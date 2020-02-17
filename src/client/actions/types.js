@@ -1,3 +1,4 @@
+export const UPLOAD_PIC = "UPLOAD_PIC";
 export const ADD_REST = "ADD_REST";
 export const DELETE_REST = "DELETE_REST";
 export const ADD_REST_SUCCESS = "ADD_REST_SUCCESS";

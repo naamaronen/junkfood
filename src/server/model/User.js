@@ -17,8 +17,7 @@ const UserSchema = new Schema({
     required: false
   },
   picture: {
-    type: String,
-    required: false
+    ref: "Image", type: Schema.Types.ObjectId
   },
   location: {
     type: String,
