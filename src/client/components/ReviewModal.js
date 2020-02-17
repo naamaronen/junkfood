@@ -68,17 +68,18 @@ class ReviewModal extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const averageRate =
+    const averageRate = Math.floor(
       (this.state.BathroomQuality +
         this.state.StaffKindness +
         this.state.Cleanliness +
         this.state.DriveThruQuality +
         this.state.DeliverySpeed +
         this.state.FoodQuality) /
-      6;
+        6
+    );
     const newReview = {
       userReview: this.state.userReview,
-      restaurantName: this.state.restaurantName, ///how to attach the restaurnat name
+      restaurantName: this.state.restaurantName,
       BathroomQuality: this.state.BathroomQuality,
       StaffKindness: this.state.StaffKindness,
       Cleanliness: this.state.Cleanliness,

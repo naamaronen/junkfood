@@ -193,7 +193,7 @@ class SearchNavBar extends Component {
                   <CustomInput
                     type="checkbox"
                     id="username"
-                    label="uaername"
+                    label="username"
                     name="username"
                     onChange={this.onBoxChange}
                   />

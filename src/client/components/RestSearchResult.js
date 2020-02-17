@@ -31,7 +31,7 @@ class RestSearchResult extends Component {
                 </div>
               ) : (
                 searchResult.map(
-                  ({ _id, name, location, picture, date, reviews }) => (
+                  ({ _id, name, location, picture, stringDate }) => (
                     <Col sm="3" key={_id}>
                       <Card
                         key={_id}
@@ -47,7 +47,7 @@ class RestSearchResult extends Component {
                           </h6>
                           <CardText>Something about rest</CardText>
                           <CardText>
-                            <small className="text-muted">{date}</small>
+                            <small className="text-muted">{stringDate}</small>
                           </CardText>
                           <Button style={{ marginBottom: "2rem" }}>
                             <Link style={{ color: "#fff" }} to={`/${name}`}>

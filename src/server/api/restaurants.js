@@ -26,7 +26,7 @@ module.exports = app => {
       name: req.body.name,
       location: req.body.location
     });
-
+    newRestaurant.stringDate = newRestaurant.date.toLocaleString();
     newRestaurant.save().then(restaurant => res.json(restaurant));
   });
 

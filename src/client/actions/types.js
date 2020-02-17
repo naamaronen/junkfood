@@ -31,3 +31,6 @@ export const SEARCH_USER = "SEARCH_USER";
 export const LOAD_SEARCH = "LOAD_SEARCH";
 export const GET_REST = "GET_REST";
 export const GET_REST_SUCCSSES = "GET_REST_SUCCSSES";
+export const TIME_SORT = "TIME_SORT";
+export const FIELD_SORT = "FIELD_SORT";
+export const SORT_SUCCSSES = "SORT_SUCCSSES";

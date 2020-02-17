@@ -43,7 +43,7 @@ class UserSearchResult extends Component {
                 </div>
               ) : (
                 searchResult.map(
-                  ({ _id, fullName, location, picture, username, reviews }) => (
+                  ({ _id, fullName, location, picture, username }) => (
                     <Col sm="3" key={_id}>
                       <Card
                         key={_id}
