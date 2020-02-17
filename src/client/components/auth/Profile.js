@@ -46,10 +46,14 @@ export class Profile extends Component {
     this.setState({ newFullName: fullName });
     this.setState({ newLocation: location });
     this.setState({ newPicture: picture });
+    this.userData = new FormData();
   }
 
   onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    const value =
+      e.target.name === "picture" ? e.target.files[0] : e.target.value;
+    this.userData.set(e.target.name, value);
+    this.setState({ [e.target.name]: value });
   };
 
   onSubmit = e => {
@@ -110,6 +114,7 @@ export class Profile extends Component {
                   type="file"
                   name="newPicture"
                   id="picture"
+                  accept="image/*"
                   onChange={this.onChange}
                 />
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>

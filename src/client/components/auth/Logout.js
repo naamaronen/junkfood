@@ -4,10 +4,15 @@ import { connect } from "react-redux";
 import { logout } from "../../actions/authActions";
 
 export class Logout extends Component {
+  onClick = () => {
+    const { user } = this.props.auth;
+    this.props.logout(user);
+  };
+
   render() {
     return (
       <Fragment>
-        <NavLink onClick={this.props.logout(this.props.auth)} href="#">
+        <NavLink onClick={this.onClick} href="#">
           Logout
         </NavLink>
       </Fragment>
@@ -17,7 +22,7 @@ export class Logout extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.token
+    auth: state.auth
   };
 };
 

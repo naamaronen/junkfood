@@ -67,8 +67,8 @@ export function loginFail(error) {
 }
 
 //Logout user
-export function logout(user) {
-  return { type: LOGOUT, payload: user, uri: "api/signout" };
+export function logout(username) {
+  return { type: LOGOUT, payload: username, uri: "api/signout/userSessions" };
 }
 
 //Logout Succsses

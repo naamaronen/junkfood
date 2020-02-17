@@ -52,9 +52,10 @@ module.exports = app => {
   // @desc Delete a user
   // access public
 
-  // app.delete("/api/signout", (req, res) => {
-  //   UserSession.findById(req.body)
-  //     .then(user => user.remove().then(() => res.json({ success: true })))
-  //     .catch(err => res.status(404).json({ success: false }));
-  // });
+  app.post("/api/signout/userSessions", (req, res) => {
+    console.log(req.body);
+    UserSession.findOne(req.body)
+      .then(user => user.remove().then(() => res.json({ success: true })))
+      .catch(err => res.status(404).json({ success: false }));
+  });
 };

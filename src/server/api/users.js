@@ -71,6 +71,26 @@ module.exports = app => {
           res.json(users);
           res.end();
         });
+    } else if (fullName != null && location === null && name === null) {
+      User.find({
+        fullName: fullName
+      })
+        .sort({ fullName: 1 })
+        .populate("reviews")
+        .then(users => {
+          res.json(users);
+          res.end();
+        });
+    } else if (location != null && name === null && fullName === null) {
+      User.find({
+        location: location
+      })
+        .sort({ fullName: 1 })
+        .populate("reviews")
+        .then(users => {
+          res.json(users);
+          res.end();
+        });
     } else {
       User.find({
         username: name

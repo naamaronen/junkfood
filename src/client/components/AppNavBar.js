@@ -50,7 +50,9 @@ class AppNavBar extends Component {
             </Col>
             <Col>
               <NavItem>
-                <Link to="/profile">Profile</Link>
+                <Link style={{ color: "#fff" }} to="/profile">
+                  Profile
+                </Link>
               </NavItem>
             </Col>
             <Col>
@@ -60,7 +62,9 @@ class AppNavBar extends Component {
             </Col>
             <Col>
               <NavItem>
-                <Link to="/">Home</Link>
+                <Link style={{ color: "#fff" }} to="/">
+                  Home
+                </Link>
               </NavItem>
             </Col>
           </Row>
@@ -82,6 +86,13 @@ class AppNavBar extends Component {
               {" "}
               <NavItem>
                 <LoginModal />
+              </NavItem>
+            </Col>
+            <Col>
+              <NavItem>
+                <Link style={{ color: "#fff" }} to="/">
+                  Home
+                </Link>
               </NavItem>
             </Col>
           </Row>

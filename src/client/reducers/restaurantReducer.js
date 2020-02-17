@@ -7,7 +7,8 @@ import {
   FETCH_RESTS,
   WATCH_REVIEWS,
   REVIEWS_SUCCESS,
-  REVIEWS_FAILURE
+  REVIEWS_FAILURE,
+  GET_REST_SUCCSSES
 } from "../actions/types";
 
 const initialState = {
@@ -15,7 +16,8 @@ const initialState = {
   reviews: [],
   loading: false,
   saving: false,
-  error: ""
+  error: "",
+  rest: null
 };
 
 //check the get method, instead of action.payload maybe use "get" function
@@ -70,6 +72,12 @@ export default function(state = initialState, action) {
 
     case REVIEWS_FAILURE:
       return { ...state, loading: false, saving: false, error: action.error };
+
+    case GET_REST_SUCCSSES:
+      return {
+        ...state,
+        rest: action.payload
+      };
 
     default:
       return state;

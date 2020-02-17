@@ -12,19 +12,22 @@ import { addReview } from "../actions/reviewAction";
 import StarRatingComponent from "react-star-rating-component";
 
 class ReviewModal extends Component {
-  state = {
-    modal: false,
-    userReview: "",
-    restaurantReview: null,
-    restaurantName: "mcdonalds", ///how to attach the restaurnat name
-    BathroomQuality: null,
-    StaffKindness: null,
-    Cleanliness: null,
-    DriveThruQuality: null,
-    DeliverySpeed: null,
-    FoodQuality: null,
-    picture: ""
-  };
+  constructor() {
+    super();
+    this.state = {
+      modal: false,
+      userReview: "",
+      restaurantReview: null,
+      restaurantName: "",
+      BathroomQuality: null,
+      StaffKindness: null,
+      Cleanliness: null,
+      DriveThruQuality: null,
+      DeliverySpeed: null,
+      FoodQuality: null,
+      picture: ""
+    };
+  }
 
   componentDidUpdate() {
     StarRatingComponent;
@@ -111,14 +114,14 @@ class ReviewModal extends Component {
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <h2>{this.state.restaurantName}</h2>
-                <h5>BathroomQuality: {this.state.BathroomQuality}</h5>
+                <h5>Bathroom Quality: {this.state.BathroomQuality}</h5>
                 <StarRatingComponent
                   name="BathroomQuality"
                   starCount={5}
                   value={this.state.BathroomQuality}
                   onStarClick={this.onStarClick1.bind(this)}
                 />
-                <h5>StaffKindness: {this.state.StaffKindness}</h5>
+                <h5>Staff Kindness: {this.state.StaffKindness}</h5>
                 <StarRatingComponent
                   name="StaffKindness"
                   starCount={5}
@@ -132,21 +135,21 @@ class ReviewModal extends Component {
                   value={this.state.Cleanliness}
                   onStarClick={this.onStarClick3.bind(this)}
                 />
-                <h5>DriveThruQuality: {this.state.DriveThruQuality}</h5>
+                <h5>DriveThru Quality: {this.state.DriveThruQuality}</h5>
                 <StarRatingComponent
                   name="DriveThruQuality"
                   starCount={5}
                   value={this.state.DriveThruQuality}
                   onStarClick={this.onStarClick4.bind(this)}
                 />
-                <h5>DeliverySpeed: {this.state.DeliverySpeed}</h5>
+                <h5>Delivery Speed: {this.state.DeliverySpeed}</h5>
                 <StarRatingComponent
                   name="DeliverySpeed"
                   starCount={5}
                   value={this.state.DeliverySpeed}
                   onStarClick={this.onStarClick5.bind(this)}
                 />
-                <h5>FoodQuality: {this.state.FoodQuality}</h5>
+                <h5>Food Quality: {this.state.FoodQuality}</h5>
                 <StarRatingComponent
                   name="FoodQuality"
                   starCount={5}

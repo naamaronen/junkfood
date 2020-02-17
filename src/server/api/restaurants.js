@@ -42,7 +42,7 @@ module.exports = app => {
   });
 
   app.post("/api/restaurant/reviews", function(req, res) {
-    const name = req.body.name;
+    const { name } = req.body;
     Restaurant.findOne({ name })
       .populate("reviews")
       .then(restaurant => {
@@ -54,6 +54,7 @@ module.exports = app => {
   app.post("/api/search_rest", (req, res) => {
     console.log("api/search_rest");
     const { name, location, rate } = req.body;
+    console.log(req.body);
     if (location != null && name != null) {
       Restaurant.find({
         name: name,
@@ -66,6 +67,7 @@ module.exports = app => {
           res.end();
         });
     } else if (location != null && rate === null) {
+      console.log(`search for location: ${location}`);
       Restaurant.find({
         location: location
       })

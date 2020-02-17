@@ -29,3 +29,5 @@ export const UPDATE_USER = "UPDATE_USER";
 export const SEARCH_REST = "SEARCH_REST";
 export const SEARCH_USER = "SEARCH_USER";
 export const LOAD_SEARCH = "LOAD_SEARCH";
+export const GET_REST = "GET_REST";
+export const GET_REST_SUCCSSES = "GET_REST_SUCCSSES";

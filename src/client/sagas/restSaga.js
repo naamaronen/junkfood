@@ -3,14 +3,16 @@ import {
   ADD_REST,
   DELETE_REST,
   FETCH_RESTS,
-  WATCH_REVIEWS
+  WATCH_REVIEWS,
+  GET_REST
 } from "../actions/types";
 import {
   loadedRests,
   restsFailure,
   addRestSuccess,
   reviewsSuccsses,
-  reviewsFailure
+  reviewsFailure,
+  getRestSuccsses
 } from "../actions/restaurantAction";
 
 function* getAllRestaurants() {
@@ -70,10 +72,30 @@ function* watchReviews(action) {
   }
 }
 
+function* getRest(action) {
+  console.log("getRestSaga=", action);
+  console.log(action.payload);
+
+  try {
+    const res = yield call(fetch, action.uri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(action.payload)
+    });
+    const restaurant = yield call([res, "json"]);
+    yield put(getRestSuccsses(restaurant));
+  } catch (e) {
+    yield put(restsFailure(e.message));
+  }
+}
+
 //using takeEvery, you take the action away from reducer to saga
 export default function* RestaurantSaga() {
   yield takeEvery(FETCH_RESTS, getAllRestaurants);
   //yield takeEvery(DELETE_REST, deleteRest);
   yield takeEvery(ADD_REST, saveRest);
   yield takeEvery(WATCH_REVIEWS, watchReviews);
+  yield takeEvery(GET_REST, getRest);
 }

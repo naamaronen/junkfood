@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { LOGIN, UPDATE_USER } from "../actions/types";
+import { LOGIN, UPDATE_USER, REGISTER } from "../actions/types";
 import { userProfileSuccsses } from "../actions/userActions.js";
 import { returnErrors } from "../actions/errorActions";
 
@@ -40,5 +40,6 @@ function* updateProfile(action) {
 //using takeEvery, you take the action away from reducer to saga
 export default function* UserSaga() {
   yield takeEvery(LOGIN, login);
+  yield takeEvery(REGISTER, login);
   yield takeEvery(UPDATE_USER, updateProfile);
 }

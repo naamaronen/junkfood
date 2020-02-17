@@ -17,12 +17,16 @@ import { clearErrors } from "../../actions/errorActions";
 import { connect } from "react-redux";
 
 class LoginModal extends Component {
-  state = {
-    modal: false,
-    username: "",
-    password: "",
-    msg: null
-  };
+  constructor() {
+    super();
+
+    this.state = {
+      modal: false,
+      username: "",
+      password: "",
+      msg: null
+    };
+  }
 
   componentDidUpdate(prevProps) {
     const { error } = this.props;

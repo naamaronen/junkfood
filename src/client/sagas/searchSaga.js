@@ -21,6 +21,7 @@ function* searchRest(action) {
 }
 
 function* searchUser(action) {
+  console.log(`action = ${action}`);
   try {
     const options = {
       method: "POST",
@@ -31,6 +32,7 @@ function* searchUser(action) {
     };
     const res = yield call(fetch, "api/search_user", options);
     const ress = yield call([res, "json"]);
+    console.log(`result = ${ress}`);
     yield put(loadSearch(ress));
   } catch (e) {
     yield put(returnErrors(e.message));

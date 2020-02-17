@@ -46,7 +46,9 @@ class RestList extends Component {
                         <small className="text-muted">{date}</small>
                       </CardText>
                       <Button style={{ marginBottom: "2rem" }}>
-                        <Link to={`/restaurants/${name}`}>Watch Reviews</Link>
+                        <Link style={{ color: "#fff" }} to={`/${name}`}>
+                          Watch Reviews
+                        </Link>
                       </Button>
                       <ReviewModal />
                     </CardBody>

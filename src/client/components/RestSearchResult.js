@@ -12,6 +12,8 @@ import {
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
+import { Link, Route, Redirect } from "react-router-dom";
+import ReviewModal from "./ReviewModal";
 
 class RestSearchResult extends Component {
   render() {
@@ -23,32 +25,40 @@ class RestSearchResult extends Component {
         <div>
           <Container>
             <CardDeck className="restaurnt-list">
-              {searchResult.map(
-                ({ _id, name, location, picture, date, reviews }) => (
-                  <Col sm="3" key={_id}>
-                    <Card
-                      key={_id}
-                      outline
-                      color="danger"
-                      className="text-center"
-                    >
-                      <CardImg top width="100%" src={picture} />
-                      <CardBody>
-                        <h5 className="card-title">{name}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">
-                          {location}
-                        </h6>
-                        <CardText>Something about rest</CardText>
-                        <CardText>
-                          <small className="text-muted">{date}</small>
-                        </CardText>
-                        <Button style={{ marginBottom: "2rem" }}>
-                          <Link to={`/restaurants/${name}`}>Watch Reviews</Link>
-                        </Button>
-                        <ReviewModal />
-                      </CardBody>
-                    </Card>
-                  </Col>
+              {searchResult.length === 0 ? (
+                <div>
+                  <h3>Restaurants Not Found </h3>
+                </div>
+              ) : (
+                searchResult.map(
+                  ({ _id, name, location, picture, date, reviews }) => (
+                    <Col sm="3" key={_id}>
+                      <Card
+                        key={_id}
+                        outline
+                        color="danger"
+                        className="text-center"
+                      >
+                        <CardImg top width="100%" src={picture} />
+                        <CardBody>
+                          <h5 className="card-title">{name}</h5>
+                          <h6 className="card-subtitle mb-2 text-muted">
+                            {location}
+                          </h6>
+                          <CardText>Something about rest</CardText>
+                          <CardText>
+                            <small className="text-muted">{date}</small>
+                          </CardText>
+                          <Button style={{ marginBottom: "2rem" }}>
+                            <Link style={{ color: "#fff" }} to={`/${name}`}>
+                              Watch Reviews
+                            </Link>
+                          </Button>
+                          <ReviewModal />
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  )
                 )
               )}
             </CardDeck>

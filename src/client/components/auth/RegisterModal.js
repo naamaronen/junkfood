@@ -172,3 +172,12 @@ const mapDispatchToProps = () => dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterModal);
+
+{
+  /* <FormGroup>
+<Label for="examplePassword">Invalid input</Label>
+<Input invalid />
+<FormFeedback>Oh noes! that name is already taken</FormFeedback>
+<FormText>Example help text that remains unchanged.</FormText>
+</FormGroup> */
+}

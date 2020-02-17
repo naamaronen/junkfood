@@ -7,7 +7,9 @@ import {
   FETCH_RESTS,
   WATCH_REVIEWS,
   REVIEWS_SUCCESS,
-  REVIEWS_FAILURE
+  REVIEWS_FAILURE,
+  GET_REST,
+  GET_REST_SUCCSSES
 } from "./types";
 
 export function getRestaurants() {
@@ -58,4 +60,12 @@ export function reviewsSuccsses(restaurant) {
 
 export function reviewsFailure(error) {
   return { type: REVIEWS_FAILURE, error };
+}
+
+export function getRest(restaurant) {
+  return { type: GET_REST, uri: "api/restaurant/reviews", payload: restaurant };
+}
+
+export function getRestSuccsses(restaurant) {
+  return { type: GET_REST_SUCCSSES, payload: restaurant };
 }

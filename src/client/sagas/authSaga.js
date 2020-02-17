@@ -53,10 +53,9 @@ function* login(action) {
         "Content-Type": "application/json"
       })
     };
-
     const res = yield call(fetch, action.uri, options);
     const user = yield call([res, "json"]);
-    //const user = yield res.json();
+    console.log(user);
     yield put(loginSuccsses(user));
     yield put(getUserSuccess(user));
   } catch (e) {
@@ -67,14 +66,16 @@ function* login(action) {
 
 function* logout(action) {
   try {
-    const res = yield call(fetch, action.uri, {
-      method: "DELETE",
+    const options = {
+      method: "POST",
       body: JSON.stringify(action.payload),
-      headers: {
+      headers: new Headers({
         "Content-Type": "application/json"
-      }
-    });
-    const user = yield res.json();
+      })
+    };
+
+    const res = yield call(fetch, action.uri, options);
+    const user = yield call([res, "json"]);
     yield put(logoutSuccsses(user));
   } catch (e) {
     yield put(returnErrors(e.message));
@@ -86,5 +87,5 @@ export default function* AuthSaga() {
   yield takeEvery(USER_LOADING, loadUser);
   yield takeEvery(REGISTER, register);
   yield takeEvery(LOGIN, login);
-  //yield takeEvery(LOGOUT, logout);
+  yield takeEvery(LOGOUT, logout);
 }

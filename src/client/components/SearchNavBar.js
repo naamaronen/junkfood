@@ -20,7 +20,6 @@ import {
 import { connect } from "react-redux";
 import { Link, Route, Redirect } from "react-router-dom";
 import { searchByRest, searchByUser } from "../actions/searchActions";
-import RestSearchResult from "./RestSearchResult";
 
 class SearchNavBar extends Component {
   state = {
@@ -32,7 +31,32 @@ class SearchNavBar extends Component {
     name: false,
     location: false,
     username: false,
-    rate: null
+    rate: null,
+    redirect: false
+  };
+
+  setRedirect = () => {
+    this.setState({
+      redirect: !this.state.redirect
+    });
+  };
+
+  renderRedirectRest = () => {
+    if (this.state.redirect) {
+      this.setRedirect();
+      this.setState({ SearchLocationValue: null });
+      //this.props.history.push("/");
+      return <Redirect to="/search_rest" />;
+    }
+  };
+
+  renderRedirectUser = () => {
+    if (this.state.redirect) {
+      this.setRedirect();
+      this.setState({ SearchLocationValue: null, SearchFullNameValue: null });
+      //this.props.history.push("/");
+      return <Redirect to="/search_user" />;
+    }
   };
 
   dropDownToggle = () => {
@@ -52,24 +76,25 @@ class SearchNavBar extends Component {
 
   onClick = e => {
     e.preventDefault();
+    this.setRedirect();
 
     if (this.state.searchFor === "restaurant") {
       const newSearch = {
         name: this.state.SearchValue,
-        fullName: this.state.SearchFullNameValue,
-        location: this.state.SearchLocationValue
+        location: this.state.SearchLocationValue,
+        rate: this.state.rate
       };
+      console.log(newSearch);
       this.props.searchByRest(newSearch);
     } else {
       const newSearch = {
         name: this.state.SearchValue,
-        location: this.stata.SearchLocationValue,
-        rate: this.state.rate
+        location: this.state.SearchLocationValue,
+        fullName: this.state.SearchFullNameValue
       };
+      console.log(newSearch);
       this.props.searchByUser(newSearch);
-      this.props.history.push("/search_rest");
     }
-    return <Redirect to="/search_rest" />;
   };
 
   render() {
@@ -85,7 +110,6 @@ class SearchNavBar extends Component {
                 placeholder="Search..."
                 onChange={this.onChange}
               />
-              {/* <Link to="/search_rest">Search</Link> */}
               <Button onClick={this.onClick}>Search</Button>
               <FormGroup check inline>
                 <Col xs="auto">
@@ -133,6 +157,7 @@ class SearchNavBar extends Component {
                       id="rate"
                       onChange={this.onChange}
                     >
+                      <option>None</option>
                       <option>1</option>
                       <option>2</option>
                       <option>3</option>
@@ -158,10 +183,8 @@ class SearchNavBar extends Component {
                 name="SearchValue"
                 className="input"
                 placeholder="Search..."
-                onChange={this.onClick}
               />
-              <Link to="/search_user">Search</Link>
-              {/*<Button onClick={this.onClick}>Search</Button> */}
+              <Button onClick={this.onClick}>Search</Button>
               <FormGroup check inline>
                 <Col xs="auto">
                   <Label for="checkbox">Search User By:</Label>
@@ -228,6 +251,9 @@ class SearchNavBar extends Component {
 
     return (
       <div>
+        {this.state.searchFor === "restaurant"
+          ? this.renderRedirectRest()
+          : this.renderRedirectUser()}
         <Navbar color="light" light expand="md">
           <Container>
             <Nav className="mr-auto" navbar>
@@ -280,11 +306,11 @@ class SearchNavBar extends Component {
 
 const mapDispatchToProps = () => dispatch => {
   return {
-    searchByRest: name => {
-      dispatch(searchByRest(name));
+    searchByRest: search => {
+      dispatch(searchByRest(search));
     },
-    searchByUser: name => {
-      dispatch(searchByUser(name));
+    searchByUser: search => {
+      dispatch(searchByUser(search));
     }
   };
 };
