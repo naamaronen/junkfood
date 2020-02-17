@@ -48,13 +48,23 @@ module.exports = app => {
       });
   });
 
+  app.post("/api/signin/userSessionsReview", function(req, res) {
+    console.log("/api/signin/userSessionsReview");
+    User.findOne({ username: req.body.userReview })
+      .populate("reviews")
+      .then(user => {
+        res.json(user);
+        res.end();
+      });
+  });
+
   // @route DELETE api/users/id
   // @desc Delete a user
   // access public
 
   app.post("/api/signout/userSessions", (req, res) => {
     console.log(req.body);
-    UserSession.findOne(req.body)
+    UserSession.findOne({ username: req.body })
       .then(user => user.remove().then(() => res.json({ success: true })))
       .catch(err => res.status(404).json({ success: false }));
   });

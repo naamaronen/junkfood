@@ -66,7 +66,7 @@ export class RestReviews extends Component {
         const sort = { sortField, name };
         this.props.sortByField(sort);
       }
-      this.setState({ showSorted: !this.state.showSorted });
+      this.setState({ showSorted: true });
     }
   };
 

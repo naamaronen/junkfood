@@ -6,7 +6,8 @@ import {
   GET_USER_SUCCESS,
   TIME_SORT,
   FIELD_SORT,
-  SORT_SUCCSSES
+  SORT_SUCCSSES,
+  DELETE_REVIEW
 } from "./types";
 
 export function addReview(review) {
@@ -43,4 +44,8 @@ export function sortByField(sort) {
 
 export function sortSuccsses(sort) {
   return { type: SORT_SUCCSSES, payload: sort };
+}
+
+export function deleteReview(id) {
+  return { type: DELETE_REVIEW, payload: id, uri: `api/reviews/${id}` };
 }

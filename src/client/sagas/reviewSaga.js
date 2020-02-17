@@ -1,5 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { ADD_REVIEW, TIME_SORT, FIELD_SORT } from "../actions/types";
+import {
+  ADD_REVIEW,
+  TIME_SORT,
+  FIELD_SORT,
+  DELETE_REVIEW
+} from "../actions/types";
 import {
   addReviewSuccess,
   reviewsFailure,
@@ -60,9 +65,21 @@ function* fieldSort(action) {
   }
 }
 
+function* deleteReview(action) {
+  console.log("deleteReviewSaga=", action);
+  try {
+    const res = yield call(fetch, action.uri, {
+      method: "DELETE"
+    });
+  } catch (e) {
+    yield put(reviewsFailure(e.message));
+  }
+}
+
 //using takeEvery, you take the action away from reducer to saga
 export default function* ReviewSaga() {
   yield takeEvery(ADD_REVIEW, saveReview);
   yield takeEvery(TIME_SORT, timeSort);
   yield takeEvery(FIELD_SORT, fieldSort);
+  yield takeEvery(DELETE_REVIEW, deleteReview);
 }

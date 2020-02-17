@@ -19,6 +19,7 @@ import { connect } from "react-redux";
 import { updateProfile, uploadPicture } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
+import { deleteReview } from "../../actions/reviewAction";
 
 export class Profile extends Component {
   state = {
@@ -49,10 +50,7 @@ export class Profile extends Component {
   }
 
   onChange = e => {
-    const value =
-      e.target.name === "picture" ? e.target.files[0] : e.target.value;
-    this.userData.set(e.target.name, value);
-    this.setState({ [e.target.name]: value });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   onSubmit = e => {
@@ -71,20 +69,23 @@ export class Profile extends Component {
     if (location != newLocation) user.location = newLocation;
     if (newPicture) {
       user.picture = newPicture; //?
-    };
+    }
     //Update user
     this.props.updateProfile(user);
   };
 
   uploadImage = e => {
-    var pic = {"imageData" : e.target.files[0]};
+    var pic = { imageData: e.target.files[0] };
     this.props.uploadPicture(pic);
     //URL.createObjectURL(e.target.files[0])
+  };
 
+  deleteReview = id => {
+    console.log("delete");
+    //this.props.deleteReview(id);
   };
 
   render() {
-    console.log(this.state);
     return (
       <div className="App">
         <AppNavBar />
@@ -262,6 +263,17 @@ export class Profile extends Component {
                                 />
                               </Col>
                             </Row>
+                            <Col>
+                              <Button color="warning">Edit Review</Button>
+                            </Col>
+                            <Col>
+                              <Button
+                                color="danger"
+                                onClick={this.deleteReview(_id)}
+                              >
+                                Delete Review
+                              </Button>
+                            </Col>
                           </CardBody>
                         </Card>
                       </Col>
@@ -288,6 +300,10 @@ const mapDispatchToProps = () => dispatch => {
     },
     uploadPicture: pic => {
       dispatch(uploadPicture(pic));
+    },
+    deleteReview: id => {
+      console.log(id);
+      dispatch(deleteReview(id));
     }
   };
 };

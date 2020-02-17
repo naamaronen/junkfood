@@ -45,7 +45,6 @@ export default function(state = initialState, action) {
 
     case SORT_SUCCSSES:
       state.sortedReviews = [];
-      console.log(action.payload);
       return {
         ...state,
         sortedReviews: state.sortedReviews.concat(action.payload)

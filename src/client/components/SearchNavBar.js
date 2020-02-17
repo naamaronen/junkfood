@@ -110,7 +110,9 @@ class SearchNavBar extends Component {
                 placeholder="Search..."
                 onChange={this.onChange}
               />
-              <Button onClick={this.onClick}>Search</Button>
+              <Button onClick={this.onClick} tag={Link} to="/search_rest">
+                Search
+              </Button>
               <FormGroup check inline>
                 <Col xs="auto">
                   <Label for="checkbox">Search Restaurant By:</Label>
@@ -184,7 +186,9 @@ class SearchNavBar extends Component {
                 className="input"
                 placeholder="Search..."
               />
-              <Button onClick={this.onClick}>Search</Button>
+              <Button onClick={this.onClick} tag={Link} to="/search_user">
+                Search
+              </Button>
               <FormGroup check inline>
                 <Col xs="auto">
                   <Label for="checkbox">Search User By:</Label>
