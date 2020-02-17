@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import {
-  NavLink,
   Jumbotron,
   Button,
   FormGroup,
@@ -17,7 +16,7 @@ import {
   Row
 } from "reactstrap";
 import { connect } from "react-redux";
-import { updateProfile } from "../../actions/userActions";
+import { updateProfile, uploadPicture } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 
@@ -70,9 +69,18 @@ export class Profile extends Component {
     var user = { username, picture, fullName, location };
     if (fullName != newFullName) user.fullName = newFullName;
     if (location != newLocation) user.location = newLocation;
-    if (picture != newPicture) user.picture = newPicture;
+    if (newPicture) {
+      user.picture = newPicture; //?
+    };
     //Update user
     this.props.updateProfile(user);
+  };
+
+  uploadImage = e => {
+    var pic = {"imageData" : e.target.files[0]};
+    this.props.uploadPicture(pic);
+    //URL.createObjectURL(e.target.files[0])
+
   };
 
   render() {
@@ -114,8 +122,9 @@ export class Profile extends Component {
                   type="file"
                   name="newPicture"
                   id="picture"
+                  placeholder={`${this.state.picture}`}
                   accept="image/*"
-                  onChange={this.onChange}
+                  onChange={this.uploadImage}
                 />
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Save Changes
@@ -276,6 +285,9 @@ const mapDispatchToProps = () => dispatch => {
   return {
     updateProfile: user => {
       dispatch(updateProfile(user));
+    },
+    uploadPicture: pic => {
+      dispatch(uploadPicture(pic));
     }
   };
 };

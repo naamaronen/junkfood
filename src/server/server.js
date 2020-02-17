@@ -5,6 +5,7 @@ const { resolve } = require("path");
 const fs = require("fs");
 const path = require("path");
 
+
 const config = {
   mongoURL:
     process.env.MONGO_URL ||
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV !== "test") {
 
 const app = express();
 
+app.use('/source/images', express.static('images'))
 //body parser for json. must be done before API routes
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); //handle body requests
