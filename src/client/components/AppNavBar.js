@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import {
   Navbar,
+  NavLink,
   NavbarBrand,
   Nav,
   NavItem,
@@ -44,27 +45,18 @@ class AppNavBar extends Component {
             <Col xs="auto">
               <NavItem>
                 <span className="navbar-text mr-3">
-                  <strong>{user ? `Welcome ${user}` : ""}</strong>
+                  {user ? `Welcome ${user}` : ""}
                 </span>
               </NavItem>
             </Col>
             <Col>
               <NavItem>
-                <Link style={{ color: "#fff" }} to="/profile">
-                  Profile
-                </Link>
+                <NavLink tag={Link} to="/profile">Profile</NavLink>
               </NavItem>
             </Col>
             <Col>
               <NavItem>
                 <Logout />
-              </NavItem>
-            </Col>
-            <Col>
-              <NavItem>
-                <Link style={{ color: "#fff" }} to="/">
-                  Home
-                </Link>
               </NavItem>
             </Col>
           </Row>
@@ -88,13 +80,6 @@ class AppNavBar extends Component {
                 <LoginModal />
               </NavItem>
             </Col>
-            <Col>
-              <NavItem>
-                <Link style={{ color: "#fff" }} to="/">
-                  Home
-                </Link>
-              </NavItem>
-            </Col>
           </Row>
         </Container>
       </Fragment>
@@ -104,7 +89,7 @@ class AppNavBar extends Component {
       <div>
         <Navbar color="dark" dark exapnd="sm" className="mb-5">
           <Container>
-            <NavbarBrand href="/">Junk Food Web</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">Junk Food Web</NavbarBrand>
 
             <Nav className="mr-auto" navbar>
               {isAuthenticated ? authLinks : guestLinks}
