@@ -93,9 +93,9 @@ export class RestReviews extends Component {
         ) : (
           <div>
             <Jumbotron>
-              <h3 className="restPage">{this.state.name}</h3>
-              <h4>{this.state.location}</h4>
-              {this.state.picture}
+              <h3 className="restPage">{rest.name}</h3>
+              <h4>{rest.location}</h4>
+              {rest.picture}
             </Jumbotron>
             <div>
               <div className="sort-reviews">
@@ -154,9 +154,9 @@ export class RestReviews extends Component {
               </div>
               <div>
                 <FormGroup tag="fieldset" inline>
-                  <Row>
-                    <Col>
-                      <FormGroup check>
+                  <div>
+                    <Row>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -165,8 +165,8 @@ export class RestReviews extends Component {
                           />{" "}
                           Bathroom Quality
                         </Label>
-                      </FormGroup>
-                      <FormGroup check>
+                      </Col>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -175,8 +175,8 @@ export class RestReviews extends Component {
                           />{" "}
                           Staff Kindness
                         </Label>
-                      </FormGroup>
-                      <FormGroup check>
+                      </Col>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -185,8 +185,8 @@ export class RestReviews extends Component {
                           />{" "}
                           Cleanliness
                         </Label>
-                      </FormGroup>
-                      <FormGroup check>
+                      </Col>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -195,8 +195,8 @@ export class RestReviews extends Component {
                           />{" "}
                           DriveThru Quality
                         </Label>
-                      </FormGroup>
-                      <FormGroup check>
+                      </Col>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -205,8 +205,8 @@ export class RestReviews extends Component {
                           />{" "}
                           Delivery Speed
                         </Label>
-                      </FormGroup>
-                      <FormGroup check>
+                      </Col>
+                      <Col xs="auto">
                         <Label check>
                           <Input
                             type="radio"
@@ -215,26 +215,26 @@ export class RestReviews extends Component {
                           />{" "}
                           Food Quality
                         </Label>
-                      </FormGroup>
-                    </Col>
-                    <Col xs="auto">
+                      </Col>
                       <Col xs="auto">
                         <Label for="rate">Star Rate</Label>
                       </Col>
-                      <Input
-                        type="select"
-                        name="rate"
-                        id="rate"
-                        onChange={this.onChangeRate}
-                      >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </Input>
-                    </Col>
-                  </Row>
+                      <Col xs="auto">
+                        <Input
+                          type="select"
+                          name="rate"
+                          id="rate"
+                          onChange={this.onChangeRate}
+                        >
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </Input>
+                      </Col>
+                    </Row>
+                  </div>
                 </FormGroup>
               </div>
               <Button onClick={this.onClick}>Sort</Button>
@@ -245,14 +245,15 @@ export class RestReviews extends Component {
               </div>
               <Container>
                 <CardDeck className="reviews-list">
-                  {this.state.reviews.map(
+                  {rest.reviews.map(
                     ({
                       rates,
                       restaurantName,
                       date,
                       _id,
                       picture,
-                      averageRate
+                      averageRate,
+                      userReview
                     }) => {
                       const {
                         BathroomQuality,
@@ -262,6 +263,7 @@ export class RestReviews extends Component {
                         DeliverySpeed,
                         FoodQuality
                       } = rates;
+                      const { username } = userReview;
                       return (
                         <Col sm="4" key={_id}>
                           <Card
@@ -273,7 +275,8 @@ export class RestReviews extends Component {
                             <CardImg top width="100%" src={picture} />
                             <CardBody>
                               <h5 className="card-title">{restaurantName}</h5>
-                              <CardText></CardText>
+
+                              <CardText>{`review by: ${username}`}</CardText>
                               <CardText>
                                 <small className="text-muted">{`review date: ${date}`}</small>
                               </CardText>

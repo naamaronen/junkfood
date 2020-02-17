@@ -50,7 +50,7 @@ class RestList extends Component {
                           Watch Reviews
                         </Link>
                       </Button>
-                      <ReviewModal />
+                      <ReviewModal rest_name={name} />
                     </CardBody>
                   </Card>
                 </Col>

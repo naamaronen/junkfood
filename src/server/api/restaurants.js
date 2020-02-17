@@ -44,7 +44,10 @@ module.exports = app => {
   app.post("/api/restaurant/reviews", function(req, res) {
     const { name } = req.body;
     Restaurant.findOne({ name })
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: { path: "userReview", model: "User" }
+      })
       .then(restaurant => {
         res.json(restaurant);
         res.end();

@@ -17,7 +17,6 @@ class ReviewModal extends Component {
     this.state = {
       modal: false,
       userReview: "",
-      restaurantReview: null,
       restaurantName: "",
       BathroomQuality: null,
       StaffKindness: null,
@@ -60,6 +59,7 @@ class ReviewModal extends Component {
     this.setState({
       modal: !this.state.modal
     });
+    this.setState({ restaurantName: this.props.rest_name });
   };
 
   onChange = e => {
@@ -78,8 +78,7 @@ class ReviewModal extends Component {
       6;
     const newReview = {
       userReview: this.state.userReview,
-      restaurantReview: null,
-      restaurantName: "mcdonalds", ///how to attach the restaurnat name
+      restaurantName: this.state.restaurantName, ///how to attach the restaurnat name
       BathroomQuality: this.state.BathroomQuality,
       StaffKindness: this.state.StaffKindness,
       Cleanliness: this.state.Cleanliness,
@@ -113,7 +112,7 @@ class ReviewModal extends Component {
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <h2>{this.state.restaurantName}</h2>
+                <h4>{this.state.restaurantName}</h4>
                 <h5>Bathroom Quality: {this.state.BathroomQuality}</h5>
                 <StarRatingComponent
                   name="BathroomQuality"
