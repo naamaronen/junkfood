@@ -38,15 +38,16 @@ function* updateProfile(action) {
 }
 
 function* uploadPicture(action) {
+  console.log(action.payload);
   try {
     const options = {
       method: "POST",
-      body: JSON.stringify(action.payload),
+      body: action.payload
       /*headers: new Headers({
         "Content-Type": "application/json"
       })*/
     };
-    const res = yield call(fetch, "api/upload", options);
+    const res = yield call(fetch, "api/image", options);
     //const user = yield call([res, "json"]);
     //yield put(userProfileSuccsses(user));
   } catch (e) {

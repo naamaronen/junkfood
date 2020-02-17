@@ -45,14 +45,10 @@ export class Profile extends Component {
     this.setState({ newFullName: fullName });
     this.setState({ newLocation: location });
     this.setState({ newPicture: picture });
-    this.userData = new FormData();
   }
 
   onChange = e => {
-    const value =
-      e.target.name === "picture" ? e.target.files[0] : e.target.value;
-    this.userData.set(e.target.name, value);
-    this.setState({ [e.target.name]: value });
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   onSubmit = e => {
@@ -69,18 +65,17 @@ export class Profile extends Component {
     var user = { username, picture, fullName, location };
     if (fullName != newFullName) user.fullName = newFullName;
     if (location != newLocation) user.location = newLocation;
-    if (newPicture) {
-      user.picture = newPicture; //?
+    if (picture != newPicture) { user.picture = newPicture;
     };
     //Update user
     this.props.updateProfile(user);
   };
 
   uploadImage = e => {
-    var pic = {"imageData" : e.target.files[0]};
+    let pic = new FormData();
+    pic.append("imageData", e.target.files[0]);
     this.props.uploadPicture(pic);
-    //URL.createObjectURL(e.target.files[0])
-
+    this.setState({ newPicture: URL.createObjectURL(e.target.files[0])});
   };
 
   render() {
@@ -115,14 +110,11 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
 
-                <Label for="picture" sm={2}>
-                  Your Picture
-                </Label>
+                <img src={this.state.newPicture}/>
                 <Input
                   type="file"
                   name="newPicture"
                   id="picture"
-                  placeholder={`${this.state.picture}`}
                   accept="image/*"
                   onChange={this.uploadImage}
                 />
