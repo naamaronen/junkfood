@@ -46,7 +46,6 @@ export class Profile extends Component {
     this.setState({ newFullName: fullName });
     this.setState({ newLocation: location });
     this.setState({ newPicture: picture });
-    this.userData = new FormData();
   }
 
   onChange = e => {
@@ -67,14 +66,20 @@ export class Profile extends Component {
     var user = { username, picture, fullName, location };
     if (fullName != newFullName) user.fullName = newFullName;
     if (location != newLocation) user.location = newLocation;
+<<<<<<< HEAD
     if (newPicture) {
       user.picture = newPicture; //?
     }
+=======
+    if (picture != newPicture) { user.picture = newPicture;
+    };
+>>>>>>> 588ee5098e9f7c28da4d3cdcdeec24e452a4e3f9
     //Update user
     this.props.updateProfile(user);
   };
 
   uploadImage = e => {
+<<<<<<< HEAD
     var pic = { imageData: e.target.files[0] };
     this.props.uploadPicture(pic);
     //URL.createObjectURL(e.target.files[0])
@@ -83,6 +88,12 @@ export class Profile extends Component {
   deleteReview = id => {
     console.log("delete");
     //this.props.deleteReview(id);
+=======
+    let pic = new FormData();
+    pic.append("imageData", e.target.files[0]);
+    this.props.uploadPicture(pic);
+    this.setState({ newPicture: URL.createObjectURL(e.target.files[0])});
+>>>>>>> 588ee5098e9f7c28da4d3cdcdeec24e452a4e3f9
   };
 
   render() {
@@ -116,14 +127,11 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
 
-                <Label for="picture" sm={2}>
-                  Your Picture
-                </Label>
+                <img src={this.state.newPicture}/>
                 <Input
                   type="file"
                   name="newPicture"
                   id="picture"
-                  placeholder={`${this.state.picture}`}
                   accept="image/*"
                   onChange={this.uploadImage}
                 />
