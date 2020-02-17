@@ -3,7 +3,8 @@ import {
   ADD_REVIEW_SUCCESS,
   REVIEWS_FAILURE,
   USER_FAILURE,
-  GET_USER_SUCCESS
+  GET_USER_SUCCESS,
+  SORT_SUCCSSES
 } from "../actions/types";
 
 const initialState = {
@@ -11,7 +12,8 @@ const initialState = {
   loading: false,
   saving: false,
   error: "",
-  token: localStorage.getItem("token")
+  token: localStorage.getItem("token"),
+  sortedReviews: []
 };
 
 //check the get method, instead of action.payload maybe use "get" function
@@ -40,6 +42,14 @@ export default function(state = initialState, action) {
 
     case USER_FAILURE:
       return { ...state, loading: false, saving: false, error: action.error };
+
+    case SORT_SUCCSSES:
+      state.sortedReviews = [];
+      console.log(action.payload);
+      return {
+        ...state,
+        sortedReviews: state.sortedReviews.concat(action.payload)
+      };
 
     default:
       return state;

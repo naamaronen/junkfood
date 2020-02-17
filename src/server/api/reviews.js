@@ -28,7 +28,7 @@ module.exports = app => {
       restaurantName: req.body.restaurantName,
       _id: new mongoose.Types.ObjectId()
     });
-
+    newReview.stringDate = newReview.date.toLocaleString();
     newReview.save(function() {
       User.findOne({ username: req.body.userReview }).then(user => {
         user.reviews.push(newReview);
@@ -59,5 +59,55 @@ module.exports = app => {
     Review.findById(req.params.id)
       .then(review => review.remove().then(() => res.json({ success: true })))
       .catch(err => res.status(404).json({ success: false }));
+  });
+
+  app.post("/api/reviews/field_sort", function(req, res) {
+    console.log("Review.sort/api/reviews/field_sort");
+    const { sortField, name } = req.body;
+    console.log(req.body);
+    const sortBy = `rates.${sortField}`;
+    Review.find({ restaurantName: name })
+      .populate("userReview")
+      .sort({ [sortBy]: -1 })
+      .then(reviews => {
+        res.json(reviews);
+        res.end();
+      });
+  });
+
+  app.post("/api/reviews/time_sort", function(req, res) {
+    console.log("Review.sort/api/reviews/time_sort");
+    const { sortTime, name } = req.body;
+    console.log(req.body);
+    if (sortTime === "newest") {
+      Review.find({ restaurantName: name })
+        .populate("userReview")
+        .sort({ date: "asc" })
+        .then(reviews => {
+          reviews.date.toLocaleString();
+          res.json(reviews);
+          res.end();
+        });
+    }
+
+    if (sortTime === "oldest") {
+      Review.find({ restaurantName: name })
+        .populate("userReview")
+        .sort({ date: -1 })
+        .then(reviews => {
+          res.json(reviews);
+          res.end();
+        });
+    }
+    if (sortTime === "lastWeek") {
+      const today = Date.now();
+      Review.find({ restaurantName: name })
+        .populate("userReview")
+        .sort({ date: -1 })
+        .then(reviews => {
+          res.json(reviews);
+          res.end();
+        });
+    }
   });
 };

@@ -134,7 +134,7 @@ export class Profile extends Component {
                   ({
                     rates,
                     restaurantName,
-                    date,
+                    stringDate,
                     _id,
                     picture,
                     averageRate
@@ -160,7 +160,7 @@ export class Profile extends Component {
                             <h5 className="card-title">{restaurantName}</h5>
                             <CardText></CardText>
                             <CardText>
-                              <small className="text-muted">{`review date: ${date}`}</small>
+                              <small className="text-muted">{`review date: ${stringDate}`}</small>
                             </CardText>
                             <Row>
                               <Col>
