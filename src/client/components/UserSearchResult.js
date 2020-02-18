@@ -25,8 +25,12 @@ import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
 import { Link, Route, Redirect } from "react-router-dom";
+import { getUserProfile } from "../actions/userActions";
 
 class UserSearchResult extends Component {
+  onClick = username => {
+    this.props.getUserProfile({ username });
+  };
   render() {
     const { searchResult } = this.props.search;
     return (
@@ -57,10 +61,12 @@ class UserSearchResult extends Component {
                           <h6 className="card-subtitle mb-2 text-muted">
                             {location}
                           </h6>
-
-                          {/*need to show other user profile and not self! */}
-
-                          <Button color="warning" tag={Link} to="/userProfile">
+                          <Button
+                            color="warning"
+                            onClick={this.onClick(username)}
+                            tag={Link}
+                            to={`/userProfile/${username}`}
+                          >
                             Watch Profile
                           </Button>
                         </CardBody>
@@ -83,4 +89,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(UserSearchResult);
+const mapDispatchToProps = () => dispatch => {
+  return {
+    getUserProfile: username => {
+      dispatch(getUserProfile(username));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserSearchResult);

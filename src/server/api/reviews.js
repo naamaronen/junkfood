@@ -55,6 +55,37 @@ module.exports = app => {
     });
   });
 
+  app.post("/api/reviews/update", (req, res) => {
+    let { _id, picture, averageRate } = req.body;
+    let {
+      BathroomQuality,
+      StaffKindness,
+      Cleanliness,
+      DriveThruQuality,
+      DeliverySpeed,
+      FoodQuality
+    } = req.body;
+    let rates = {
+      BathroomQuality,
+      StaffKindness,
+      Cleanliness,
+      DriveThruQuality,
+      DeliverySpeed,
+      FoodQuality
+    };
+    Review.findOneAndUpdate({ _id }, { rates, picture, averageRate }).then(
+      review => {
+        review.save(function() {
+          return res.send({
+            succsees: true,
+            message: "review added",
+            review: review
+          });
+        });
+      }
+    );
+  });
+
   // app.delete("/api/reviews/:id", (req, res) => {
   //   Review.findById(req.params.id)
   //     .then(review => review.remove().then(() => res.json({ success: true })))

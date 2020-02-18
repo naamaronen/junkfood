@@ -20,6 +20,7 @@ import { updateProfile, uploadPicture } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
+import UpdateReview from "../UpdateReview";
 
 export class Profile extends Component {
   state = {
@@ -46,6 +47,22 @@ export class Profile extends Component {
     this.setState({ newFullName: fullName });
     this.setState({ newLocation: location });
     this.setState({ newPicture: picture });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props != prevProps) {
+      const { userProfile } = this.props.user;
+      const { fullName, reviews, location, username, picture } = userProfile;
+      this.setState({ userProfile: userProfile });
+      this.setState({ fullName: fullName });
+      this.setState({ location: location });
+      this.setState({ username: username });
+      this.setState({ picture: picture });
+      this.setState({ reviews: reviews });
+      this.setState({ newFullName: fullName });
+      this.setState({ newLocation: location });
+      this.setState({ newPicture: picture });
+    }
   }
 
   onChange = e => {
@@ -152,6 +169,14 @@ export class Profile extends Component {
                       DeliverySpeed,
                       FoodQuality
                     } = rates;
+                    const review = {
+                      rates,
+                      restaurantName,
+                      stringDate,
+                      _id,
+                      picture,
+                      averageRate
+                    };
                     return (
                       <Col sm="4" key={_id}>
                         <Card
@@ -259,7 +284,7 @@ export class Profile extends Component {
                               </Col>
                             </Row>
                             <Col>
-                              <Button color="warning">Edit Review</Button>
+                              <UpdateReview review={review} />
                             </Col>
                             <Col>
                               <Button

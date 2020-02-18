@@ -2,7 +2,9 @@ import {
   USER_PROFILE_SUCCSSES,
   UPDATE_USER,
   UPLOAD_PIC,
-  REFRESH
+  REFRESH,
+  OTHER_PROFILE,
+  OTHER_PROFILE_SUCCSSES
 } from "./types";
 
 export function userProfileSuccsses(user) {
@@ -30,5 +32,20 @@ export function uploadPicture(picture) {
   return {
     type: UPLOAD_PIC,
     payload: picture
+  };
+}
+
+export function getUserProfile(user) {
+  return {
+    type: OTHER_PROFILE,
+    payload: user,
+    uri: "api/users/getProfile"
+  };
+}
+
+export function otherProfileSuccsses(user) {
+  return {
+    type: OTHER_PROFILE_SUCCSSES,
+    payload: user
   };
 }

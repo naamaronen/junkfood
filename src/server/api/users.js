@@ -48,6 +48,16 @@ module.exports = app => {
       });
   });
 
+  app.post("/api/users/getProfile", (req, res) => {
+    User.findOne({ username: req.body.username })
+      .select("-password")
+      .populate("reviews")
+      .then(user => {
+        res.json(user);
+        res.end();
+      });
+  });
+
   app.post("/api/register/update", (req, res) => {
     console.log("User.get/users/api/register/update");
     const { username, fullName, picture, location } = req.body;
@@ -69,9 +79,9 @@ module.exports = app => {
     const { name, fullName, location } = req.body;
     if (location != null && fullName != null && name != null) {
       User.find({
-        username: name,
-        location: location,
-        fullName: fullName
+        username: new RegExp(`^${name}$`, "i"),
+        location: new RegExp(`^${location}$`, "i"),
+        fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -81,7 +91,7 @@ module.exports = app => {
         });
     } else if (fullName != null && location === null && name === null) {
       User.find({
-        fullName: fullName
+        fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -91,7 +101,7 @@ module.exports = app => {
         });
     } else if (location != null && name === null && fullName === null) {
       User.find({
-        location: location
+        location: new RegExp(`^${location}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -101,7 +111,7 @@ module.exports = app => {
         });
     } else {
       User.find({
-        username: name
+        username: new RegExp(`^${name}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")

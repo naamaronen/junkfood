@@ -45,8 +45,6 @@ class SearchNavBar extends Component {
     if (this.state.redirect) {
       this.setRedirect();
       this.setState({ SearchLocationValue: null });
-      //this.props.history.push("/");
-      return <Redirect to="/search_rest" />;
     }
   };
 
@@ -54,8 +52,6 @@ class SearchNavBar extends Component {
     if (this.state.redirect) {
       this.setRedirect();
       this.setState({ SearchLocationValue: null, SearchFullNameValue: null });
-      //this.props.history.push("/");
-      return <Redirect to="/search_user" />;
     }
   };
 
@@ -74,10 +70,8 @@ class SearchNavBar extends Component {
     this.render();
   };
 
-  onClick = e => {
-    e.preventDefault();
+  onClick = () => {
     this.setRedirect();
-
     if (this.state.searchFor === "restaurant") {
       const newSearch = {
         name: this.state.SearchValue,
@@ -110,7 +104,7 @@ class SearchNavBar extends Component {
                 placeholder="Search..."
                 onChange={this.onChange}
               />
-              <Button onClick={this.onClick} tag={Link} to="/search_rest">
+              <Button onClick={this.onClick} tag={Link} to={"/search_rest"}>
                 Search
               </Button>
               <FormGroup check inline>
@@ -187,7 +181,7 @@ class SearchNavBar extends Component {
                 placeholder="Search..."
                 onChange={this.onChange}
               />
-              <Button onClick={this.onClick} tag={Link} to="/search_user">
+              <Button onClick={this.onClick} tag={Link} to={"/search_user"}>
                 Search
               </Button>
               <FormGroup check inline>
