@@ -17,7 +17,8 @@ const UserSchema = new Schema({
     required: false
   },
   picture: {
-    ref: "Image", type: Schema.Types.ObjectId
+    ref: "Image",
+    type: Schema.Types.ObjectId
   },
   location: {
     type: String,
@@ -26,12 +27,12 @@ const UserSchema = new Schema({
   reviews: [{ ref: "Review", type: Schema.Types.ObjectId }]
 });
 
-UserSchema.methods.generateHash = function(password) {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
+// UserSchema.methods.generateHash = function(password) {
+//   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+// };
 
-UserSchema.methods.validPassword = function(password) {
-  return bcrypt.compareSync(password, this.password);
-};
+// UserSchema.methods.validPassword = function(password) {
+//   return bcrypt.compareSync(password, this.password);
+// };
 
 module.exports = User = mongoose.model("User", UserSchema);

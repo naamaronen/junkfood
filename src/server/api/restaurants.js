@@ -26,7 +26,7 @@ module.exports = app => {
       name: req.body.name,
       location: req.body.location
     });
-
+    newRestaurant.stringDate = newRestaurant.date.toLocaleString();
     newRestaurant.save().then(restaurant => res.json(restaurant));
   });
 
@@ -58,10 +58,10 @@ module.exports = app => {
     console.log("api/search_rest");
     const { name, location, rate } = req.body;
     console.log(req.body);
-    if (location != null && name != null) {
+    if (location != null && name != null && name != "") {
       Restaurant.find({
-        name: name,
-        location: location
+        name: new RegExp(`^${name}$`, "i"),
+        location: new RegExp(`^${location}$`, "i")
       })
         .sort({ name: 1 })
         .populate("reviews")
@@ -72,7 +72,7 @@ module.exports = app => {
     } else if (location != null && rate === null) {
       console.log(`search for location: ${location}`);
       Restaurant.find({
-        location: location
+        location: new RegExp(`^${location}$`, "i")
       })
         .sort({ name: 1 })
         .populate("reviews")
@@ -82,7 +82,7 @@ module.exports = app => {
         });
     } else if (location != null && rate != null) {
       Restaurant.find({
-        location: location,
+        location: new RegExp(`^${location}$`, "i"),
         averageRate: rate
       })
         .sort({ name: 1 })
@@ -93,7 +93,7 @@ module.exports = app => {
         });
     } else if (rate != null) {
       Restaurant.find({
-        name: name,
+        name: new RegExp(`^${name}$`, "i"),
         averageRate: rate
       })
         .sort({ name: 1 })
@@ -104,7 +104,7 @@ module.exports = app => {
         });
     } else {
       Restaurant.find({
-        name: name
+        name: new RegExp(`^${name}$`, "i")
       })
         .sort({ name: 1 })
         .populate("reviews")

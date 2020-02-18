@@ -15,7 +15,11 @@ const RestaurantSchema = new Schema({
 
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now()
+  },
+  stringDate: {
+    type: String,
+    default: Date.now()
   },
   reviews: [{ ref: "Review", type: Schema.Types.ObjectId }]
 });

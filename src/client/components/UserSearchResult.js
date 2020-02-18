@@ -25,9 +25,12 @@ import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
 import { Link, Route, Redirect } from "react-router-dom";
-import ReviewModal from "./ReviewModal";
+import { getUserProfile } from "../actions/userActions";
 
 class UserSearchResult extends Component {
+  onClick = username => {
+    this.props.getUserProfile({ username });
+  };
   render() {
     const { searchResult } = this.props.search;
     return (
@@ -43,7 +46,7 @@ class UserSearchResult extends Component {
                 </div>
               ) : (
                 searchResult.map(
-                  ({ _id, fullName, location, picture, username, reviews }) => (
+                  ({ _id, fullName, location, picture, username }) => (
                     <Col sm="3" key={_id}>
                       <Card
                         key={_id}
@@ -58,13 +61,14 @@ class UserSearchResult extends Component {
                           <h6 className="card-subtitle mb-2 text-muted">
                             {location}
                           </h6>
-                          {/* <CardText>
-                          <small className="text-muted">{date}</small>
-                        </CardText> */}
-                          {/* <Button style={{ marginBottom: "2rem" }}>
-                          <Link to={`/restaurants/${name}`}>Watch Reviews</Link>
-                        </Button>
-                        <ReviewModal /> */}
+                          <Button
+                            color="warning"
+                            onClick={this.onClick(username)}
+                            tag={Link}
+                            to={`/userProfile/${username}`}
+                          >
+                            Watch Profile
+                          </Button>
                         </CardBody>
                       </Card>
                     </Col>
@@ -85,4 +89,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(UserSearchResult);
+const mapDispatchToProps = () => dispatch => {
+  return {
+    getUserProfile: username => {
+      dispatch(getUserProfile(username));
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserSearchResult);

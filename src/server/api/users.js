@@ -2,6 +2,7 @@
 const User = require("../model/User");
 const upload = require("../image");
 const Image = require("../model/Image");
+const bcrypt = require("bcryptjs");
 
 //@route POST api/users
 //@desc Register new user
@@ -13,7 +14,7 @@ module.exports = app => {
     //Simple validation
     if (!req.body.fullName || !req.body.username || !req.body.password) {
         console.log("missing fields");
-      return res.status(404).json({ msg: "Please enter all fields" });
+      return res.status(404).send({ msg: "Please enter all fields" });
     }
     //Check for existing user - by username
     User.findOne({ username: req.body.username }).then(user => {
@@ -30,13 +31,15 @@ module.exports = app => {
           });
           newImage.save()
       }
+      
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
       const newUser = new User({
         fullName: req.body.fullName,
         username: req.body.username,
         location: req.body.location,
-        picture: newImage
+        picture: newImage,
+        password: req.body.password
       });
-      newUser.generateHash(req.body.password);
       newUser.save().then(user => {
         res.json(user);
         res.end();
@@ -78,6 +81,17 @@ module.exports = app => {
             res.json(user);
             res.end();
           });
+    
+  app.post("/api/users/getProfile", (req, res) => {
+    User.findOne({ username: req.body.username })
+      .select("-password")
+      .populate("reviews")
+      .then(user => {
+        res.json(user);
+        res.end();
+      });
+  });
+
       });
 
   app.post("/api/search_user", (req, res) => {
@@ -85,9 +99,9 @@ module.exports = app => {
     const { name, fullName, location } = req.body;
     if (location != null && fullName != null && name != null) {
       User.find({
-        username: name,
-        location: location,
-        fullName: fullName
+        username: new RegExp(`^${name}$`, "i"),
+        location: new RegExp(`^${location}$`, "i"),
+        fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -98,7 +112,7 @@ module.exports = app => {
         });
     } else if (fullName != null && location === null && name === null) {
       User.find({
-        fullName: fullName
+        fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -108,7 +122,7 @@ module.exports = app => {
         });
     } else if (location != null && name === null && fullName === null) {
       User.find({
-        location: location
+        location: new RegExp(`^${location}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")
@@ -118,7 +132,7 @@ module.exports = app => {
         });
     } else {
       User.find({
-        username: name
+        username: new RegExp(`^${name}$`, "i")
       })
         .sort({ fullName: 1 })
         .populate("reviews")

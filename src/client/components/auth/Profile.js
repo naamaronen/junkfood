@@ -20,6 +20,8 @@ import { connect } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
+import { deleteReview } from "../../actions/reviewAction";
+import UpdateReview from "../UpdateReview";
 
 export class Profile extends Component {
   state = {
@@ -50,6 +52,22 @@ export class Profile extends Component {
       newPicture: null });
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props != prevProps) {
+      const { userProfile } = this.props.user;
+      const { fullName, reviews, location, username, picture } = userProfile;
+      this.setState({ userProfile: userProfile });
+      this.setState({ fullName: fullName });
+      this.setState({ location: location });
+      this.setState({ username: username });
+      this.setState({ picture: picture });
+      this.setState({ reviews: reviews });
+      this.setState({ newFullName: fullName });
+      this.setState({ newLocation: location });
+      this.setState({ newPicture: picture });
+    }
+  }
+
   onChange = e => {
     console.log(e);
     this.setState({ [e.target.name]: e.target.value });
@@ -70,13 +88,18 @@ export class Profile extends Component {
     userData.append("imageData", this.state.newPicture);
     userData.append("fullName", this.state.newFullName);
     userData.append("location", this.state.newLocation);
+
     //Update user
     this.props.updateProfile(userData);
   };
 
 
+  deleteReview = id => {
+    console.log("delete");
+    //this.props.deleteReview(id);
+  };
+
   render() {
-    console.log(this.state);
     return (
       <div className="App">
         <AppNavBar />
@@ -134,7 +157,7 @@ export class Profile extends Component {
                   ({
                     rates,
                     restaurantName,
-                    date,
+                    stringDate,
                     _id,
                     picture,
                     averageRate
@@ -147,6 +170,14 @@ export class Profile extends Component {
                       DeliverySpeed,
                       FoodQuality
                     } = rates;
+                    const review = {
+                      rates,
+                      restaurantName,
+                      stringDate,
+                      _id,
+                      picture,
+                      averageRate
+                    };
                     return (
                       <Col sm="4" key={_id}>
                         <Card
@@ -160,7 +191,7 @@ export class Profile extends Component {
                             <h5 className="card-title">{restaurantName}</h5>
                             <CardText></CardText>
                             <CardText>
-                              <small className="text-muted">{`review date: ${date}`}</small>
+                              <small className="text-muted">{`review date: ${stringDate}`}</small>
                             </CardText>
                             <Row>
                               <Col>
@@ -253,6 +284,17 @@ export class Profile extends Component {
                                 />
                               </Col>
                             </Row>
+                            <Col>
+                              <UpdateReview review={review} />
+                            </Col>
+                            <Col>
+                              <Button
+                                color="danger"
+                                onClick={this.deleteReview(_id)}
+                              >
+                                Delete Review
+                              </Button>
+                            </Col>
                           </CardBody>
                         </Card>
                       </Col>
@@ -276,6 +318,10 @@ const mapDispatchToProps = () => dispatch => {
   return {
     updateProfile: user => {
       dispatch(updateProfile(user));
+    },
+    deleteReview: id => {
+      console.log(id);
+      dispatch(deleteReview(id));
     }
   };
 };
