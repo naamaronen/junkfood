@@ -1,5 +1,6 @@
 //User model
 const User = require("../model/User");
+const bcrypt = require("bcryptjs");
 
 //@route POST api/users
 //@desc Register new user
@@ -8,24 +9,31 @@ module.exports = app => {
   app.post("/api/register", (req, res) => {
     //Simple validation
     if (!req.body.fullName || !req.body.username || !req.body.password) {
-      return res.status(404).json({ msg: "Please enter all fields" });
+      return res.status(404).send({ msg: "Please enter all fields" });
     }
     //Check for existing user - by username
     User.findOne({ username: req.body.username }).then(user => {
       if (user) {
-        return res.status(404).json({ msg: "User already exist!" });
+        return res.status(404).send({ msg: "User already exist!" });
       }
-      const newUser = new User({
-        fullName: req.body.fullName,
-        username: req.body.username,
-        location: req.body.location,
-        picture: req.body.picture
-      });
-      newUser.generateHash(req.body.password);
-      newUser.save().then(user => {
-        res.json(user);
-        res.end();
-      });
+      try {
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+
+        const newUser = new User({
+          fullName: req.body.fullName,
+          username: req.body.username,
+          location: req.body.location,
+          picture: req.body.picture,
+          password: req.body.password
+        });
+
+        newUser.save().then(user => {
+          res.json(user);
+          res.end();
+        });
+      } catch (error) {
+        res.status(500).send(error);
+      }
     });
   });
 

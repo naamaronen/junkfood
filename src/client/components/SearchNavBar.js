@@ -185,6 +185,7 @@ class SearchNavBar extends Component {
                 name="SearchValue"
                 className="input"
                 placeholder="Search..."
+                onChange={this.onChange}
               />
               <Button onClick={this.onClick} tag={Link} to="/search_user">
                 Search

@@ -7,7 +7,8 @@ import {
   NavItem,
   Container,
   Row,
-  Col
+  Col,
+  Alert
 } from "reactstrap";
 import RegisterModal from "./auth/RegisterModal";
 import LoginModal from "./auth/LoginModal";
@@ -16,22 +17,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 class AppNavBar extends Component {
-  state = {
-    isOpen: false,
-    dropdownOpen: false,
-    searchFor: "restaurant"
-  };
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  };
-  dropDownToggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  };
-
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -51,7 +36,9 @@ class AppNavBar extends Component {
             </Col>
             <Col>
               <NavItem>
-                <NavLink tag={Link} to="/profile">Profile</NavLink>
+                <NavLink tag={Link} to="/profile">
+                  Profile
+                </NavLink>
               </NavItem>
             </Col>
             <Col>
@@ -89,13 +76,24 @@ class AppNavBar extends Component {
       <div>
         <Navbar color="dark" dark exapnd="sm" className="mb-5">
           <Container>
-            <NavbarBrand tag={Link} to="/">Junk Food Web</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">
+              Junk Food Web
+            </NavbarBrand>
 
             <Nav className="mr-auto" navbar>
               {isAuthenticated ? authLinks : guestLinks}
             </Nav>
           </Container>
         </Navbar>
+        <div>
+          {user && !isAuthenticated ? (
+            <Alert color="success">
+              Register Succssesfully - please Login!
+            </Alert>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     );
   }

@@ -5,7 +5,8 @@ import {
   Button,
   ModalHeader,
   ModalBody,
-  FormGroup
+  FormGroup,
+  Alert
 } from "reactstrap";
 import { connect } from "react-redux";
 import { addReview } from "../actions/reviewAction";
@@ -52,14 +53,22 @@ class ReviewModal extends Component {
   }
 
   toggle = () => {
-    const { user } = this.props.auth;
-    this.setState({
-      userReview: user
-    });
-    this.setState({
-      modal: !this.state.modal
-    });
-    this.setState({ restaurantName: this.props.rest_name });
+    const { user, isAuthenticated } = this.props.auth;
+    if (isAuthenticated) {
+      this.setState({
+        userReview: user
+      });
+      this.setState({
+        modal: !this.state.modal
+      });
+      this.setState({ restaurantName: this.props.rest_name });
+    } else {
+      return (
+        <Alert color="danger">
+          Sorry, you Have to be logged in to add a review
+        </Alert>
+      );
+    }
   };
 
   onChange = e => {

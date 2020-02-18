@@ -45,7 +45,7 @@ class RegisterModal extends Component {
     }
     //if authenticated, close modal
     if (this.state.modal) {
-      if (this.props.isAuthenticated) this.toggle();
+      if (this.props.user) this.toggle();
     }
   }
 
@@ -155,7 +155,8 @@ class RegisterModal extends Component {
 const mapStateToProps = state => {
   return {
     error: state.error,
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
   };
 };
 

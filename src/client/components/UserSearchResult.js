@@ -25,7 +25,6 @@ import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
 import { Link, Route, Redirect } from "react-router-dom";
-import ReviewModal from "./ReviewModal";
 
 class UserSearchResult extends Component {
   render() {
@@ -58,13 +57,12 @@ class UserSearchResult extends Component {
                           <h6 className="card-subtitle mb-2 text-muted">
                             {location}
                           </h6>
-                          {/* <CardText>
-                          <small className="text-muted">{date}</small>
-                        </CardText> */}
-                          {/* <Button style={{ marginBottom: "2rem" }}>
-                          <Link to={`/restaurants/${name}`}>Watch Reviews</Link>
-                        </Button>
-                        <ReviewModal /> */}
+
+                          {/*need to show other user profile and not self! */}
+
+                          <Button color="warning" tag={Link} to="/userProfile">
+                            Watch Profile
+                          </Button>
                         </CardBody>
                       </Card>
                     </Col>

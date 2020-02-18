@@ -19,7 +19,7 @@ const RestaurantSchema = new Schema({
   },
   stringDate: {
     type: String,
-    default: Date.now().toLocaleString("en-GB", { timeZone: "UTC" })
+    default: Date.now()
   },
   reviews: [{ ref: "Review", type: Schema.Types.ObjectId }]
 });

@@ -36,3 +36,4 @@ export const TIME_SORT = "TIME_SORT";
 export const FIELD_SORT = "FIELD_SORT";
 export const SORT_SUCCSSES = "SORT_SUCCSSES";
 export const DELETE_REVIEW = "DELETE_REVIEW";
+export const REFRESH = "REFRESH";

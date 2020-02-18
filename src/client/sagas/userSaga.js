@@ -4,7 +4,7 @@ import {
   UPDATE_USER,
   REGISTER,
   UPLOAD_PIC,
-  ADD_REVIEW
+  REFRESH
 } from "../actions/types";
 import { userProfileSuccsses } from "../actions/userActions.js";
 import { returnErrors } from "../actions/errorActions";
@@ -19,23 +19,6 @@ function* getUser(action) {
       })
     };
     const res = yield call(fetch, "api/signin/userSessions", options);
-    const user = yield call([res, "json"]);
-    yield put(userProfileSuccsses(user));
-  } catch (e) {
-    yield put(returnErrors(e.message));
-  }
-}
-
-function* getUserAfterReview(action) {
-  try {
-    const options = {
-      method: "POST",
-      body: JSON.stringify(action.payload),
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
-    };
-    const res = yield call(fetch, "api/signin/userSessionsReview", options);
     const user = yield call([res, "json"]);
     yield put(userProfileSuccsses(user));
   } catch (e) {
@@ -65,14 +48,7 @@ function* uploadPicture(action) {
   try {
     const options = {
       method: "POST",
-<<<<<<< HEAD
-      body: JSON.stringify(action.payload)
-=======
       body: action.payload
->>>>>>> 588ee5098e9f7c28da4d3cdcdeec24e452a4e3f9
-      /*headers: new Headers({
-        "Content-Type": "application/json"
-      })*/
     };
     const res = yield call(fetch, "api/image", options);
     //const user = yield call([res, "json"]);
@@ -86,7 +62,7 @@ function* uploadPicture(action) {
 export default function* UserSaga() {
   yield takeEvery(LOGIN, getUser);
   yield takeEvery(REGISTER, getUser);
-  yield takeEvery(ADD_REVIEW, getUserAfterReview);
+  yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
   yield takeEvery(UPLOAD_PIC, uploadPicture);
 }

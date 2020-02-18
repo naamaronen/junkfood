@@ -46,12 +46,9 @@ export class RestReviews extends Component {
   };
 
   onChangeField = e => {
+    this.setState({ sortTime: "" });
     this.setState({ isSorted: !this.state.isSorted });
     this.setState({ sortField: e.target.name });
-  };
-
-  onChangeRate = e => {
-    this.setState({ rate: e.target.value });
   };
 
   onClick = e => {
@@ -233,132 +230,138 @@ export class RestReviews extends Component {
               <h4>{rest.location}</h4>
               {rest.picture}
             </Jumbotron>
-            <div>
-              <div className="sort-reviews">
-                <h5>Sort By</h5>
-                <FormGroup check>
-                  <div>
-                    <CustomInput
-                      type="checkbox"
-                      name="newest"
-                      onChange={this.onChangeTime}
-                      label="Newest"
-                      id="customRadio1"
-                      inline
-                    />
-                    <CustomInput
-                      type="checkbox"
-                      name="oldest"
-                      onChange={this.onChangeTime}
-                      label="Oldest"
-                      id="customRadio2"
-                      inline
-                    />
-                    <CustomInput
-                      type="checkbox"
-                      name="lastWeek"
-                      onChange={this.onChangeTime}
-                      label="since last Week"
-                      id="customRadio3"
-                      inline
-                    />
-                    <CustomInput
-                      type="checkbox"
-                      name="lastMonth"
-                      onChange={this.onChangeTime}
-                      label="since last Month"
-                      id="customRadio4"
-                      inline
-                    />
-                    <CustomInput
-                      type="checkbox"
-                      name="lastYear"
-                      onChange={this.onChangeTime}
-                      label="since last Year"
-                      id="customRadio5"
-                      inline
-                    />
-                  </div>
-                </FormGroup>
-              </div>
+            <Container>
               <div>
-                <FormGroup check>
-                  <div>
-                    <Row>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="BathroomQuality"
-                          onChange={this.onChangeField}
-                          label="Bathroom Quality"
-                          id="customRadio6"
-                        />
-                      </Col>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="StaffKindness"
-                          onChange={this.onChangeField}
-                          label="Staff Kindness"
-                          id="customRadio7"
-                        />
-                      </Col>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="Cleanliness"
-                          onChange={this.onChangeField}
-                          label="Cleanliness"
-                          id="customRadio8"
-                        />
-                      </Col>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="DriveThruQuality"
-                          onChange={this.onChangeField}
-                          label="DriveThru Quality"
-                          id="customRadio9"
-                        />
-                      </Col>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="DeliverySpeed"
-                          onChange={this.onChangeField}
-                          label="Delivery Speed"
-                          id="customRadio10"
-                        />
-                      </Col>
-                      <Col xs="auto">
-                        <CustomInput
-                          type="checkbox"
-                          name="FoodQuality"
-                          onChange={this.onChangeField}
-                          label="Food Quality"
-                          id="customRadio11"
-                        />
-                      </Col>
-                    </Row>
-                  </div>
-                </FormGroup>
+                <div className="sort-reviews">
+                  <h5>Sort By</h5>
+                  <FormGroup check>
+                    <div>
+                      <CustomInput
+                        type="checkbox"
+                        name="newest"
+                        onChange={this.onChangeTime}
+                        label="Newest"
+                        id="customRadio1"
+                        inline
+                      />
+                      <CustomInput
+                        type="checkbox"
+                        name="oldest"
+                        onChange={this.onChangeTime}
+                        label="Oldest"
+                        id="customRadio2"
+                        inline
+                      />
+                      <CustomInput
+                        type="checkbox"
+                        name="lastWeek"
+                        onChange={this.onChangeTime}
+                        label="since last Week"
+                        id="customRadio3"
+                        inline
+                      />
+                      <CustomInput
+                        type="checkbox"
+                        name="lastMonth"
+                        onChange={this.onChangeTime}
+                        label="since last Month"
+                        id="customRadio4"
+                        inline
+                      />
+                      <CustomInput
+                        type="checkbox"
+                        name="lastYear"
+                        onChange={this.onChangeTime}
+                        label="since last Year"
+                        id="customRadio5"
+                        inline
+                      />
+                    </div>
+                  </FormGroup>
+                </div>
+                <div>
+                  <FormGroup check>
+                    <div>
+                      <Row>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="BathroomQuality"
+                            onChange={this.onChangeField}
+                            label="Bathroom Quality"
+                            id="customRadio6"
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="StaffKindness"
+                            onChange={this.onChangeField}
+                            label="Staff Kindness"
+                            id="customRadio7"
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="Cleanliness"
+                            onChange={this.onChangeField}
+                            label="Cleanliness"
+                            id="customRadio8"
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="DriveThruQuality"
+                            onChange={this.onChangeField}
+                            label="DriveThru Quality"
+                            id="customRadio9"
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="DeliverySpeed"
+                            onChange={this.onChangeField}
+                            label="Delivery Speed"
+                            id="customRadio10"
+                          />
+                        </Col>
+                        <Col xs="auto">
+                          <CustomInput
+                            type="checkbox"
+                            name="FoodQuality"
+                            onChange={this.onChangeField}
+                            label="Food Quality"
+                            id="customRadio11"
+                          />
+                        </Col>
+                      </Row>
+                    </div>
+                  </FormGroup>
+                </div>
+                <div>
+                  <Row>
+                    <Col xs="auto">
+                      <Button onClick={this.onClick}>Sort</Button>
+                    </Col>
+                    <Col xs="auto">
+                      <Button onClick={this.showAll}>Show All Reviews</Button>
+                    </Col>
+                  </Row>
+                </div>
               </div>
-              <Row>
-                <Col xs="auto">
-                  <Button onClick={this.onClick}>Sort</Button>
-                </Col>
-                <Col xs="auto">
-                  <Button onClick={this.showAll}>Show All Reviews</Button>
-                </Col>
-              </Row>
-            </div>
+            </Container>
             <div>
-              <div>
-                <h3>Reviews</h3>
-              </div>
-              {this.state.showSorted
-                ? this.showReviews(this.props.review.sortedReviews)
-                : this.showReviews(rest.reviews)}
+              <Container>
+                <div>
+                  <h3>Reviews</h3>
+                </div>
+                {this.state.showSorted
+                  ? this.showReviews(this.props.review.sortedReviews)
+                  : this.showReviews(rest.reviews)}
+              </Container>
             </div>
           </div>
         )}

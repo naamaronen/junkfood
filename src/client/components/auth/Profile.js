@@ -66,34 +66,21 @@ export class Profile extends Component {
     var user = { username, picture, fullName, location };
     if (fullName != newFullName) user.fullName = newFullName;
     if (location != newLocation) user.location = newLocation;
-<<<<<<< HEAD
-    if (newPicture) {
-      user.picture = newPicture; //?
-    }
-=======
-    if (picture != newPicture) { user.picture = newPicture;
-    };
->>>>>>> 588ee5098e9f7c28da4d3cdcdeec24e452a4e3f9
+
     //Update user
     this.props.updateProfile(user);
   };
 
   uploadImage = e => {
-<<<<<<< HEAD
-    var pic = { imageData: e.target.files[0] };
+    let pic = new FormData();
+    pic.append("imageData", e.target.files[0]);
     this.props.uploadPicture(pic);
-    //URL.createObjectURL(e.target.files[0])
+    this.setState({ newPicture: URL.createObjectURL(e.target.files[0]) });
   };
 
   deleteReview = id => {
     console.log("delete");
     //this.props.deleteReview(id);
-=======
-    let pic = new FormData();
-    pic.append("imageData", e.target.files[0]);
-    this.props.uploadPicture(pic);
-    this.setState({ newPicture: URL.createObjectURL(e.target.files[0])});
->>>>>>> 588ee5098e9f7c28da4d3cdcdeec24e452a4e3f9
   };
 
   render() {
@@ -127,7 +114,7 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
 
-                <img src={this.state.newPicture}/>
+                <img src={this.state.newPicture} />
                 <Input
                   type="file"
                   name="newPicture"

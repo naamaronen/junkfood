@@ -1,6 +1,7 @@
 //User model
 const User = require("../model/User");
 const UserSession = require("../model/UserSession");
+const bcrypt = require("bcryptjs");
 
 //@route POST api/signin
 //@desc Signin new user
@@ -11,20 +12,20 @@ module.exports = app => {
     console.log("User.post/api/signin");
     const username = req.body.username;
     const password = req.body.password;
+
     if (!username || !password) {
-      return res.status(404).json({ msg: "Please enter all fields" });
+      return res.status(404).send({ msg: "Please enter all fields" });
     }
     //Check for existing user - by username
-    User.find({ username }).then(user => {
+    User.findOne({ username }).then(user => {
       if (!user) {
-        return res.status(404).json({ msg: "User does not exist!" });
+        return res.status(404).send({ msg: "User does not exist!" });
       }
-      console.log(password);
-      //if (!user[0].validPassword(req.body.password)) {
-      //  return res.status(404).json({ msg: "Wrong Password!" });
-      //}
+      if (!bcrypt.compareSync(password, user.password)) {
+        return res.status(400).send({ message: "The password is invalid" });
+      }
       const newUserSession = new UserSession({
-        userId: user[0]._id,
+        userId: user._id,
         username: username
       });
       newUserSession.save((err, doc) => {
@@ -61,11 +62,4 @@ module.exports = app => {
   // @route DELETE api/users/id
   // @desc Delete a user
   // access public
-
-  app.post("/api/signout/userSessions", (req, res) => {
-    console.log(req.body);
-    UserSession.findOne({ username: req.body })
-      .then(user => user.remove().then(() => res.json({ success: true })))
-      .catch(err => res.status(404).json({ success: false }));
-  });
 };

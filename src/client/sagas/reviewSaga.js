@@ -10,6 +10,7 @@ import {
   reviewsFailure,
   sortSuccsses
 } from "../actions/reviewAction";
+import { refresh } from "../actions/userActions";
 
 function* saveReview(action) {
   console.log("addReviewSaga=", action);
@@ -23,6 +24,7 @@ function* saveReview(action) {
     });
     const review = yield call([res, "json"]);
     console.log(review);
+    yield put(refresh({ username: action.payload.userReview }));
     yield put(addReviewSuccess(review));
   } catch (e) {
     yield put(reviewsFailure(e.message));

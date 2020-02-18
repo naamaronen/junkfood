@@ -1,12 +1,20 @@
 import React, { Component } from "react";
-import { Container, Button } from "reactstrap";
 import { connect } from "react-redux";
 import {
   deleteRestaurant,
   getRestaurants,
   fetchRests
 } from "../actions/restaurantAction";
-import { Card, CardImg, CardText, CardBody, CardDeck, Col } from "reactstrap";
+import {
+  Container,
+  Button,
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardDeck,
+  Col
+} from "reactstrap";
 import ReviewModal from "./ReviewModal";
 
 import { Link } from "react-router-dom";
