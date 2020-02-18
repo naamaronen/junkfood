@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Image = require("../model/Image");
 const multer = require("multer");
 
 
@@ -25,22 +24,6 @@ const upload = multer({
     }
 });
 
-module.exports = app => {
-    app.post("/api/image", upload.single('imageData'), function (req, res) {
-        console.log("Image.post/api/image");
-        const newImage = new Image({
-            imageData: req.file.path
-        });
+module.exports = upload;
 
-        newImage.save()
-            .then((result) => {
-                console.log(result);
-                res.status(200).json({
-                    success:true,
-                    document:result
-                });
-            })
-            .catch((err)=>console.log(err));
-        })
-    };
 

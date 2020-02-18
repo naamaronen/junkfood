@@ -15,10 +15,7 @@ function* register(action) {
   try {
     const options = {
       method: "POST",
-      body: JSON.stringify(action.payload),
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
+      body: action.payload
     };
 
     const res = yield call(fetch, action.uri, options);

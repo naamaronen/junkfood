@@ -28,12 +28,6 @@ export function refresh(user) {
   };
 }
 
-export function uploadPicture(picture) {
-  return {
-    type: UPLOAD_PIC,
-    payload: picture
-  };
-}
 
 export function getUserProfile(user) {
   return {

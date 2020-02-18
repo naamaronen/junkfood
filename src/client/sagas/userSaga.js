@@ -32,13 +32,11 @@ function* getUser(action) {
 }
 
 function* updateProfile(action) {
+  console.log(action.payload);
   try {
     const options = {
       method: "POST",
-      body: JSON.stringify(action.payload),
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
+      body: action.payload
     };
     const res = yield call(fetch, "api/register/update", options);
     const user = yield call([res, "json"]);
@@ -48,7 +46,7 @@ function* updateProfile(action) {
     yield put(returnErrors(e.message));
   }
 }
-
+/*
 function* uploadPicture(action) {
   console.log(action.payload);
   try {
@@ -62,7 +60,7 @@ function* uploadPicture(action) {
   } catch (e) {
     yield put(returnErrors(e.message));
   }
-}
+}*/
 
 function* otherProfile(action) {
   try {
@@ -87,6 +85,5 @@ export default function* UserSaga() {
   yield takeEvery(REGISTER, getUser);
   yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
-  yield takeEvery(UPLOAD_PIC, uploadPicture);
   yield takeEvery(OTHER_PROFILE, otherProfile);
 }

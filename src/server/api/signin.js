@@ -42,7 +42,7 @@ module.exports = app => {
   app.post("/api/signin/userSessions", function(req, res) {
     console.log("User.get/api/signin");
     User.findOne({ username: req.body.username })
-      .populate("reviews")
+        .populate("picture").populate("reviews")
       .then(user => {
         res.json(user);
         res.end();
