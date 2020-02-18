@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Dropzone from 'react-dropzone';
 import {
   Form,
   Modal,
@@ -27,7 +28,8 @@ class RegisterModal extends Component {
     password: "",
     location: "",
     picture: null,
-    msg: null
+    msg: null,
+    loadedPicture: null
   };
 
   componentDidUpdate(prevProps) {
@@ -60,21 +62,25 @@ class RegisterModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  loadImage = e => {
+    console.log(e);
+    this.setState({
+      loadedPicture: URL.createObjectURL(e[0]),
+      picture: e[0]
+    });
+  };
+
   onSubmit = e => {
     e.preventDefault();
-
-    const { fullName, username, password, location, picture } = this.state;
-
     //Create new user
-    const newUser = {
-      fullName,
-      username,
-      password,
-      location,
-      picture
-    };
+    let userData = new FormData();
+    userData.append("username", this.state.username);
+    userData.append("imageData", this.state.picture);
+    userData.append("fullName", this.state.fullName);
+    userData.append("location", this.state.location);
+    userData.append("password", this.state.password);
     //Attempt to register
-    this.props.register(newUser);
+    this.props.register(userData);
   };
 
   render() {
@@ -87,7 +93,7 @@ class RegisterModal extends Component {
           <ModalHeader toggle={this.toggle}>Register</ModalHeader>
           <ModalBody>
             {this.state.msg ? (
-              <Alert color="danger">{this.atate.msg}</Alert>
+              <Alert color="danger">{this.state.msg}</Alert>
             ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
@@ -132,12 +138,16 @@ class RegisterModal extends Component {
                     Add Picture
                   </Label>
                   <Col sm={10}>
-                    <Input
-                      type="file"
-                      name="picture"
-                      id="picture"
-                      onChange={this.onChange}
-                    />
+                    <img src={this.state.loadedPicture}/>
+                    <Dropzone name="picture" accept="image/*" onDrop={this.loadImage}>
+                      {({getRootProps, getInputProps}) => (
+                          <section>
+                            <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
+                              <input {...getInputProps()} />
+                              <p>Drag image here, or click to select file</p>
+                            </div>
+                          </section>
+                      )}</Dropzone>
                   </Col>
                 </FormGroup>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import Dropzone from 'react-dropzone';
 import {
   Jumbotron,
   Button,
@@ -16,7 +17,7 @@ import {
   Row
 } from "reactstrap";
 import { connect } from "react-redux";
-import { updateProfile, uploadPicture } from "../../actions/userActions";
+import { updateProfile } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 
@@ -30,53 +31,49 @@ export class Profile extends Component {
     reviews: [],
     newFullName: "",
     newLocation: "",
-    newPicture: null
+    newPicture: null,
+    loadedPicture: null
   };
 
   componentDidMount() {
     const { userProfile } = this.props.user;
     const { fullName, reviews, location, username, picture } = userProfile;
-    this.setState({ userProfile: userProfile });
-    this.setState({ fullName: fullName });
-    this.setState({ location: location });
-    this.setState({ username: username });
-    this.setState({ picture: picture });
-    this.setState({ reviews: reviews });
-    this.setState({ newFullName: fullName });
-    this.setState({ newLocation: location });
-    this.setState({ newPicture: picture });
+    this.setState({
+      userProfile: userProfile,
+      fullName: fullName,
+      location: location,
+      username: username,
+      picture: picture.imageData,
+      reviews: reviews,
+      newFullName: fullName,
+      newLocation: location,
+      newPicture: null });
   }
 
   onChange = e => {
+    console.log(e);
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  loadImage = e => {
+    console.log(e);
+    this.setState({
+      loadedPicture: URL.createObjectURL(e[0]),
+      newPicture: e[0]
+    });
   };
 
   onSubmit = e => {
     e.preventDefault();
-    const {
-      username,
-      picture,
-      fullName,
-      location,
-      newLocation,
-      newFullName,
-      newPicture
-    } = this.state;
-    var user = { username, picture, fullName, location };
-    if (fullName != newFullName) user.fullName = newFullName;
-    if (location != newLocation) user.location = newLocation;
-    if (picture != newPicture) { user.picture = newPicture;
-    };
+    let userData = new FormData();
+    userData.append("username", this.state.username);
+    userData.append("imageData", this.state.newPicture);
+    userData.append("fullName", this.state.newFullName);
+    userData.append("location", this.state.newLocation);
     //Update user
-    this.props.updateProfile(user);
+    this.props.updateProfile(userData);
   };
 
-  uploadImage = e => {
-    let pic = new FormData();
-    pic.append("imageData", e.target.files[0]);
-    this.props.uploadPicture(pic);
-    this.setState({ newPicture: URL.createObjectURL(e.target.files[0])});
-  };
 
   render() {
     console.log(this.state);
@@ -86,6 +83,7 @@ export class Profile extends Component {
         <div>
           <Jumbotron>
             <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
+            <img src={this.state.picture}/>
             <p>you can watch and edit your profile here!</p>
 
             <Form onSubmit={this.onSubmit}>
@@ -99,7 +97,6 @@ export class Profile extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-
                 <Label for="location">Location</Label>
                 <Input
                   type="text"
@@ -110,14 +107,16 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
 
-                <img src={this.state.newPicture}/>
-                <Input
-                  type="file"
-                  name="newPicture"
-                  id="picture"
-                  accept="image/*"
-                  onChange={this.uploadImage}
-                />
+                <img src={this.state.loadedPicture}/>
+                <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
+                  {({getRootProps, getInputProps}) => (
+                    <section>
+                      <div {...getRootProps()} style={{ border: '1px solid black', width: 400, color: 'black', padding: 20 }}>
+                        <input {...getInputProps()} />
+                        <p>Drag image here, or click to select file</p>
+                      </div>
+                    </section>
+                )}</Dropzone>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Save Changes
                 </Button>
@@ -277,9 +276,6 @@ const mapDispatchToProps = () => dispatch => {
   return {
     updateProfile: user => {
       dispatch(updateProfile(user));
-    },
-    uploadPicture: pic => {
-      dispatch(uploadPicture(pic));
     }
   };
 };

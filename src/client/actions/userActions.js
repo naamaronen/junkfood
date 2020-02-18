@@ -1,4 +1,4 @@
-import { USER_PROFILE_SUCCSSES, UPDATE_USER, UPLOAD_PIC } from "./types";
+import { USER_PROFILE_SUCCSSES, UPDATE_USER } from "./types";
 
 export function userProfileSuccsses(user) {
   return {
@@ -14,9 +14,3 @@ export function updateProfile(user) {
   };
 }
 
-export function uploadPicture(picture) {
-  return {
-    type: UPLOAD_PIC,
-    payload: picture
-  };
-}
