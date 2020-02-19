@@ -17,7 +17,7 @@ class UpdateReview extends Component {
     super();
     this.state = {
       modal: false,
-      userReview: "",
+      user: "",
       restaurantName: "",
       BathroomQuality: null,
       StaffKindness: null,
@@ -73,7 +73,7 @@ class UpdateReview extends Component {
     } = rates;
     if (isAuthenticated) {
       this.setState({
-        userReview: user
+        user: user
       });
       this.setState({
         modal: !this.state.modal
@@ -107,7 +107,7 @@ class UpdateReview extends Component {
         6
     );
     const newReview = {
-      userReview: this.state.userReview,
+      user: this.state.user,
       restaurantName: this.state.restaurantName,
       BathroomQuality: this.state.BathroomQuality,
       StaffKindness: this.state.StaffKindness,
@@ -134,7 +134,7 @@ class UpdateReview extends Component {
         </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>
-            Hi {this.state.userReview}, Update your Review
+            Hi {this.state.user}, Update your Review
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={this.onSubmit}>

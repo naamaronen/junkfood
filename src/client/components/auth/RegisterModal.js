@@ -63,7 +63,6 @@ class RegisterModal extends Component {
   };
 
   loadImage = e => {
-    console.log(e);
     this.setState({
       loadedPicture: URL.createObjectURL(e[0]),
       picture: e[0]
