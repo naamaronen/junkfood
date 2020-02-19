@@ -82,9 +82,14 @@ module.exports = app => {
       });
 
     app.post("/api/users/getProfile", (req, res) => {
+      console.log("users.post/api/users/getProfile");
       User.findOne({ username: req.body.username })
         .select("-password")
         .populate("reviews")
+          .populate({
+            path: "reviews",
+            populate: { path: "pictures", model: "Image" }
+          })
         .then(user => {
           res.json(user);
           res.end();
@@ -103,6 +108,10 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
+          .populate({
+            path: "reviews",
+            populate: { path: "pictures", model: "Image" }
+          })
         .populate("picture")
         .then(users => {
           res.json(users);
@@ -114,6 +123,10 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
+          .populate({
+            path: "reviews",
+            populate: { path: "pictures", model: "Image" }
+          })
         .then(users => {
           res.json(users);
           res.end();
@@ -123,7 +136,10 @@ module.exports = app => {
         location: new RegExp(`^${location}$`, "i")
       })
         .sort({ fullName: 1 })
-        .populate("reviews")
+          .populate({
+            path: "reviews",
+            populate: { path: "pictures", model: "Image" }
+          })
         .then(users => {
           res.json(users);
           res.end();
@@ -134,6 +150,10 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
+          .populate({
+            path: "reviews",
+            populate: { path: "pictures", model: "Image" }
+          })
         .then(users => {
           res.json(users);
           res.end();

@@ -1,27 +1,15 @@
 import React, { Component, Fragment } from "react";
 import Dropzone from 'react-dropzone';
 import {
-  Jumbotron,
-  Button,
-  FormGroup,
-  Form,
-  Col,
-  CardDeck,
-  Card,
-  Label,
-  Input,
-  CardImg,
-  CardBody,
-  CardText,
-  Container,
-  Row
+  Jumbotron, Button, FormGroup, Form, Col, CardDeck, Card, Label,
+  Input, CardImg, CardBody, CardText, Container, Row, UncontrolledCarousel
 } from "reactstrap";
 import { connect } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
 import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
-import UpdateReview from "../UpdateReview";
+import ReviewModal from "../ReviewModal";
 
 export class Profile extends Component {
   state = {
@@ -86,7 +74,6 @@ export class Profile extends Component {
 
 
   onDeleteReview = id => {
-    console.log("delete");
     //this.props.deleteReview(id);
   };
 
@@ -150,7 +137,7 @@ export class Profile extends Component {
                     restaurantName,
                     stringDate,
                     _id,
-                    picture,
+                    pictures,
                     averageRate
                   }) => {
                     const {
@@ -166,9 +153,11 @@ export class Profile extends Component {
                       restaurantName,
                       stringDate,
                       _id,
-                      picture,
+                      pictures,
                       averageRate
                     };
+                    const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}});
+                    console.log(pictures);
                     return (
                       <Col sm="4" key={_id}>
                         <Card
@@ -177,7 +166,6 @@ export class Profile extends Component {
                           color="danger"
                           className="text-center"
                         >
-                          <CardImg top width="100%" src={picture} />
                           <CardBody>
                             <h5 className="card-title">{restaurantName}</h5>
                             <CardText></CardText>
@@ -274,9 +262,10 @@ export class Profile extends Component {
                                   value={FoodQuality}
                                 />
                               </Col>
+                              <UncontrolledCarousel items={reviewImages} indicators={false} />
                             </Row>
                             <Col>
-                              <UpdateReview review={review} />
+                              <ReviewModal review={review} type="Update"/>
                             </Col>
                             <Col>
                               <Button

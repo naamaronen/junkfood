@@ -9,7 +9,7 @@ import {
   Alert, Col
 } from "reactstrap";
 import { connect } from "react-redux";
-import { addReview } from "../actions/reviewAction";
+import {addReview, updateReview} from "../actions/reviewAction";
 import StarRatingComponent from "react-star-rating-component";
 import Dropzone from "react-dropzone";
 
@@ -30,9 +30,9 @@ class ReviewModal extends Component {
     };
   }
 
-  componentDidUpdate() {
+  /*componentDidUpdate() {
     StarRatingComponent;
-  }
+  }*/
 
   onStarClick1(nextValue, prevValue, name) {
     this.setState({ BathroomQuality: nextValue });
@@ -57,12 +57,31 @@ class ReviewModal extends Component {
     const { user, isAuthenticated } = this.props.auth;
     if (isAuthenticated) {
       this.setState({
-        user: user
-      });
-      this.setState({
+        user: user,
         modal: !this.state.modal
       });
-      this.setState({ restaurantName: this.props.rest_name });
+
+      switch (this.props.type) {
+        case "Add":
+          this.setState({ restaurantName: this.props.rest_name })
+          break;
+        case "Update":
+          const rates = this.props.review.rates;
+          this.setState({
+            _id: this.props.review._id,
+            BathroomQuality: rates.BathroomQuality,
+            StaffKindness: rates.StaffKindness,
+            Cleanliness: rates.Cleanliness,
+            DriveThruQuality: rates.DriveThruQuality,
+            DeliverySpeed: rates.DeliverySpeed,
+            FoodQuality: rates.FoodQuality,
+            pictures: this.props.review.pictures,
+            restaurantName: this.props.review.restaurantName
+          });
+          console.log(this.props.review);
+          break;
+      }
+
     } else {
       return (
         <Alert color="danger">
@@ -103,10 +122,15 @@ class ReviewModal extends Component {
     for (const img of this.state.pictures){
       newReview.append("pictures", img);
     }
-    console.log("pictures");
-    console.log(newReview.get("pictures"));
     //Add restaurant via ADD_REVIEW sction
-    this.props.addReview(newReview);
+    switch (this.props.type) {
+      case "Add":
+        this.props.addReview(newReview);
+        break;
+      case "Update":
+        this.props.updateReview(newReview);
+        break;
+    }
 
     //close modal
     this.toggle();
@@ -125,11 +149,11 @@ class ReviewModal extends Component {
           style={{ marginBottom: "2rem" }}
           onClick={this.toggle}
         >
-          Add Review
+          {this.props.type} Review
         </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>
-            Hi {this.state.user}, Add a new Review
+            Hi {this.state.user}, {this.props.type} your Review
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
@@ -190,7 +214,7 @@ class ReviewModal extends Component {
                   <ul>{images}</ul>
                 </aside>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
-                  Add Review
+                  {this.props.type} Review
                 </Button>
               </FormGroup>
             </Form>
@@ -206,10 +230,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = () => dispatch => {
-  //addReview;
   return {
     addReview: review => {
       dispatch(addReview(review));
+    },
+    updateReview: review => {
+      dispatch(updateReview(review));
     }
   };
 };

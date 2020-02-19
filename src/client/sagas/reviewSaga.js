@@ -14,9 +14,7 @@ import {
 import { refresh } from "../actions/userActions";
 
 function* saveReview(action) {
-  console.log("addReviewSaga=", action);
-  console.log(action.payload);
-  console.log(action.payload.get("pictures"));
+  console.log("saveReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
@@ -31,7 +29,7 @@ function* saveReview(action) {
   }
 }
 
-function* timeSort(action) {
+function* sort(action) {
   console.log("sortTimeReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
@@ -48,7 +46,7 @@ function* timeSort(action) {
     yield put(reviewsFailure(e.message));
   }
 }
-
+/*
 function* fieldSort(action) {
   console.log("sortFieldReviewSaga=", action);
   try {
@@ -65,7 +63,7 @@ function* fieldSort(action) {
   } catch (e) {
     yield put(reviewsFailure(e.message));
   }
-}
+}*/
 
 function* deleteReview(action) {
   console.log("deleteReviewSaga=", action);
@@ -78,8 +76,9 @@ function* deleteReview(action) {
   }
 }
 
+/*
 function* updateReview(action) {
-  console.log("addReviewSaga=", action);
+  console.log("updateReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
@@ -95,13 +94,13 @@ function* updateReview(action) {
   } catch (e) {
     yield put(reviewsFailure(e.message));
   }
-}
+}*/
 
 //using takeEvery, you take the action away from reducer to saga
 export default function* ReviewSaga() {
-  yield takeEvery(ADD_REVIEW, saveReview);
-  yield takeEvery(TIME_SORT, timeSort);
-  yield takeEvery(FIELD_SORT, fieldSort);
+  yield takeEvery([ADD_REVIEW, UPDATE_REVIEW], saveReview);
+  yield takeEvery([TIME_SORT, FIELD_SORT], sort);
+  //yield takeEvery(FIELD_SORT, fieldSort);
   yield takeEvery(DELETE_REVIEW, deleteReview);
-  yield takeEvery(UPDATE_REVIEW, updateReview);
+  //yield takeEvery(UPDATE_REVIEW, updateReview);
 }
