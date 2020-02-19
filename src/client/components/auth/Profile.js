@@ -31,9 +31,6 @@ export class Profile extends Component {
     location: "",
     picture: null,
     reviews: [],
-    newFullName: "",
-    newLocation: "",
-    newPicture: null,
     loadedPicture: null
   };
 
@@ -45,39 +42,33 @@ export class Profile extends Component {
       fullName: fullName,
       location: location,
       username: username,
-      picture: picture.imageData,
+      picture: picture ? picture.imageData:null,
       reviews: reviews,
-      newFullName: fullName,
-      newLocation: location,
-      newPicture: null });
+    });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props != prevProps) {
       const { userProfile } = this.props.user;
       const { fullName, reviews, location, username, picture } = userProfile;
-      this.setState({ userProfile: userProfile });
-      this.setState({ fullName: fullName });
-      this.setState({ location: location });
-      this.setState({ username: username });
-      this.setState({ picture: picture });
-      this.setState({ reviews: reviews });
-      this.setState({ newFullName: fullName });
-      this.setState({ newLocation: location });
-      this.setState({ newPicture: picture });
+      this.setState({ userProfile: userProfile,
+        fullName: fullName,
+        location: location,
+        username: username,
+        picture: picture ? picture.imageData:null,
+        reviews: reviews,
+        loadedPicture: null });
     }
   }
 
   onChange = e => {
-    console.log(e);
     this.setState({ [e.target.name]: e.target.value });
   };
 
   loadImage = e => {
-    console.log(e);
     this.setState({
       loadedPicture: URL.createObjectURL(e[0]),
-      newPicture: e[0]
+      picture: e[0]
     });
   };
 
@@ -85,16 +76,16 @@ export class Profile extends Component {
     e.preventDefault();
     let userData = new FormData();
     userData.append("username", this.state.username);
-    userData.append("imageData", this.state.newPicture);
-    userData.append("fullName", this.state.newFullName);
-    userData.append("location", this.state.newLocation);
+    userData.append("imageData", this.state.picture);
+    userData.append("fullName", this.state.fullName);
+    userData.append("location", this.state.location);
 
     //Update user
     this.props.updateProfile(userData);
   };
 
 
-  deleteReview = id => {
+  onDeleteReview = id => {
     console.log("delete");
     //this.props.deleteReview(id);
   };
@@ -114,7 +105,7 @@ export class Profile extends Component {
                 <Label for="fullName">Full Name</Label>
                 <Input
                   type="text"
-                  name="newFullName"
+                  name="fullName"
                   id="fullName"
                   placeholder={`${this.state.fullName}`}
                   className="mb-3"
@@ -123,7 +114,7 @@ export class Profile extends Component {
                 <Label for="location">Location</Label>
                 <Input
                   type="text"
-                  name="newLocation"
+                  name="location"
                   id="location"
                   placeholder={`${this.state.location}`}
                   className="mb-3"
@@ -290,7 +281,7 @@ export class Profile extends Component {
                             <Col>
                               <Button
                                 color="danger"
-                                onClick={this.deleteReview(_id)}
+                                onClick={this.onDeleteReview(_id)}
                               >
                                 Delete Review
                               </Button>
@@ -320,7 +311,6 @@ const mapDispatchToProps = () => dispatch => {
       dispatch(updateProfile(user));
     },
     deleteReview: id => {
-      console.log(id);
       dispatch(deleteReview(id));
     }
   };

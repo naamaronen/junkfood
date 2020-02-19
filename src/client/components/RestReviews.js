@@ -15,13 +15,15 @@ import {
   CardText,
   Container,
   Row,
-  CustomInput
+  CustomInput,
+  UncontrolledCarousel
 } from "reactstrap";
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { getRest } from "../actions/restaurantAction";
 import { sortByDate, sortByField } from "../actions/reviewAction";
+import ReviewModal from "./ReviewModal";
 
 export class RestReviews extends Component {
   constructor() {
@@ -82,9 +84,9 @@ export class RestReviews extends Component {
                 restaurantName,
                 stringDate,
                 _id,
-                picture,
+                pictures,
                 averageRate,
-                userReview
+                user
               }) => {
                 const {
                   BathroomQuality,
@@ -94,7 +96,8 @@ export class RestReviews extends Component {
                   DeliverySpeed,
                   FoodQuality
                 } = rates;
-                const { username } = userReview;
+                const { username } = user;
+                const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}})
                 return (
                   <Col sm="4" key={_id}>
                     <Card
@@ -103,7 +106,6 @@ export class RestReviews extends Component {
                       color="danger"
                       className="text-center"
                     >
-                      <CardImg top width="100%" src={picture} />
                       <CardBody>
                         <h5 className="card-title">{restaurantName}</h5>
 
@@ -201,6 +203,7 @@ export class RestReviews extends Component {
                               value={FoodQuality}
                             />
                           </Col>
+                          <UncontrolledCarousel items={reviewImages} indicators={false} />
                         </Row>
                       </CardBody>
                     </Card>
@@ -228,7 +231,7 @@ export class RestReviews extends Component {
             <Jumbotron>
               <h3 className="restPage">{rest.name}</h3>
               <h4>{rest.location}</h4>
-              {rest.picture}
+              {rest.pictures}
             </Jumbotron>
             <Container>
               <div>
@@ -348,6 +351,9 @@ export class RestReviews extends Component {
                     </Col>
                     <Col xs="auto">
                       <Button onClick={this.showAll}>Show All Reviews</Button>
+                    </Col>
+                    <Col xs="auto">
+                    <ReviewModal rest_name={rest.name} />
                     </Col>
                   </Row>
                 </div>

@@ -3,37 +3,48 @@ const mongoose = require("mongoose");
 const Review = require("../model/Review");
 const User = require("../model/User");
 const Restaurant = require("../model/Restaurant");
+const Image = require("../model/Image");
+const upload = require("../image");
 
 module.exports = app => {
   app.get("/api/reviews", function(req, res) {
     console.log("Review.get/api/reviews");
-    Review.find().then(reviews => {
+    Review.find()
+        .populate("pictures")
+        .then(reviews => {
       res.json(reviews);
       res.end();
     });
   });
 
-  app.post("/api/reviews", (req, res) => {
+  app.post("/api/reviews", upload.array('pictures'), (req, res) => {
+    console.log("Review.post/api/reviews");
+    let newImages = req.files.map( file => {
+      let newImage = new Image({ imageData: file.path });
+      newImage.save();
+      console.log(newImage);
+      return newImage;
+    });
     const newReview = new Review({
-      picture: req.body.picture,
+      pictures: newImages,
       rates: {
-        BathroomQuality: req.body.BathroomQuality,
-        StaffKindness: req.body.StaffKindness,
-        Cleanliness: req.body.Cleanliness,
-        DriveThruQuality: req.body.DriveThruQuality,
-        DeliverySpeed: req.body.DeliverySpeed,
-        FoodQuality: req.body.FoodQuality
+        BathroomQuality: parseInt(req.body.BathroomQuality),
+        StaffKindness: parseInt(req.body.StaffKindness),
+        Cleanliness: parseInt(req.body.Cleanliness),
+        DriveThruQuality: parseInt(req.body.DriveThruQuality),
+        DeliverySpeed: parseInt(req.body.DeliverySpeed),
+        FoodQuality: parseInt(req.body.FoodQuality)
       },
-      averageRate: req.body.averageRate,
+      averageRate: parseFloat(req.body.averageRate),
       restaurantName: req.body.restaurantName,
       _id: new mongoose.Types.ObjectId()
     });
     newReview.stringDate = newReview.date.toLocaleString();
     newReview.save(function() {
-      User.findOne({ username: req.body.userReview }).then(user => {
+      User.findOne({ username: req.body.user }).then(user => {
         user.reviews.push(newReview);
         user.save(() => {
-          newReview.userReview = user;
+          newReview.user = user;
 
           Restaurant.findOne({ name: req.body.restaurantName }).then(
             restaurant => {
@@ -98,7 +109,7 @@ module.exports = app => {
     console.log(req.body);
     const sortBy = `rates.${sortField}`;
     Review.find({ restaurantName: name })
-      .populate("userReview")
+      .populate("user")
       .sort({ [sortBy]: -1 })
       .then(reviews => {
         res.json(reviews);
@@ -112,7 +123,7 @@ module.exports = app => {
     console.log(req.body);
     if (sortTime === "newest") {
       Review.find({ restaurantName: name })
-        .populate("userReview")
+        .populate("user")
         .sort({ date: -1 })
         .then(reviews => {
           res.json(reviews);
@@ -122,7 +133,7 @@ module.exports = app => {
 
     if (sortTime === "oldest") {
       Review.find({ restaurantName: name })
-        .populate("userReview")
+        .populate("user")
         .sort({ date: 1 })
         .then(reviews => {
           res.json(reviews);
@@ -134,7 +145,7 @@ module.exports = app => {
         restaurantName: name,
         date: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) }
       })
-        .populate("userReview")
+        .populate("user")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -146,7 +157,7 @@ module.exports = app => {
         restaurantName: name,
         date: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }
       })
-        .populate("userReview")
+        .populate("user")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -160,7 +171,7 @@ module.exports = app => {
           $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1))
         }
       })
-        .populate("userReview")
+        .populate("user")
         .then(reviews => {
           res.json(reviews);
           res.end();

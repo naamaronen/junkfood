@@ -1,8 +1,8 @@
 //User model
 const User = require("../model/User");
-const upload = require("../image");
 const Image = require("../model/Image");
 const bcrypt = require("bcryptjs");
+const upload = require("../image");
 
 //@route POST api/users
 //@desc Register new user
@@ -11,6 +11,8 @@ module.exports = app => {
   app.post("/api/register", upload.single("imageData"), (req, res) => {
     console.log("User.post/api/account/register");
     console.log(req.body.fullName);
+    console.log(req.files);
+    console.log(req.file);
     //Simple validation
     if (!req.body.fullName || !req.body.username || !req.body.password) {
       console.log("missing fields");
@@ -23,8 +25,6 @@ module.exports = app => {
         return res.status(404).json({ msg: "User already exist!" });
       }
       let newImage = null;
-      console.log(req);
-      console.log(req.file);
       if (req.file) {
         newImage = new Image({
           imageData: req.file.path

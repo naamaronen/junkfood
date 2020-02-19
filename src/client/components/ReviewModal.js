@@ -6,26 +6,27 @@ import {
   ModalHeader,
   ModalBody,
   FormGroup,
-  Alert
+  Alert, Col
 } from "reactstrap";
 import { connect } from "react-redux";
 import { addReview } from "../actions/reviewAction";
 import StarRatingComponent from "react-star-rating-component";
+import Dropzone from "react-dropzone";
 
 class ReviewModal extends Component {
   constructor() {
     super();
     this.state = {
       modal: false,
-      userReview: "",
+      user: "",
       restaurantName: "",
-      BathroomQuality: null,
-      StaffKindness: null,
-      Cleanliness: null,
-      DriveThruQuality: null,
-      DeliverySpeed: null,
-      FoodQuality: null,
-      picture: ""
+      BathroomQuality: 5,
+      StaffKindness: 5,
+      Cleanliness: 5,
+      DriveThruQuality: 5,
+      DeliverySpeed: 5,
+      FoodQuality: 5,
+      pictures: []
     };
   }
 
@@ -56,7 +57,7 @@ class ReviewModal extends Component {
     const { user, isAuthenticated } = this.props.auth;
     if (isAuthenticated) {
       this.setState({
-        userReview: user
+        user: user
       });
       this.setState({
         modal: !this.state.modal
@@ -74,7 +75,10 @@ class ReviewModal extends Component {
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-
+  loadImages = (files) => {
+    console.log(files);
+    this.setState({pictures: files})
+  };
   onSubmit = e => {
     e.preventDefault();
     const averageRate = Math.floor(
@@ -86,18 +90,21 @@ class ReviewModal extends Component {
         this.state.FoodQuality) /
         6
     );
-    const newReview = {
-      userReview: this.state.userReview,
-      restaurantName: this.state.restaurantName,
-      BathroomQuality: this.state.BathroomQuality,
-      StaffKindness: this.state.StaffKindness,
-      Cleanliness: this.state.Cleanliness,
-      DriveThruQuality: this.state.DriveThruQuality,
-      DeliverySpeed: this.state.DeliverySpeed,
-      FoodQuality: this.state.FoodQuality,
-      picture: this.state.picture,
-      averageRate: averageRate
-    };
+    let newReview = new FormData();
+    newReview.append("user", this.state.user);
+    newReview.append("restaurantName", this.state.restaurantName);
+    newReview.append("BathroomQuality", this.state.BathroomQuality);
+    newReview.append("StaffKindness", this.state.StaffKindness);
+    newReview.append("Cleanliness", this.state.Cleanliness);
+    newReview.append("DriveThruQuality", this.state.DriveThruQuality);
+    newReview.append("DeliverySpeed", this.state.DeliverySpeed);
+    newReview.append("FoodQuality", this.state.FoodQuality);
+    newReview.append("averageRate", averageRate.toString());
+    for (const img of this.state.pictures){
+      newReview.append("pictures", img);
+    }
+    console.log("pictures");
+    console.log(newReview.get("pictures"));
     //Add restaurant via ADD_REVIEW sction
     this.props.addReview(newReview);
 
@@ -106,6 +113,11 @@ class ReviewModal extends Component {
   };
 
   render() {
+    const images = this.state.pictures.map(file => (
+      <li key={file.name}>
+        {file.name} - {file.size} bytes
+      </li>
+    ));
     return (
       <div>
         <Button
@@ -117,7 +129,7 @@ class ReviewModal extends Component {
         </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>
-            Hi {this.state.userReview}, Add a new Review
+            Hi {this.state.user}, Add a new Review
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
@@ -165,7 +177,18 @@ class ReviewModal extends Component {
                   value={this.state.FoodQuality}
                   onStarClick={this.onStarClick6.bind(this)}
                 />
-
+                <Dropzone name="picture" accept="image/*" onDrop={this.loadImages}>
+                  {({getRootProps, getInputProps}) => (
+                      <section>
+                        <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
+                          <input {...getInputProps()} />
+                          <p>Drag images here, or click to select files</p>
+                        </div>
+                      </section>
+                  )}</Dropzone>
+                <aside>
+                  <ul>{images}</ul>
+                </aside>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Add Review
                 </Button>

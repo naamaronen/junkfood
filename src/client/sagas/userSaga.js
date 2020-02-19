@@ -3,7 +3,6 @@ import {
   LOGIN,
   UPDATE_USER,
   REGISTER,
-  UPLOAD_PIC,
   REFRESH,
   OTHER_PROFILE
 } from "../actions/types";
@@ -46,21 +45,7 @@ function* updateProfile(action) {
     yield put(returnErrors(e.message));
   }
 }
-/*
-function* uploadPicture(action) {
-  console.log(action.payload);
-  try {
-    const options = {
-      method: "POST",
-      body: action.payload
-    };
-    const res = yield call(fetch, "api/image", options);
-    //const user = yield call([res, "json"]);
-    //yield put(userProfileSuccsses(user));
-  } catch (e) {
-    yield put(returnErrors(e.message));
-  }
-}*/
+
 
 function* otherProfile(action) {
   try {
