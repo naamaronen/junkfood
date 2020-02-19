@@ -15,17 +15,16 @@ import { refresh } from "../actions/userActions";
 
 function* saveReview(action) {
   console.log("addReviewSaga=", action);
+  console.log(action.payload);
+  console.log(action.payload.get("pictures"));
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(action.payload)
+      body: action.payload
     });
     const review = yield call([res, "json"]);
     console.log(review);
-    yield put(refresh({ username: action.payload.userReview }));
+    yield put(refresh({ username: action.payload.get("user") }));
     yield put(addReviewSuccess(review));
   } catch (e) {
     yield put(reviewsFailure(e.message));
@@ -91,7 +90,7 @@ function* updateReview(action) {
     });
     const review = yield call([res, "json"]);
     console.log(review);
-    yield put(refresh({ username: action.payload.userReview }));
+    yield put(refresh({ username: action.payload.user }));
     //yield put(addReviewSuccess(review));
   } catch (e) {
     yield put(reviewsFailure(e.message));

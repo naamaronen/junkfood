@@ -3,12 +3,9 @@ const Schema = mongoose.Schema;
 
 //create Schema
 const ReviewSchema = new Schema({
-  userReview: { ref: "User", type: Schema.Types.ObjectId },
+  user: { ref: "User", type: Schema.Types.ObjectId },
   restaurantReview: { ref: "Restaurant", type: Schema.Types.ObjectId },
-  picture: {
-    type: String,
-    required: false
-  },
+  pictures: [{ ref: "Image", type: Schema.Types.ObjectId }],
   rates: {
     type: {
       BathroomQuality: 0,
