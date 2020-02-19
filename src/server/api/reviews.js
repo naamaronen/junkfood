@@ -113,6 +113,7 @@ module.exports = app => {
     const sortBy = `rates.${sortField}`;
     Review.find({ restaurantName: name })
       .populate("user")
+        .populate("pictures")
       .sort({ [sortBy]: -1 })
       .then(reviews => {
         res.json(reviews);
@@ -127,6 +128,7 @@ module.exports = app => {
     if (sortTime === "newest") {
       Review.find({ restaurantName: name })
         .populate("user")
+          .populate("pictures")
         .sort({ date: -1 })
         .then(reviews => {
           res.json(reviews);
@@ -137,6 +139,7 @@ module.exports = app => {
     if (sortTime === "oldest") {
       Review.find({ restaurantName: name })
         .populate("user")
+          .populate("pictures")
         .sort({ date: 1 })
         .then(reviews => {
           res.json(reviews);
@@ -149,6 +152,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) }
       })
         .populate("user")
+          .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -161,6 +165,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }
       })
         .populate("user")
+          .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -175,6 +180,7 @@ module.exports = app => {
         }
       })
         .populate("user")
+          .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
