@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Dropzone from 'react-dropzone';
+import Dropzone from "react-dropzone";
 import {
   Form,
   Modal,
@@ -17,8 +17,17 @@ import {
 } from "reactstrap";
 import { register } from "../../actions/authActions";
 import { clearErrors } from "../../actions/errorActions";
-
+import Autosuggest from "react-autosuggest";
 import { connect } from "react-redux";
+
+const getSuggestionValue = suggestion => suggestion.name;
+
+// Use your imagination to render suggestions.
+const renderSuggestion = suggestion => (
+  <div>
+    <Alert color="danger">{suggestion.name} - is already taken</Alert>
+  </div>
+);
 
 class RegisterModal extends Component {
   state = {
@@ -29,10 +38,32 @@ class RegisterModal extends Component {
     location: "",
     picture: null,
     msg: null,
-    loadedPicture: null
+    loadedPicture: null,
+    userNames: [],
+    suggestions: []
+  };
+  componentDidMount() {
+    this.initUserNames();
+  }
+
+  initUserNames = () => {
+    let { users } = this.props.usernames;
+    let userNames = [];
+    users.map(user => {
+      userNames.push(user.username);
+    });
+    let uniqueUser = [...new Set(userNames)];
+    let userName = [];
+    uniqueUser.map(name => {
+      userName.push({ name: name });
+    });
+    this.setState({
+      userNames: userName
+    });
   };
 
   componentDidUpdate(prevProps) {
+    if (this.props != prevProps) this.initUserNames();
     const { error } = this.props;
     if (error !== prevProps.error) {
       if (error.id === "REGISTER_FAIL") {
@@ -50,6 +81,38 @@ class RegisterModal extends Component {
       if (this.props.user) this.toggle();
     }
   }
+
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    return inputLength === 0
+      ? []
+      : this.state.userNames.filter(
+          username => username.name.toLowerCase() === inputValue
+        );
+  };
+
+  onChangeUsername = (event, { newValue }) => {
+    this.setState({
+      username: newValue
+    });
+  };
+
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value)
+    });
+  };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
 
   toggle = () => {
     //Clear errors
@@ -84,6 +147,13 @@ class RegisterModal extends Component {
   };
 
   render() {
+    const { username, suggestions } = this.state;
+    const value = username;
+    const inputProps = {
+      placeholder: "username",
+      value,
+      onChange: this.onChangeUsername
+    };
     return (
       <div>
         <NavLink onClick={this.toggle} href="#">
@@ -107,14 +177,22 @@ class RegisterModal extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="username">username</Label>
-                <Input
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                />
+                {/* <Input
                   type="text"
                   name="username"
                   id="username"
                   placeholder="username"
                   className="mb-3"
                   onChange={this.onChange}
-                />
+                /> */}
                 <Label for="password">Password</Label>
                 <Input
                   type="text"
@@ -138,16 +216,29 @@ class RegisterModal extends Component {
                     Add Picture
                   </Label>
                   <Col sm={10}>
-                    <img src={this.state.loadedPicture}/>
-                    <Dropzone name="picture" accept="image/*" onDrop={this.loadImage}>
-                      {({getRootProps, getInputProps}) => (
-                          <section>
-                            <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
-                              <input {...getInputProps()} />
-                              <p>Drag image here, or click to select file</p>
-                            </div>
-                          </section>
-                      )}</Dropzone>
+                    <img src={this.state.loadedPicture} />
+                    <Dropzone
+                      name="picture"
+                      accept="image/*"
+                      onDrop={this.loadImage}
+                    >
+                      {({ getRootProps, getInputProps }) => (
+                        <section>
+                          <div
+                            {...getRootProps()}
+                            style={{
+                              border: "1px solid black",
+                              width: 300,
+                              color: "black",
+                              padding: 20
+                            }}
+                          >
+                            <input {...getInputProps()} />
+                            <p>Drag image here, or click to select file</p>
+                          </div>
+                        </section>
+                      )}
+                    </Dropzone>
                   </Col>
                 </FormGroup>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
@@ -166,7 +257,8 @@ const mapStateToProps = state => {
   return {
     error: state.error,
     isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
+    user: state.auth.user,
+    usernames: state.user
   };
 };
 

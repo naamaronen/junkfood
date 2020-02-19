@@ -1,10 +1,11 @@
 import {
   USER_PROFILE_SUCCSSES,
   UPDATE_USER,
-  UPLOAD_PIC,
   REFRESH,
   OTHER_PROFILE,
-  OTHER_PROFILE_SUCCSSES
+  OTHER_PROFILE_SUCCSSES,
+  LOADED_USERS,
+  FETCH_USERS
 } from "./types";
 
 export function userProfileSuccsses(user) {
@@ -28,7 +29,6 @@ export function refresh(user) {
   };
 }
 
-
 export function getUserProfile(user) {
   return {
     type: OTHER_PROFILE,
@@ -42,4 +42,12 @@ export function otherProfileSuccsses(user) {
     type: OTHER_PROFILE_SUCCSSES,
     payload: user
   };
+}
+
+export function loadedUsers(users) {
+  return { type: LOADED_USERS, payload: users };
+}
+
+export function fetchUsers() {
+  return { type: FETCH_USERS, uri: "api/users/fetch" };
 }

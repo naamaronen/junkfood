@@ -58,7 +58,7 @@ module.exports = app => {
     console.log("api/search_rest");
     const { name, location, rate } = req.body;
     console.log(req.body);
-    if (location != null && name != null && name != "") {
+    if (location != "" && name != "") {
       Restaurant.find({
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
@@ -69,7 +69,7 @@ module.exports = app => {
           res.json(rests);
           res.end();
         });
-    } else if (location != null && rate === null) {
+    } else if (location != "" && rate === null) {
       console.log(`search for location: ${location}`);
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i")
@@ -80,7 +80,7 @@ module.exports = app => {
           res.json(rests);
           res.end();
         });
-    } else if (location != null && rate != null) {
+    } else if (location != "" && rate != null) {
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i"),
         averageRate: rate

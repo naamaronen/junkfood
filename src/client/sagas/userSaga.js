@@ -3,14 +3,15 @@ import {
   LOGIN,
   UPDATE_USER,
   REGISTER,
-  UPLOAD_PIC,
   REFRESH,
-  OTHER_PROFILE
+  OTHER_PROFILE,
+  FETCH_USERS
 } from "../actions/types";
 import {
   userProfileSuccsses,
   refresh,
-  otherProfileSuccsses
+  otherProfileSuccsses,
+  loadedUsers
 } from "../actions/userActions.js";
 import { returnErrors } from "../actions/errorActions";
 
@@ -79,6 +80,22 @@ function* otherProfile(action) {
   }
 }
 
+function* getAllUsers(action) {
+  console.log("get all users");
+  try {
+    const res = yield call(fetch, action.uri, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const users = yield call([res, "json"]);
+    yield put(loadedUsers(users));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 //using takeEvery, you take the action away from reducer to saga
 export default function* UserSaga() {
   yield takeEvery(LOGIN, getUser);
@@ -86,4 +103,5 @@ export default function* UserSaga() {
   yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
   yield takeEvery(OTHER_PROFILE, otherProfile);
+  yield takeEvery(FETCH_USERS, getAllUsers);
 }

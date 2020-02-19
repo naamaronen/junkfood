@@ -92,10 +92,20 @@ module.exports = app => {
     });
   });
 
+  app.get("/api/users/fetch", function(req, res) {
+    console.log("/api/users/fetch");
+    User.find()
+      .populate("reviews")
+      .then(users => {
+        res.json(users);
+        res.end();
+      });
+  });
+
   app.post("/api/search_user", (req, res) => {
     console.log("api/search_user");
     const { name, fullName, location } = req.body;
-    if (location != null && fullName != null && name != null) {
+    if (location != "" && fullName != null && name != "") {
       User.find({
         username: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i"),
@@ -108,7 +118,7 @@ module.exports = app => {
           res.json(users);
           res.end();
         });
-    } else if (fullName != null && location === null && name === null) {
+    } else if (fullName != null && location === "" && name === "") {
       User.find({
         fullName: new RegExp(`^${fullName}$`, "i")
       })
@@ -118,7 +128,7 @@ module.exports = app => {
           res.json(users);
           res.end();
         });
-    } else if (location != null && name === null && fullName === null) {
+    } else if (location != "" && name === "" && fullName === null) {
       User.find({
         location: new RegExp(`^${location}$`, "i")
       })
