@@ -10,16 +10,16 @@ module.exports = app => {
   app.get("/api/reviews", function(req, res) {
     console.log("Review.get/api/reviews");
     Review.find()
-        .populate("pictures")
-        .then(reviews => {
-      res.json(reviews);
-      res.end();
-    });
+      .populate("pictures")
+      .then(reviews => {
+        res.json(reviews);
+        res.end();
+      });
   });
 
-  app.post("/api/reviews", upload.array('pictures'), (req, res) => {
+  app.post("/api/reviews", upload.array("pictures"), (req, res) => {
     console.log("Review.post/api/reviews");
-    let newImages = req.files.map( file => {
+    let newImages = req.files.map(file => {
       let newImage = new Image({ imageData: file.path });
       newImage.save();
       console.log(newImage);
@@ -97,11 +97,14 @@ module.exports = app => {
     );
   });
 
-  // app.delete("/api/reviews/:id", (req, res) => {
-  //   Review.findById(req.params.id)
-  //     .then(review => review.remove().then(() => res.json({ success: true })))
-  //     .catch(err => res.status(404).json({ success: false }));
-  // });
+  app.delete("/api/reviews/:id", (req, res) => {
+    console.log("delete review:");
+    console.log(req.params.id);
+    const id = req.params.id;
+    Review.findOneAndDelete({ _id: id }, function(err, res) {
+      if (err) throw err;
+    });
+  });
 
   app.post("/api/reviews/field_sort", function(req, res) {
     console.log("Review.sort/api/reviews/field_sort");

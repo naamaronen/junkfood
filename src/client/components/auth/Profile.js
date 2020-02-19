@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import Dropzone from 'react-dropzone';
+import Dropzone from "react-dropzone";
 import {
   Jumbotron,
   Button,
@@ -22,6 +22,7 @@ import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import UpdateReview from "../UpdateReview";
+import { refresh } from "../../actions/userActions";
 
 export class Profile extends Component {
   state = {
@@ -36,28 +37,35 @@ export class Profile extends Component {
 
   componentDidMount() {
     const { userProfile } = this.props.user;
-    const { fullName, reviews, location, username, picture } = userProfile;
-    this.setState({
-      userProfile: userProfile,
-      fullName: fullName,
-      location: location,
-      username: username,
-      picture: picture ? picture.imageData:null,
-      reviews: reviews,
-    });
+    if (userProfile != null) {
+      const { fullName, reviews, location, username, picture } = userProfile;
+      this.setState({
+        userProfile: userProfile,
+        fullName: fullName,
+        location: location,
+        username: username,
+        picture: picture ? picture.imageData : null,
+        reviews: reviews
+      });
+      this.props.refresh({ username: username });
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props != prevProps) {
       const { userProfile } = this.props.user;
-      const { fullName, reviews, location, username, picture } = userProfile;
-      this.setState({ userProfile: userProfile,
-        fullName: fullName,
-        location: location,
-        username: username,
-        picture: picture ? picture.imageData:null,
-        reviews: reviews,
-        loadedPicture: null });
+      if (userProfile != null) {
+        const { fullName, reviews, location, username, picture } = userProfile;
+        this.setState({
+          userProfile: userProfile,
+          fullName: fullName,
+          location: location,
+          username: username,
+          picture: picture ? picture.imageData : null,
+          reviews: reviews,
+          loadedPicture: null
+        });
+      }
     }
   }
 
@@ -84,10 +92,9 @@ export class Profile extends Component {
     this.props.updateProfile(userData);
   };
 
-
-  onDeleteReview = id => {
+  onDeleteReview = e => {
     console.log("delete");
-    //this.props.deleteReview(id);
+    this.props.deleteReview(e.target.value);
   };
 
   render() {
@@ -97,7 +104,7 @@ export class Profile extends Component {
         <div>
           <Jumbotron>
             <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
-            <img src={this.state.picture}/>
+            <img src={this.state.picture} />
             <p>you can watch and edit your profile here!</p>
 
             <Form onSubmit={this.onSubmit}>
@@ -121,16 +128,29 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
 
-                <img src={this.state.loadedPicture}/>
-                <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
-                  {({getRootProps, getInputProps}) => (
+                <img src={this.state.loadedPicture} />
+                <Dropzone
+                  name="newPicture"
+                  accept="image/*"
+                  onDrop={this.loadImage}
+                >
+                  {({ getRootProps, getInputProps }) => (
                     <section>
-                      <div {...getRootProps()} style={{ border: '1px solid black', width: 400, color: 'black', padding: 20 }}>
+                      <div
+                        {...getRootProps()}
+                        style={{
+                          border: "1px solid black",
+                          width: 400,
+                          color: "black",
+                          padding: 20
+                        }}
+                      >
                         <input {...getInputProps()} />
                         <p>Drag image here, or click to select file</p>
                       </div>
                     </section>
-                )}</Dropzone>
+                  )}
+                </Dropzone>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Save Changes
                 </Button>
@@ -281,7 +301,8 @@ export class Profile extends Component {
                             <Col>
                               <Button
                                 color="danger"
-                                onClick={this.onDeleteReview(_id)}
+                                value={_id}
+                                onClick={this.onDeleteReview}
                               >
                                 Delete Review
                               </Button>
@@ -312,6 +333,9 @@ const mapDispatchToProps = () => dispatch => {
     },
     deleteReview: id => {
       dispatch(deleteReview(id));
+    },
+    refresh: id => {
+      dispatch(refresh(id));
     }
   };
 };
