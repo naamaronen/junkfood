@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
   Form,
@@ -25,14 +26,14 @@ class UpdateReview extends Component {
       DriveThruQuality: null,
       DeliverySpeed: null,
       FoodQuality: null,
-      pictures: [],
+      picture: "",
       _id: null
     };
   }
 
-  /*componentDidUpdate() {
+  componentDidUpdate() {
     StarRatingComponent;
-  }*/
+  }
 
   onStarClick1(nextValue, prevValue, name) {
     this.setState({ BathroomQuality: nextValue });
@@ -60,19 +61,34 @@ class UpdateReview extends Component {
       restaurantName,
       stringDate,
       _id,
-      pictures,
+      picture,
       averageRate
     } = this.props.review;
+    const {
+      BathroomQuality,
+      StaffKindness,
+      Cleanliness,
+      DriveThruQuality,
+      DeliverySpeed,
+      FoodQuality
+    } = rates;
     if (isAuthenticated) {
       this.setState({
-        _id: _id,
-        BathroomQuality: rates.BathroomQuality,
-        StaffKindness: rates.StaffKindness,
-        Cleanliness: rates.Cleanliness,
-        DriveThruQuality: rates.DriveThruQuality,
-        DeliverySpeed: rates.DeliverySpeed,
-        FoodQuality: rates.FoodQuality,
-        pictures: pictures });
+        user: user
+      });
+      this.setState({
+        modal: !this.state.modal
+      });
+
+      this.setState({ restaurantName: restaurantName });
+      this.setState({ _id: _id });
+      this.setState({ BathroomQuality: BathroomQuality });
+      this.setState({ StaffKindness: StaffKindness });
+      this.setState({ Cleanliness: Cleanliness });
+      this.setState({ DriveThruQuality: DriveThruQuality });
+      this.setState({ DeliverySpeed: DeliverySpeed });
+      this.setState({ FoodQuality: FoodQuality });
+      this.setState({ picture: picture });
     }
   };
 
@@ -100,7 +116,7 @@ class UpdateReview extends Component {
       DriveThruQuality: this.state.DriveThruQuality,
       DeliverySpeed: this.state.DeliverySpeed,
       FoodQuality: this.state.FoodQuality,
-      pictures: this.state.pictures,
+      picture: this.state.picture,
       averageRate: averageRate,
       _id: this.state._id
     };
