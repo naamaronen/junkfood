@@ -97,7 +97,7 @@ export class RestReviews extends Component {
                   FoodQuality
                 } = rates;
                 const { username } = user;
-                const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}})
+                const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}});
                 return (
                   <Col sm="4" key={_id}>
                     <Card
@@ -353,7 +353,7 @@ export class RestReviews extends Component {
                       <Button onClick={this.showAll}>Show All Reviews</Button>
                     </Col>
                     <Col xs="auto">
-                    <ReviewModal rest_name={rest.name} />
+                    <ReviewModal rest_name={rest.name} type="Add"/>
                     </Col>
                   </Row>
                 </div>

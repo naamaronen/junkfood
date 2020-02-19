@@ -54,7 +54,7 @@ class RestList extends Component {
                         Watch Reviews
                       </Link>
                     </Button>
-                    <ReviewModal rest_name={name} />
+                    <ReviewModal rest_name={name} type="Add"/>
                   </CardBody>
                 </Card>
               </Col>

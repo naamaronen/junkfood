@@ -42,7 +42,11 @@ module.exports = app => {
   app.post("/api/signin/userSessions", function(req, res) {
     console.log("User.get/api/signin");
     User.findOne({ username: req.body.username })
-        .populate("picture").populate("reviews")
+        .populate("picture")
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
       .then(user => {
         res.json(user);
         res.end();
@@ -51,8 +55,11 @@ module.exports = app => {
 
   app.post("/api/signin/userSessionsReview", function(req, res) {
     console.log("/api/signin/userSessionsReview");
-    User.findOne({ username: req.body.userReview })
-      .populate("reviews")
+    User.findOne({ username: req.body.user })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
       .then(user => {
         res.json(user);
         res.end();
