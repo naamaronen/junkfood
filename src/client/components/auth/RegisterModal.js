@@ -22,7 +22,6 @@ import { connect } from "react-redux";
 
 const getSuggestionValue = suggestion => suggestion.name;
 
-// Use your imagination to render suggestions.
 const renderSuggestion = suggestion => (
   <div>
     <Alert color="danger">{suggestion.name} - is already taken</Alert>
@@ -99,15 +98,12 @@ class RegisterModal extends Component {
     });
   };
 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: this.getSuggestions(value)
     });
   };
 
-  // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
@@ -184,14 +180,6 @@ class RegisterModal extends Component {
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps}
                 />
-                {/* <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  placeholder="username"
-                  className="mb-3"
-                  onChange={this.onChange}
-                /> */}
                 <Label for="password">Password</Label>
                 <Input
                   type="text"
@@ -274,12 +262,3 @@ const mapDispatchToProps = () => dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterModal);
-
-{
-  /* <FormGroup>
-<Label for="examplePassword">Invalid input</Label>
-<Input invalid />
-<FormFeedback>Oh noes! that name is already taken</FormFeedback>
-<FormText>Example help text that remains unchanged.</FormText>
-</FormGroup> */
-}

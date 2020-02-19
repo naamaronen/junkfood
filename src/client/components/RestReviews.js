@@ -1,22 +1,18 @@
 import React, { Component, Fragment } from "react";
 import {
-  NavLink,
   Jumbotron,
   Button,
   FormGroup,
-  Form,
   Col,
   CardDeck,
   Card,
-  Label,
-  Input,
-  CardImg,
   CardBody,
   CardText,
   Container,
   Row,
   CustomInput,
-  UncontrolledCarousel
+  UncontrolledCarousel,
+  Alert
 } from "reactstrap";
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
@@ -33,13 +29,23 @@ export class RestReviews extends Component {
       sortField: "",
       isSorted: false,
       showSorted: false,
-      name: ""
+      name: "",
+      alert: false
     };
   }
 
   componentDidMount() {
+    this.setState({ alert: false });
     this.setState({ name: this.props.match.params.id });
     this.props.getRest({ name: this.props.match.params.id });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props != prevProps) {
+      if (this.props.auth) {
+        this.setState({ alert: false });
+      }
+    }
   }
 
   onChangeTime = e => {
@@ -73,6 +79,10 @@ export class RestReviews extends Component {
     this.setState({ showSorted: false });
   };
 
+  callbackFunction = childData => {
+    this.setState({ alert: true });
+  };
+
   showReviews = reviews => {
     return (
       <div>
@@ -97,7 +107,9 @@ export class RestReviews extends Component {
                   FoodQuality
                 } = rates;
                 const { username } = user;
-                const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}});
+                const reviewImages = pictures.map(pic => {
+                  return { key: pic._id, src: pic.imageData };
+                });
                 return (
                   <Col sm="4" key={_id}>
                     <Card
@@ -203,7 +215,10 @@ export class RestReviews extends Component {
                               value={FoodQuality}
                             />
                           </Col>
-                          <UncontrolledCarousel items={reviewImages} indicators={false} />
+                          <UncontrolledCarousel
+                            items={reviewImages}
+                            indicators={false}
+                          />
                         </Row>
                       </CardBody>
                     </Card>
@@ -353,8 +368,19 @@ export class RestReviews extends Component {
                       <Button onClick={this.showAll}>Show All Reviews</Button>
                     </Col>
                     <Col xs="auto">
-                    <ReviewModal rest_name={rest.name} type="Add"/>
+                      <ReviewModal
+                        rest_name={rest.name}
+                        type="Add"
+                        parentCallback={this.callbackFunction}
+                      />
                     </Col>
+                    {this.state.alert ? (
+                      <Alert color="danger">
+                        Sorry, you Have to be logged in to add a review
+                      </Alert>
+                    ) : (
+                      ""
+                    )}
                   </Row>
                 </div>
               </div>
@@ -379,7 +405,8 @@ export class RestReviews extends Component {
 const mapStateToProps = state => {
   return {
     restaurant: state.restaurant,
-    review: state.review
+    review: state.review,
+    auth: state.auth.isAuthenticated
   };
 };
 
