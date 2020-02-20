@@ -98,12 +98,42 @@ module.exports = app => {
   });
 
   app.delete("/api/reviews/:id", (req, res) => {
-    console.log("delete review:");
-    console.log(req.params.id);
     const id = req.params.id;
-    Review.findOneAndDelete({ _id: id }, function(err, res) {
-      if (err) throw err;
-    });
+    Review.findOneAndDelete({ _id: id })
+      .populate({
+        path: "user",
+        populate: { path: "reviews" }
+      })
+      .populate({
+        path: "restaurantReview",
+        populate: { path: "reviews" }
+      })
+      .then(review => {
+        const userId = review.user._id;
+        const restId = review.restaurantReview._id;
+        User.findById(userId)
+          .populate("reviews")
+          .then(user => {
+            for (var i = 0; i < user.reviews.length; i++) {
+              if (`${user.reviews[i]._id}` === id) {
+                user.reviews.splice(i, 1);
+              }
+            }
+            user.save();
+          })
+          .catch(err => console.log(err));
+        Restaurant.findById(restId)
+          .populate("reviews")
+          .then(rest => {
+            for (var i = 0; i < rest.reviews.length; i++) {
+              if (`${rest.reviews[i]._id}` === id) {
+                rest.reviews.splice(i, 1);
+              }
+            }
+            rest.save();
+          })
+          .catch(err => console.log(err));
+      });
   });
 
   app.post("/api/reviews/field_sort", function(req, res) {
@@ -113,7 +143,7 @@ module.exports = app => {
     const sortBy = `rates.${sortField}`;
     Review.find({ restaurantName: name })
       .populate("user")
-        .populate("pictures")
+      .populate("pictures")
       .sort({ [sortBy]: -1 })
       .then(reviews => {
         res.json(reviews);
@@ -128,7 +158,7 @@ module.exports = app => {
     if (sortTime === "newest") {
       Review.find({ restaurantName: name })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .sort({ date: -1 })
         .then(reviews => {
           res.json(reviews);
@@ -139,7 +169,7 @@ module.exports = app => {
     if (sortTime === "oldest") {
       Review.find({ restaurantName: name })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .sort({ date: 1 })
         .then(reviews => {
           res.json(reviews);
@@ -152,7 +182,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -165,7 +195,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -180,7 +210,7 @@ module.exports = app => {
         }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();

@@ -44,14 +44,14 @@ module.exports = app => {
   app.post("/api/restaurant/reviews", function(req, res) {
     const { name } = req.body;
     Restaurant.findOne({ name })
-        .populate({
-          path: "reviews",
-          populate: { path: "user", model: "User" }
-        })
-        .populate({
-          path: "reviews",
-          populate: { path: "pictures", model: "Image" }
-        })
+      .populate({
+        path: "reviews",
+        populate: { path: "user", model: "User" }
+      })
+      .populate({
+        path: "reviews",
+        populate: { path: "pictures", model: "Image" }
+      })
       .then(restaurant => {
         res.json(restaurant);
         res.end();
@@ -75,6 +75,7 @@ module.exports = app => {
         });
     } else if (location != "" && rate === null) {
       console.log(`search for location: ${location}`);
+      console.log(`search for averageRate: ${rate}`);
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i")
       })
@@ -86,26 +87,48 @@ module.exports = app => {
         });
     } else if (location != "" && rate != null) {
       Restaurant.find({
-        location: new RegExp(`^${location}$`, "i"),
-        averageRate: rate
+        location: new RegExp(`^${location}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
-          res.json(rests);
+          const Rests = [];
+          rests.map(rest => {
+            const numOfRev = rest.reviews.length;
+            var currRate = 0;
+            rest.reviews.map(review => {
+              currRate = currRate + review.averageRate;
+            });
+            const avgRate = Math.floor(currRate / numOfRev);
+            if (avgRate === Number(rate)) {
+              Rests.push(rest);
+            }
+          });
+          res.json(Rests);
           res.end();
-        });
+        })
+        .catch(e => console.log(e));
     } else if (rate != null) {
       Restaurant.find({
-        name: new RegExp(`^${name}$`, "i"),
-        averageRate: rate
+        name: new RegExp(`^${name}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
-          res.json(rests);
+          const Rests = [];
+          rests.map(rest => {
+            const numOfRev = rest.reviews.length;
+            var currRate = 0;
+            rest.reviews.map(review => {
+              currRate = currRate + review.averageRate;
+            });
+            const avgRate = Math.floor(currRate / numOfRev);
+            if (avgRate === Number(rate)) {
+              Rests.push(rest);
+            }
+          });
+          res.json(Rests);
           res.end();
-        });
+        })
+        .catch(e => console.log(e));
     } else {
       Restaurant.find({
         name: new RegExp(`^${name}$`, "i")
