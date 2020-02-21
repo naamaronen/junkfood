@@ -83,12 +83,13 @@ export class Profile extends Component {
         <AppNavBar />
         <div>
           <Jumbotron>
-            <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
-            <img src={this.state.picture}/>
-            <p>you can watch and edit your profile here!</p>
-
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
+            <Container>
+              <Row>
+              <Col>
+            <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
+            <p>you can watch and edit your profile here!</p>
                 <Label for="fullName">Full Name</Label>
                 <Input
                   type="text"
@@ -107,22 +108,25 @@ export class Profile extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-
-                <img src={this.state.loadedPicture}/>
-                <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
-                  {({getRootProps, getInputProps}) => (
+            </Col>
+              <Col>
+                <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
+                <p>{"\n\n\n"}Edit profile picture:</p>
+              <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
+                {({getRootProps, getInputProps}) => (
                     <section>
-                      <div {...getRootProps()} style={{ border: '1px solid black', width: 400, color: 'black', padding: 20 }}>
+                      <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
                         <input {...getInputProps()} />
                         <p>Drag image here, or click to select file</p>
                       </div>
                     </section>
                 )}</Dropzone>
-                <Button color="dark" style={{ marginBottom: "2rem" }} block>
-                  Save Changes
-                </Button>
-              </FormGroup>
-            </Form>
+              </Col></Row></Container>
+            <Button color="dark" style={{ marginBottom: "2rem" }} block>
+              Save Changes
+            </Button>
+          </FormGroup>
+        </Form>
           </Jumbotron>
 
           <div>
@@ -157,7 +161,6 @@ export class Profile extends Component {
                       averageRate
                     };
                     const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}});
-                    console.log(pictures);
                     return (
                       <Col sm="4" key={_id}>
                         <Card

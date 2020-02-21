@@ -61,7 +61,7 @@ module.exports = app => {
   app.post("/api/register/update", upload.single("imageData"), (req, res) => {
     console.log("User.get/users/api/register/update");
     let newImage = null;
-    //console.log(req);
+    console.log(req.file.path);
     //console.log(req.body);
     if (req.file) {
       newImage = new Image({

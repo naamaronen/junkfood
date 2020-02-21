@@ -203,7 +203,7 @@ export class RestReviews extends Component {
                               value={FoodQuality}
                             />
                           </Col>
-                          <UncontrolledCarousel items={reviewImages} indicators={false} />
+                          <UncontrolledCarousel items={reviewImages} indicators={false}/>
                         </Row>
                       </CardBody>
                     </Card>
