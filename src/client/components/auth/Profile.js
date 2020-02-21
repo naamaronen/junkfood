@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import Dropzone from 'react-dropzone';
 import {
   Jumbotron, Button, FormGroup, Form, Col, CardDeck, Card, Label,
-  Input, CardImg, CardBody, CardText, Container, Row, UncontrolledCarousel
+  Input, CardImg, CardBody, CardText, Container, Row, UncontrolledCarousel, Alert, ModalBody
 } from "reactstrap";
 import { connect } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
@@ -10,23 +10,28 @@ import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import ReviewModal from "../ReviewModal";
+import {clearErrors} from "../../actions/errorActions";
 
 export class Profile extends Component {
   state = {
-    userProfile: null,
+    //userProfile: null,
     username: "",
     fullName: "",
     location: "",
     picture: null,
     reviews: [],
-    loadedPicture: null
+    loadedPicture: null,
+    error:null,
+    updateSuccess:null
   };
 
   componentDidMount() {
+    console.log("profile mounted")
+    console.log(this.props.user)
     const { userProfile } = this.props.user;
     const { fullName, reviews, location, username, picture } = userProfile;
     this.setState({
-      userProfile: userProfile,
+      //userProfile: userProfile,
       fullName: fullName,
       location: location,
       username: username,
@@ -36,9 +41,23 @@ export class Profile extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props != prevProps) {
-      const { userProfile } = this.props.user;
-      const { fullName, reviews, location, username, picture } = userProfile;
+    const error = this.props.error;
+    const userProfile = this.props.user;
+    // Error with updating the profile
+    if (error !== prevProps.error) {
+      console.log("error updated");
+      console.log(error);
+      this.setState({
+        error: error.msg
+      });
+    }
+    if (userProfile != prevProps.user) {
+      console.log("profile changed");
+      this.setState({
+        updateSuccess: true
+      });
+    }
+    /*  const { fullName, reviews, location, username, picture } = userProfile;
       this.setState({ userProfile: userProfile,
         fullName: fullName,
         location: location,
@@ -46,7 +65,7 @@ export class Profile extends Component {
         picture: picture ? picture.imageData:null,
         reviews: reviews,
         loadedPicture: null });
-    }
+    }*/
   }
 
   onChange = e => {
@@ -62,12 +81,17 @@ export class Profile extends Component {
 
   onSubmit = e => {
     e.preventDefault();
+    this.props.clearErrors();
+    this.setState({
+      updateSuccess: null
+    });
     let userData = new FormData();
     userData.append("username", this.state.username);
     userData.append("imageData", this.state.picture);
     userData.append("fullName", this.state.fullName);
     userData.append("location", this.state.location);
-
+    console.log("submitting");
+    console.log(this.state);
     //Update user
     this.props.updateProfile(userData);
   };
@@ -111,20 +135,28 @@ export class Profile extends Component {
             </Col>
               <Col>
                 <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
-                <p>{"\n\n\n"}Edit profile picture:</p>
+                <p></p>
+                <p>Edit profile picture:</p>
               <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
                 {({getRootProps, getInputProps}) => (
                     <section>
                       <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
                         <input {...getInputProps()} />
-                        <p>Drag image here, or click to select file</p>
+                        <p>Drag image here, {"\n"}or click to select file</p>
                       </div>
                     </section>
                 )}</Dropzone>
+                <p></p>
               </Col></Row></Container>
             <Button color="dark" style={{ marginBottom: "2rem" }} block>
               Save Changes
             </Button>
+                {this.state.error ? (
+                    <Alert color="danger">{this.state.error}</Alert>
+                ) : ""}
+                {this.state.updateSuccess ? (
+                    <Alert color="success">{"Profile updated successfully"}</Alert>
+                ) : ""}
           </FormGroup>
         </Form>
           </Jumbotron>
@@ -294,7 +326,8 @@ export class Profile extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user,
+  error: state.error
 });
 
 const mapDispatchToProps = () => dispatch => {
@@ -304,6 +337,9 @@ const mapDispatchToProps = () => dispatch => {
     },
     deleteReview: id => {
       dispatch(deleteReview(id));
+    },
+    clearErrors: () => {
+      dispatch(clearErrors());
     }
   };
 };

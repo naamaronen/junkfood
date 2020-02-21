@@ -10,6 +10,7 @@ import {
 } from "../actions/authActions";
 import { getUserSuccess } from "../actions/reviewAction";
 import { returnErrors } from "../actions/errorActions";
+import {userProfileSuccsses} from "../actions/userActions";
 
 function* register(action) {
   try {
@@ -19,8 +20,14 @@ function* register(action) {
     };
 
     const res = yield call(fetch, action.uri, options);
-    const user = yield res.json();
-    yield put(registerSuccsses(user));
+    const reply = yield res.json();
+    if (reply.success){
+      yield put(registerSuccsses(reply.user));
+      yield put(userProfileSuccsses(reply.user));
+    } else {
+      yield put(registerFail(reply.msg));
+      yield put(returnErrors(reply));
+    }
   } catch (e) {
     yield put(registerFail(e.message));
   }
@@ -51,10 +58,16 @@ function* login(action) {
       })
     };
     const res = yield call(fetch, action.uri, options);
-    const user = yield call([res, "json"]);
-    console.log(user);
-    yield put(loginSuccsses(user));
-    yield put(getUserSuccess(user));
+    const reply = yield call([res, "json"]);
+    console.log(reply);
+    if (reply.success) {
+      yield put(loginSuccsses(reply));
+      //yield put(getUserSuccess(reply));
+    }
+    else{
+      yield put(loginFail(reply));
+      yield put(returnErrors(reply));
+    }
   } catch (e) {
     yield put(loginFail(e.message));
     yield put(returnErrors(e.message));

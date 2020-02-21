@@ -63,17 +63,11 @@ class RegisterModal extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props != prevProps) this.initUserNames();
-    const { error } = this.props;
+    const error = this.props.error;
     if (error !== prevProps.error) {
-      if (error.id === "REGISTER_FAIL") {
         this.setState({
-          msg: error.msg.msg
+          msg: error.msg
         });
-      } else {
-        this.setState({
-          msg: null
-        });
-      }
     }
     //if authenticated, close modal
     if (this.state.modal) {
@@ -159,7 +153,7 @@ class RegisterModal extends Component {
           <ModalBody>
             {this.state.msg ? (
               <Alert color="danger">{this.state.msg}</Alert>
-            ) : null}
+            ) : ""}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label for="fullName">fullName</Label>
@@ -203,7 +197,7 @@ class RegisterModal extends Component {
                     Add Picture
                   </Label>
                   <Col sm={10}>
-                    <img src={this.state.loadedPicture} />
+                    <img src={this.state.loadedPicture} style={{width: 300}}/>
                     <Dropzone
                       name="picture"
                       accept="image/*"
