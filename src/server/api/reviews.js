@@ -10,16 +10,16 @@ module.exports = app => {
   app.get("/api/reviews", function(req, res) {
     console.log("Review.get/api/reviews");
     Review.find()
-        .populate("pictures")
-        .then(reviews => {
-      res.json(reviews);
-      res.end();
-    });
+      .populate("pictures")
+      .then(reviews => {
+        res.json(reviews);
+        res.end();
+      });
   });
 
-  app.post("/api/reviews", upload.array('pictures'), (req, res) => {
+  app.post("/api/reviews", upload.array("pictures"), (req, res) => {
     console.log("Review.post/api/reviews");
-    let newImages = req.files.map( file => {
+    let newImages = req.files.map(file => {
       let newImage = new Image({ imageData: file.path });
       newImage.save();
       console.log(newImage);
@@ -97,11 +97,44 @@ module.exports = app => {
     );
   });
 
-  // app.delete("/api/reviews/:id", (req, res) => {
-  //   Review.findById(req.params.id)
-  //     .then(review => review.remove().then(() => res.json({ success: true })))
-  //     .catch(err => res.status(404).json({ success: false }));
-  // });
+  app.delete("/api/reviews/:id", (req, res) => {
+    const id = req.params.id;
+    Review.findOneAndDelete({ _id: id })
+      .populate({
+        path: "user",
+        populate: { path: "reviews" }
+      })
+      .populate({
+        path: "restaurantReview",
+        populate: { path: "reviews" }
+      })
+      .then(review => {
+        const userId = review.user._id;
+        const restId = review.restaurantReview._id;
+        User.findById(userId)
+          .populate("reviews")
+          .then(user => {
+            for (var i = 0; i < user.reviews.length; i++) {
+              if (`${user.reviews[i]._id}` === id) {
+                user.reviews.splice(i, 1);
+              }
+            }
+            user.save();
+          })
+          .catch(err => console.log(err));
+        Restaurant.findById(restId)
+          .populate("reviews")
+          .then(rest => {
+            for (var i = 0; i < rest.reviews.length; i++) {
+              if (`${rest.reviews[i]._id}` === id) {
+                rest.reviews.splice(i, 1);
+              }
+            }
+            rest.save();
+          })
+          .catch(err => console.log(err));
+      });
+  });
 
   app.post("/api/reviews/field_sort", function(req, res) {
     console.log("Review.sort/api/reviews/field_sort");
@@ -110,7 +143,7 @@ module.exports = app => {
     const sortBy = `rates.${sortField}`;
     Review.find({ restaurantName: name })
       .populate("user")
-        .populate("pictures")
+      .populate("pictures")
       .sort({ [sortBy]: -1 })
       .then(reviews => {
         res.json(reviews);
@@ -125,7 +158,7 @@ module.exports = app => {
     if (sortTime === "newest") {
       Review.find({ restaurantName: name })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .sort({ date: -1 })
         .then(reviews => {
           res.json(reviews);
@@ -136,7 +169,7 @@ module.exports = app => {
     if (sortTime === "oldest") {
       Review.find({ restaurantName: name })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .sort({ date: 1 })
         .then(reviews => {
           res.json(reviews);
@@ -149,7 +182,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -162,7 +195,7 @@ module.exports = app => {
         date: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();
@@ -177,7 +210,7 @@ module.exports = app => {
         }
       })
         .populate("user")
-          .populate("pictures")
+        .populate("pictures")
         .then(reviews => {
           res.json(reviews);
           res.end();

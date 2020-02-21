@@ -61,8 +61,6 @@ module.exports = app => {
   app.post("/api/register/update", upload.single("imageData"), (req, res) => {
     console.log("User.get/users/api/register/update");
     let newImage = null;
-    console.log(req.file.path);
-    //console.log(req.body);
     if (req.file) {
       newImage = new Image({
         imageData: req.file.path
@@ -86,10 +84,10 @@ module.exports = app => {
       User.findOne({ username: req.body.username })
         .select("-password")
         .populate("reviews")
-          .populate({
-            path: "reviews",
-            populate: { path: "pictures", model: "Image" }
-          })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
         .then(user => {
           res.json(user);
           res.end();
@@ -118,10 +116,10 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
-          .populate({
-            path: "reviews",
-            populate: { path: "pictures", model: "Image" }
-          })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
         .populate("picture")
         .then(users => {
           res.json(users);
@@ -133,10 +131,38 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
-          .populate({
-            path: "reviews",
-            populate: { path: "pictures", model: "Image" }
-          })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
+        .then(users => {
+          res.json(users);
+          res.end();
+        });
+    } else if (location != "" && name === "" && fullName != null) {
+      User.find({
+        location: new RegExp(`^${location}$`, "i"),
+        fullName: new RegExp(`^${fullName}$`, "i")
+      })
+        .sort({ fullName: 1 })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
+        .then(users => {
+          res.json(users);
+          res.end();
+        });
+    } else if (location != "" && name != "" && fullName === null) {
+      User.find({
+        location: new RegExp(`^${location}$`, "i"),
+        username: new RegExp(`^${name}$`, "i")
+      })
+        .sort({ fullName: 1 })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
         .then(users => {
           res.json(users);
           res.end();
@@ -146,10 +172,24 @@ module.exports = app => {
         location: new RegExp(`^${location}$`, "i")
       })
         .sort({ fullName: 1 })
-          .populate({
-            path: "reviews",
-            populate: { path: "pictures", model: "Image" }
-          })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
+        .then(users => {
+          res.json(users);
+          res.end();
+        });
+    } else if (location === "" && name != "" && fullName != null) {
+      User.find({
+        fullName: new RegExp(`^${fullName}$`, "i"),
+        username: new RegExp(`^${name}$`, "i")
+      })
+        .sort({ fullName: 1 })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
         .then(users => {
           res.json(users);
           res.end();
@@ -160,10 +200,10 @@ module.exports = app => {
       })
         .sort({ fullName: 1 })
         .populate("reviews")
-          .populate({
-            path: "reviews",
-            populate: { path: "pictures", model: "Image" }
-          })
+        .populate({
+          path: "reviews",
+          populate: { path: "pictures", model: "Image" }
+        })
         .then(users => {
           res.json(users);
           res.end();

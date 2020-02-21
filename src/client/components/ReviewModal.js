@@ -6,10 +6,11 @@ import {
   ModalHeader,
   ModalBody,
   FormGroup,
-  Alert, Col
+  Alert,
+  Col
 } from "reactstrap";
 import { connect } from "react-redux";
-import {addReview, updateReview} from "../actions/reviewAction";
+import { addReview, updateReview } from "../actions/reviewAction";
 import StarRatingComponent from "react-star-rating-component";
 import Dropzone from "react-dropzone";
 
@@ -63,7 +64,7 @@ class ReviewModal extends Component {
 
       switch (this.props.type) {
         case "Add":
-          this.setState({ restaurantName: this.props.rest_name })
+          this.setState({ restaurantName: this.props.rest_name });
           break;
         case "Update":
           const rates = this.props.review.rates;
@@ -80,13 +81,8 @@ class ReviewModal extends Component {
           });
           break;
       }
-
     } else {
-      return (
-        <Alert color="danger">
-          Sorry, you Have to be logged in to add a review
-        </Alert>
-      );
+      this.sendData();
     }
   };
 
@@ -117,7 +113,7 @@ class ReviewModal extends Component {
     newReview.append("DeliverySpeed", this.state.DeliverySpeed);
     newReview.append("FoodQuality", this.state.FoodQuality);
     newReview.append("averageRate", averageRate.toString());
-    for (const img of this.state.pictures){
+    for (const img of this.state.pictures) {
       newReview.append("pictures", img);
     }
     //Add restaurant via ADD_REVIEW sction
@@ -132,6 +128,10 @@ class ReviewModal extends Component {
 
     //close modal
     this.toggle();
+  };
+
+  sendData = () => {
+    this.props.parentCallback();
   };
 
   render() {
@@ -199,15 +199,28 @@ class ReviewModal extends Component {
                   value={this.state.FoodQuality}
                   onStarClick={this.onStarClick6.bind(this)}
                 />
-                <Dropzone name="picture" accept="image/*" onDrop={this.loadImages}>
-                  {({getRootProps, getInputProps}) => (
-                      <section>
-                        <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
-                          <input {...getInputProps()} />
-                          <p>Drag images here, or click to select files</p>
-                        </div>
-                      </section>
-                  )}</Dropzone>
+                <Dropzone
+                  name="picture"
+                  accept="image/*"
+                  onDrop={this.loadImages}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div
+                        {...getRootProps()}
+                        style={{
+                          border: "1px solid black",
+                          width: 300,
+                          color: "black",
+                          padding: 20
+                        }}
+                      >
+                        <input {...getInputProps()} />
+                        <p>Drag images here, or click to select files</p>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
                 <aside>
                   <ul>{images}</ul>
                 </aside>

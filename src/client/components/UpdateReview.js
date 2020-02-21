@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import {
   Form,
@@ -18,7 +17,7 @@ class UpdateReview extends Component {
     super();
     this.state = {
       modal: false,
-      user: "",
+      userReview: "",
       restaurantName: "",
       BathroomQuality: null,
       StaffKindness: null,
@@ -74,7 +73,7 @@ class UpdateReview extends Component {
     } = rates;
     if (isAuthenticated) {
       this.setState({
-        user: user
+        userReview: user
       });
       this.setState({
         modal: !this.state.modal
@@ -108,7 +107,7 @@ class UpdateReview extends Component {
         6
     );
     const newReview = {
-      user: this.state.user,
+      userReview: this.state.userReview,
       restaurantName: this.state.restaurantName,
       BathroomQuality: this.state.BathroomQuality,
       StaffKindness: this.state.StaffKindness,
@@ -135,7 +134,7 @@ class UpdateReview extends Component {
         </Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>
-            Hi {this.state.user}, Update your Review
+            Hi {this.state.userReview}, Update your Review
           </ModalHeader>
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
