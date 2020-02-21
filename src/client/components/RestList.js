@@ -16,12 +16,14 @@ import {
   Col
 } from "reactstrap";
 import ReviewModal from "./ReviewModal";
+import { fetchUsers } from "../actions/userActions";
 
 import { Link } from "react-router-dom";
 
 class RestList extends Component {
   componentDidMount() {
     this.props.fetchRests();
+    this.props.fetchUsers();
   }
 
   onDeleteClick = id => {
@@ -80,6 +82,9 @@ const mapDispatchToProps = () => dispatch => {
     },
     deleteRestaurant: id => {
       dispatch(deleteRestaurant(id));
+    },
+    fetchUsers: () => {
+      dispatch(fetchUsers());
     }
   };
 };
