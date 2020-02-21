@@ -32,7 +32,7 @@ export default function(state = initialState, action) {
     case REVIEWS_FAILURE:
       return { ...state, loading: false, saving: false, error: action.error };
 
-    case GET_USER_SUCCESS:
+    case GET_USER_SUCCESS://why we do that?
       localStorage.setItem("token", action.payload.token);
       return {
         ...state,

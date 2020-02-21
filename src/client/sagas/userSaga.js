@@ -33,16 +33,20 @@ function* getUser(action) {
 }
 
 function* updateProfile(action) {
-  console.log(action.payload);
   try {
     const options = {
       method: "POST",
       body: action.payload
     };
     const res = yield call(fetch, "api/register/update", options);
-    const user = yield call([res, "json"]);
-    yield put(userProfileSuccsses(user));
-    yield put(refresh(user));
+    const reply = yield call([res, "json"]);
+
+    if (reply.success) {
+      yield put(userProfileSuccsses(reply.user));
+      yield put(refresh(reply.user));
+    } else {
+      yield put(returnErrors(reply));
+    }
   } catch (e) {
     yield put(returnErrors(e.message));
   }
@@ -85,7 +89,7 @@ function* getAllUsers(action) {
 //using takeEvery, you take the action away from reducer to saga
 export default function* UserSaga() {
   yield takeEvery(LOGIN, getUser);
-  yield takeEvery(REGISTER, getUser);
+  //yield takeEvery(REGISTER, getUser);
   yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
   yield takeEvery(OTHER_PROFILE, otherProfile);

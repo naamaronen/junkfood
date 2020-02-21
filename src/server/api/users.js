@@ -10,20 +10,19 @@ const upload = require("../image");
 module.exports = app => {
   app.post("/api/register", upload.single("imageData"), (req, res) => {
     console.log("User.post/api/account/register");
-    console.log(req.body.fullName);
-    console.log(req.files);
-    console.log(req.file);
+    const reply = {success: false};
     //Simple validation
     if (!req.body.fullName || !req.body.username || !req.body.password) {
-      console.log("missing fields");
-      return res.status(404).send({ msg: "Please enter all fields" });
+      reply.msg = "Please enter all fields";
+      return res.status(400).send(reply);
     }
     //Check for existing user - by username
     User.findOne({ username: req.body.username }).then(user => {
       if (user) {
-        console.log("user exists");
-        return res.status(404).json({ msg: "User already exist!" });
+        reply.msg = "Username already in use! Please choose another";
+        return res.status(400).send(reply);
       }
+      // valid query. register the user
       let newImage = null;
       if (req.file) {
         newImage = new Image({
@@ -41,7 +40,9 @@ module.exports = app => {
         password: req.body.password
       });
       newUser.save().then(user => {
-        res.json(user);
+        reply.success=true;
+        reply.user = user;
+        res.json(reply);
         res.end();
       });
     });
@@ -60,6 +61,12 @@ module.exports = app => {
 
   app.post("/api/register/update", upload.single("imageData"), (req, res) => {
     console.log("User.get/users/api/register/update");
+    const reply = {success: false};
+    //Simple validation
+    if (!req.body.fullName || !req.body.location) {
+      reply.msg = "Can't enter empty name or location.";
+      return res.status(400).send(reply);
+    }
     let newImage = null;
     if (req.file) {
       newImage = new Image({
@@ -75,7 +82,10 @@ module.exports = app => {
         user.location = req.body.location;
         if (newImage != null) user.picture = newImage;
         user.save();
-        res.json(user);
+        reply.user = user;
+        reply.username = username;
+        reply.success = true;
+        res.json(reply);
         res.end();
       });
 

@@ -19,7 +19,6 @@ import { connect } from "react-redux";
 class LoginModal extends Component {
   constructor() {
     super();
-
     this.state = {
       modal: false,
       username: "",
@@ -30,16 +29,11 @@ class LoginModal extends Component {
 
   componentDidUpdate(prevProps) {
     const { error } = this.props;
+    console.log(error);
     if (error !== prevProps.error) {
-      if (error.id === "LOGIN_FAIL") {
-        this.setState({
-          msg: error.msg.msg
-        });
-      } else {
-        this.setState({
-          msg: null
-        });
-      }
+      this.setState({
+        msg: error.msg
+      });
     }
     //if authenticated, close modal
     if (this.state.modal) {
@@ -77,9 +71,6 @@ class LoginModal extends Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Login</ModalHeader>
           <ModalBody>
-            {this.state.msg ? (
-              <Alert color="danger">{this.atate.msg}</Alert>
-            ) : null}
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
                 <Label for="username">username</Label>
@@ -103,6 +94,9 @@ class LoginModal extends Component {
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Login
                 </Button>
+                {this.state.msg ? (
+                    <Alert color="danger">{this.state.msg}</Alert>
+                ) : ""}
               </FormGroup>
             </Form>
           </ModalBody>

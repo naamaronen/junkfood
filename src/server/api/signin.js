@@ -12,29 +12,31 @@ module.exports = app => {
     console.log("User.post/api/signin");
     const username = req.body.username;
     const password = req.body.password;
+    const reply = {success: false};
 
     if (!username || !password) {
-      return res.status(404).send({ msg: "Please enter all fields" });
+        reply.msg = "Please enter all fields";
+        return res.status(400).send(reply);
     }
     //Check for existing user - by username
     User.findOne({ username }).then(user => {
       if (!user) {
-        return res.status(404).send({ msg: "User does not exist!" });
+          reply.msg = "User does not exist!";
+          return res.status(400).send(reply);
       }
       if (!bcrypt.compareSync(password, user.password)) {
-        return res.status(400).send({ message: "The password is invalid" });
+          reply.msg = "Incorrect password.";
+          return res.status(400).send(reply);
       }
       const newUserSession = new UserSession({
         userId: user._id,
         username: username
       });
       newUserSession.save((err, doc) => {
-        return res.send({
-          succsees: true,
-          message: "valid sign in",
-          token: doc._id,
-          username: username
-        });
+          reply.success=true;
+          reply.token = doc._id;
+          reply.username = username;
+          return res.send(reply);
       });
     });
   });
