@@ -81,7 +81,7 @@ class RestList extends Component {
                         <CardText>
                           <small className="text-muted">{stringDate}</small>
                         </CardText>
-                        <Button style={{ marginBottom: "2rem" }}>
+                        <Button color="primary" style={{ marginBottom: "2rem" }}>
                           <Link style={{ color: "#fff" }} to={`/${name}`}>
                             Watch Reviews
                           </Link>

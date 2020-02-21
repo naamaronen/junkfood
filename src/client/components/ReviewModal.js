@@ -79,7 +79,6 @@ class ReviewModal extends Component {
             pictures: this.props.review.pictures,
             restaurantName: this.props.review.restaurantName
           });
-          console.log(this.props.review);
           break;
       }
     } else {
@@ -90,9 +89,8 @@ class ReviewModal extends Component {
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  loadImages = files => {
-    console.log(files);
-    this.setState({ pictures: files });
+  loadImages = (files) => {
+    this.setState({pictures: files})
   };
   onSubmit = e => {
     e.preventDefault();
@@ -145,7 +143,7 @@ class ReviewModal extends Component {
     return (
       <div>
         <Button
-          color="dark"
+          color="warning"
           style={{ marginBottom: "2rem" }}
           onClick={this.toggle}
         >
@@ -226,7 +224,7 @@ class ReviewModal extends Component {
                 <aside>
                   <ul>{images}</ul>
                 </aside>
-                <Button color="dark" style={{ marginBottom: "2rem" }} block>
+                <Button color="warning" style={{ marginBottom: "2rem" }} block>
                   {this.props.type} Review
                 </Button>
               </FormGroup>
