@@ -7,9 +7,9 @@ import {
   ModalHeader,
   ModalBody,
   FormGroup,
-  Label
+  Label, Alert
 } from "reactstrap";
-import { addRest } from "../actions/restaurantAction";
+import {addRest, clearRestSuccessStatus} from "../actions/restaurantAction";
 
 import { connect } from "react-redux";
 
@@ -17,13 +17,14 @@ class RestaurantModal extends Component {
   state = {
     modal: false,
     name: "",
-    location: ""
+    location: "",
   };
 
   toggle = () => {
     this.setState({
       modal: !this.state.modal
     });
+    this.props.clearStatus();
   };
 
   onChange = e => {
@@ -41,7 +42,7 @@ class RestaurantModal extends Component {
     this.props.addRest(newRest);
 
     //close modal
-    this.toggle();
+    //this.toggle();
   };
 
   render() {
@@ -80,10 +81,23 @@ class RestaurantModal extends Component {
                 </Button>
               </FormGroup>
             </Form>
+            {this.props.error ? (
+                <Alert color="danger">{this.props.error}</Alert>
+            ) : ""}
+            {this.props.success ? (
+                <Alert color="success">{"Restaurant added successfully"}</Alert>
+            ) : ""}
           </ModalBody>
         </Modal>
       </div>
     );
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    error: state.restaurant.error,
+    success: state.restaurant.addSuccess
   }
 }
 
@@ -92,8 +106,11 @@ const mapDispatchToProps = () => dispatch => {
   return {
     addRest: restaurant => {
       dispatch(addRest(restaurant));
+    },
+    clearStatus: () => {
+      dispatch(clearRestSuccessStatus());
     }
   };
 };
 
-export default connect(null, mapDispatchToProps)(RestaurantModal);
+export default connect(mapStateToProps, mapDispatchToProps)(RestaurantModal);

@@ -1,4 +1,5 @@
 export const ADD_REST = "ADD_REST";
+export const CLEAR_SUCCESS_STATUS = "CLEAR_SUCCESS_STATUS";
 export const DELETE_REST = "DELETE_REST";
 export const ADD_REST_SUCCESS = "ADD_REST_SUCCESS";
 export const RESTS_FAILURE = "RESTS_FAILURE";

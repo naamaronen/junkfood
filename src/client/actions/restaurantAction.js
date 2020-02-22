@@ -9,7 +9,7 @@ import {
   REVIEWS_SUCCESS,
   REVIEWS_FAILURE,
   GET_REST,
-  GET_REST_SUCCSSES
+  GET_REST_SUCCSSES, CLEAR_SUCCESS_STATUS
 } from "./types";
 
 export function getRestaurants() {
@@ -39,7 +39,7 @@ export function addRestSuccess(restaurant) {
 }
 
 export function restsFailure(error) {
-  return { type: RESTS_FAILURE, error };
+  return { type: RESTS_FAILURE, error:error };
 }
 
 export function loadedRests(restaurants) {
@@ -68,4 +68,10 @@ export function getRest(restaurant) {
 
 export function getRestSuccsses(restaurant) {
   return { type: GET_REST_SUCCSSES, payload: restaurant };
+}
+
+export function clearRestSuccessStatus() {
+  return {
+    type: CLEAR_SUCCESS_STATUS
+  };
 }

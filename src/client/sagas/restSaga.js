@@ -41,8 +41,12 @@ function* saveRest(action) {
       },
       body: JSON.stringify(action.payload)
     });
-    const restaurant = yield call([res, "json"]);
-    yield put(addRestSuccess(restaurant));
+    const reply = yield call([res, "json"]);
+    if (reply.success) {
+      yield put(addRestSuccess(reply.restaurant));
+    } else {
+      yield put(restsFailure(reply.msg));
+    }
   } catch (e) {
     yield put(restsFailure(e.message));
   }
@@ -73,7 +77,6 @@ function* watchReviews(action) {
 }
 
 function* getRest(action) {
-  console.log("getRestSaga=", action);
   console.log(action.payload);
 
   try {

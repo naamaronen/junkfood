@@ -2,7 +2,6 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   LOGIN,
   UPDATE_USER,
-  REGISTER,
   REFRESH,
   OTHER_PROFILE,
   FETCH_USERS
@@ -89,7 +88,6 @@ function* getAllUsers(action) {
 //using takeEvery, you take the action away from reducer to saga
 export default function* UserSaga() {
   yield takeEvery(LOGIN, getUser);
-  //yield takeEvery(REGISTER, getUser);
   yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
   yield takeEvery(OTHER_PROFILE, otherProfile);

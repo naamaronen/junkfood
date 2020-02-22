@@ -1,6 +1,5 @@
 //User model
 const User = require("../model/User");
-const UserSession = require("../model/UserSession");
 const bcrypt = require("bcryptjs");
 
 //@route POST api/signin
@@ -12,7 +11,7 @@ module.exports = app => {
     console.log("User.post/api/signin");
     const username = req.body.username;
     const password = req.body.password;
-    const reply = {success: false};
+    let reply = {success: false};
 
     if (!username || !password) {
         reply.msg = "Please enter all fields";
@@ -28,16 +27,9 @@ module.exports = app => {
           reply.msg = "Incorrect password.";
           return res.status(400).send(reply);
       }
-      const newUserSession = new UserSession({
-        userId: user._id,
-        username: username
-      });
-      newUserSession.save((err, doc) => {
-          reply.success=true;
-          reply.token = doc._id;
-          reply.username = username;
-          return res.send(reply);
-      });
+      reply.success=true;
+      reply.username = username;
+      return res.send(reply);
     });
   });
 
@@ -55,7 +47,7 @@ module.exports = app => {
       });
   });
 
-  app.post("/api/signin/userSessionsReview", function(req, res) {
+  /*app.post("/api/signin/userSessionsReview", function(req, res) {
     console.log("/api/signin/userSessionsReview");
     User.findOne({ username: req.body.user })
         .populate({
@@ -66,7 +58,7 @@ module.exports = app => {
         res.json(user);
         res.end();
       });
-  });
+  });*/
 
   // @route DELETE api/users/id
   // @desc Delete a user

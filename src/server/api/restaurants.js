@@ -22,12 +22,26 @@ module.exports = app => {
   //@desc Create a Post
   //access public
   app.post("/api/restaurants", (req, res) => {
-    const newRestaurant = new Restaurant({
-      name: req.body.name,
-      location: req.body.location
-    });
-    newRestaurant.stringDate = newRestaurant.date.toLocaleString();
-    newRestaurant.save().then(restaurant => res.json(restaurant));
+      console.log("/api/restaurants");
+      let reply = {success: false};
+      if (!req.body.name || !req.body.location) {
+          reply.msg = "Please enter all fields";
+          return res.status(400).send(reply);
+      }
+      let restDetails = { name: req.body.name, location: req.body.location };
+      Restaurant.findOne(restDetails).then(rest => {
+          if (rest) {
+              reply.msg = "Restaurant already in database";
+              return res.status(400).send(reply);
+          }
+          const newRestaurant = new Restaurant(restDetails);
+          newRestaurant.stringDate = newRestaurant.date.toLocaleString();
+          newRestaurant.save().then(restaurant => {
+              reply.success = true;
+              reply.restaurant = restaurant
+              res.json(reply);
+          });
+      });
   });
 
   //@route DELETE api/restaurants/id
