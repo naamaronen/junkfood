@@ -59,7 +59,7 @@ module.exports = app => {
       });
 
       return res.send({
-        succsees: true,
+        success: true,
         message: "review added",
         review: newReview
       });
@@ -155,31 +155,39 @@ module.exports = app => {
     console.log("Review.sort/api/reviews/time_sort");
     const { sortTime, name } = req.body;
     console.log(req.body);
-    if (sortTime === "newest") {
+    let sortType = null, dateQuery = null;
+    switch (sortTime){
+      case "newest":
+        sortType = { date: -1 };
+        break;
+      case "oldest":
+        sortType = { date: 1 };
+        break;
+      case "lastWeek":
+        dateQuery = new Date(new Date().setDate(new Date().getDate() - 7));
+        break;
+      case "lastMonth":
+        dateQuery = new Date(new Date().setMonth(new Date().getMonth() - 1));
+        break;
+      case "lastYear":
+        dateQuery=new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+        break;
+    }
+
+    if (sortType) {
       Review.find({ restaurantName: name })
         .populate("user")
         .populate("pictures")
-        .sort({ date: -1 })
+        .sort(sortType)
         .then(reviews => {
           res.json(reviews);
           res.end();
         });
     }
-
-    if (sortTime === "oldest") {
-      Review.find({ restaurantName: name })
-        .populate("user")
-        .populate("pictures")
-        .sort({ date: 1 })
-        .then(reviews => {
-          res.json(reviews);
-          res.end();
-        });
-    }
-    if (sortTime === "lastWeek") {
+    if (dateQuery) {
       Review.find({
         restaurantName: name,
-        date: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)) }
+        date: { $gte: dateQuery }
       })
         .populate("user")
         .populate("pictures")
@@ -189,32 +197,5 @@ module.exports = app => {
         });
     }
 
-    if (sortTime === "lastMonth") {
-      Review.find({
-        restaurantName: name,
-        date: { $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)) }
-      })
-        .populate("user")
-        .populate("pictures")
-        .then(reviews => {
-          res.json(reviews);
-          res.end();
-        });
-    }
-
-    if (sortTime === "lastYear") {
-      Review.find({
-        restaurantName: name,
-        date: {
-          $gte: new Date(new Date().setFullYear(new Date().getFullYear() - 1))
-        }
-      })
-        .populate("user")
-        .populate("pictures")
-        .then(reviews => {
-          res.json(reviews);
-          res.end();
-        });
-    }
   });
 };
