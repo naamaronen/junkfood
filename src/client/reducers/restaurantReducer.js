@@ -8,7 +8,8 @@ import {
   WATCH_REVIEWS,
   REVIEWS_SUCCESS,
   REVIEWS_FAILURE,
-  GET_REST_SUCCSSES
+  GET_REST_SUCCSSES,
+  CLEAR_SUCCESS_STATUS
 } from "../actions/types";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   loading: false,
   saving: false,
   error: "",
+  addSuccess: false,
   rest: null
 };
 
@@ -27,6 +29,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         restaurants: action.payload,
+        error: "",
         loading: false
       };
 
@@ -39,16 +42,20 @@ export default function(state = initialState, action) {
     case ADD_REST_SUCCESS:
       return {
         ...state,
+        error: "",
+        addSuccess: true,
         restaurants: state.restaurants.concat(action.payload),
         saving: false
       };
 
     case RESTS_FAILURE:
-      return { ...state, loading: false, saving: false, error: action.error };
+      return { ...state, loading: false, saving: false, error: action.error,
+        addSuccess: false};
 
     case DELETE_REST:
       return {
         ...state,
+        error: "",
         restaurants: state.restaurants.reduce(
           (restaurants, restaurant) =>
             restaurant._id !== action.payload
@@ -67,17 +74,22 @@ export default function(state = initialState, action) {
       return {
         ...state,
         reviews: action.payload.reviews,
+        addSuccess: true,
         loading: false
       };
 
     case REVIEWS_FAILURE:
-      return { ...state, loading: false, saving: false, error: action.error };
+      return { ...state, loading: false, saving: false, addSuccess: false, error: action.error };
 
     case GET_REST_SUCCSSES:
       return {
         ...state,
+        error: "",
         rest: action.payload
       };
+
+    case CLEAR_SUCCESS_STATUS:
+      return {...state, error:"", addSuccess: false};
 
     default:
       return state;

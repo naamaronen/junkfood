@@ -17,14 +17,28 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 class AppNavBar extends Component {
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
+  /*state = {justLoggedIn: true};
+
+  componentDidUpdate(prevProps) {
+    const { isAuthenticated } = this.props.auth;
+    console.log("navbar updated");
+    console.log(this.props);
+    console.log(prevProps.auth.isAuthenticated);
+    if (!isAuthenticated==prevProps.auth.isAuthenticated){
+      console.log("isAuthenticated updated");
+      if (!isAuthenticated) {
+        this.setState({justLoggedIn: true});
+      }
+    } else if (this.state.justLoggedIn) {
+      this.setState({justLoggedIn: false});
+    }
+  }*/
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
+    //const justLoggedIn = this.state.justLoggedIn;
     const authLinks = (
-      <Fragment>
+        <Fragment>
         <Container>
           <Row>
             <Col xs="auto">
@@ -79,25 +93,21 @@ class AppNavBar extends Component {
             <NavbarBrand tag={Link} to="/">
               Junk Food Web
             </NavbarBrand>
-
             <Nav className="mr-auto" navbar>
               {isAuthenticated ? authLinks : guestLinks}
             </Nav>
           </Container>
         </Navbar>
-        <div>
-          {user && !isAuthenticated ? (
-            <Alert color="success">
-              Register Succssesfully - please Login!
-            </Alert>
-          ) : (
-            ""
-          )}
-        </div>
       </div>
     );
   }
 }
+/*
+        <div>
+          {justLoggedIn&&isAuthenticated?
+            <Alert color="success"> Logged in Succssesfully! </Alert>
+           : ""}
+        </div>*/
 
 const mapStateToProps = state => ({
   auth: state.auth
