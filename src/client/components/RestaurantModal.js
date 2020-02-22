@@ -10,10 +10,7 @@ import {
   Label, Alert
 } from "reactstrap";
 import {addRest, clearRestSuccessStatus} from "../actions/restaurantAction";
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import PlacesAutocomplete from 'react-places-autocomplete';
 
 import { connect } from "react-redux";
 
@@ -38,11 +35,6 @@ class RestaurantModal extends Component {
 
   onlocChange = address => {
     this.setState({ location: address});
-    /*geocodeByAddress(address)
-        .then(results => getLatLng(results[0]))
-        .then(latLng => this.setState({geoLocation:latLng }))
-        .catch(error =>  this.setState({error:error }));
-        */
   };
 
   onSubmit = e => {
@@ -98,12 +90,9 @@ class RestaurantModal extends Component {
                             const className = suggestion.active
                                 ? 'suggestion-item--active'
                                 : 'suggestion-item';
-                            const style = suggestion.active
-                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
                             return (
                                 <div
-                                    {...getSuggestionItemProps(suggestion, {className}, style)}
+                                    {...getSuggestionItemProps(suggestion, {className})}
                                 >
                                   <span>{suggestion.description}</span>
                                 </div>

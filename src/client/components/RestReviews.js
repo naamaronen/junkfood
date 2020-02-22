@@ -20,7 +20,6 @@ import StarRatingComponent from "react-star-rating-component";
 import { getRest } from "../actions/restaurantAction";
 import { sortByDate, sortByField } from "../actions/reviewAction";
 import ReviewModal from "./ReviewModal";
-import {geocodeByAddress, getLatLng} from "react-places-autocomplete";
 import {updateUserGeoLocation} from "../actions/userActions";
 
 
