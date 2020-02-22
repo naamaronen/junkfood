@@ -324,7 +324,7 @@ class SearchNavBar extends Component {
                 <Col xs="auto">
                   <Form inline>
                     <Col xs="auto">
-                      <Label for="rate">rate</Label>
+                      <Label for="rate">rate ></Label>
                     </Col>
                     <Input
                       type="select"

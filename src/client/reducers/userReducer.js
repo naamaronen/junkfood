@@ -1,17 +1,23 @@
 import {
   USER_PROFILE_SUCCSSES,
   OTHER_PROFILE_SUCCSSES,
-  LOADED_USERS
+  LOADED_USERS,
+  USER_GEO_LOCATION
 } from "../actions/types";
+
 
 const initialState = {
   userProfile: null,
   otherUser: null,
-  users: []
+  users: [],
+  userGeoLocation: null
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case USER_GEO_LOCATION:
+      return {...state, userGeoLocation: action.payload}
+
     case USER_PROFILE_SUCCSSES:
       return { ...state, userProfile: action.payload };
 

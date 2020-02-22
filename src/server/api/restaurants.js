@@ -81,7 +81,7 @@ module.exports = app => {
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
       })
-        .sort({ name: 1 })
+        //.sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -89,7 +89,7 @@ module.exports = app => {
         });
     } else if (location != "" && rate === null) {
       console.log(`search for location: ${location}`);
-      console.log(`search for averageRate: ${rate}`);
+      //console.log(`search for averageRate: ${rate}`);
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i")
       })
@@ -113,7 +113,7 @@ module.exports = app => {
               currRate = currRate + review.averageRate;
             });
             const avgRate = Math.floor(currRate / numOfRev);
-            if (avgRate === Number(rate)) {
+            if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
           });
@@ -135,7 +135,7 @@ module.exports = app => {
               currRate = currRate + review.averageRate;
             });
             const avgRate = Math.floor(currRate / numOfRev);
-            if (avgRate === Number(rate)) {
+            if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
           });

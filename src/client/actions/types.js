@@ -1,4 +1,5 @@
 export const ADD_REST = "ADD_REST";
+export const USER_GEO_LOCATION = "USER_GEO_LOCATION";
 export const CLEAR_SUCCESS_STATUS = "CLEAR_SUCCESS_STATUS";
 export const DELETE_REST = "DELETE_REST";
 export const ADD_REST_SUCCESS = "ADD_REST_SUCCESS";

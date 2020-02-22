@@ -70,7 +70,6 @@ export default function(state = initialState, action) {
       return { ...state, loading: true };
 
     case REVIEWS_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         reviews: action.payload.reviews,
@@ -86,7 +85,7 @@ export default function(state = initialState, action) {
         ...state,
         error: "",
         rest: action.payload
-      };
+      }
 
     case CLEAR_SUCCESS_STATUS:
       return {...state, error:"", addSuccess: false};

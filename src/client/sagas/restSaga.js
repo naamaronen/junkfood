@@ -88,6 +88,7 @@ function* getRest(action) {
       body: JSON.stringify(action.payload)
     });
     const restaurant = yield call([res, "json"]);
+    console.log(restaurant);
     yield put(getRestSuccsses(restaurant));
   } catch (e) {
     yield put(restsFailure(e.message));

@@ -10,6 +10,10 @@ import {
   Label, Alert
 } from "reactstrap";
 import {addRest, clearRestSuccessStatus} from "../actions/restaurantAction";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 import { connect } from "react-redux";
 
@@ -18,8 +22,9 @@ class RestaurantModal extends Component {
     modal: false,
     name: "",
     location: "",
+    error:""
   };
-
+  //autocomplete = new google.maps.places.Autocomplete();
   toggle = () => {
     this.setState({
       modal: !this.state.modal
@@ -29,6 +34,15 @@ class RestaurantModal extends Component {
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
+  };
+
+  onlocChange = address => {
+    this.setState({ location: address});
+    /*geocodeByAddress(address)
+        .then(results => getLatLng(results[0]))
+        .then(latLng => this.setState({geoLocation:latLng }))
+        .catch(error =>  this.setState({error:error }));
+        */
   };
 
   onSubmit = e => {
@@ -69,13 +83,33 @@ class RestaurantModal extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="Location">Location</Label>
-                <Input
-                  type="text"
-                  name="location"
-                  id="restaurant_location"
-                  placeholder="Add Restaurant location"
-                  onChange={this.onChange}
-                />
+                <PlacesAutocomplete onChange={this.onlocChange} value={this.state.location}>
+                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                      <div>
+                        <input
+                            {...getInputProps({
+                              placeholder: 'Add Restaurant location',
+                              className: 'location-search-input',
+                            })}
+                        />
+                        <div className="autocomplete-dropdown-container">
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map(suggestion => {
+                            const className = suggestion.active
+                                ? 'suggestion-item--active'
+                                : 'suggestion-item';
+                            const style = suggestion.active
+                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                            return (
+                                <div
+                                    {...getSuggestionItemProps(suggestion, {className}, style)}
+                                >
+                                  <span>{suggestion.description}</span>
+                                </div>
+                            );})}</div></div>
+                  )}
+                </PlacesAutocomplete>
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Add Restaurant
                 </Button>
