@@ -20,6 +20,37 @@ import StarRatingComponent from "react-star-rating-component";
 import { getRest } from "../actions/restaurantAction";
 import { sortByDate, sortByField } from "../actions/reviewAction";
 import ReviewModal from "./ReviewModal";
+import {updateUserGeoLocation} from "../actions/userActions";
+
+
+const geolocQueryURL = "https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=9wo4oIHk2RzJkQNEHEiGyvip9eBaZfyncovmOlXglE8&searchtext=";
+
+
+function calcDistance(loc1, loc2) {
+  console.log("calcing finally");
+  let lat1 = loc1.latitude, lon1 = loc1.longitude;
+  let lat2 = loc2.Latitude, lon2 = loc2.Longitude;
+  console.log(lat2);
+  console.log(lat1);
+  console.log(lon2);
+  if ((lat1 == lat2) && (lon1 == lon2)) {
+    return 0;
+  }
+  else {
+    var radlat1 = Math.PI * lat1/180;
+    var radlat2 = Math.PI * lat2/180;
+    var theta = lon1-lon2;
+    var radtheta = Math.PI * theta/180;
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = dist * 180/Math.PI;
+    dist = dist * 60 * 1.1515 * 1609.344; // in Meters
+    return Math.round(dist);
+  }
+}
 
 export class RestReviews extends Component {
   constructor() {
@@ -30,20 +61,41 @@ export class RestReviews extends Component {
       isSorted: false,
       showSorted: false,
       name: "",
-      alert: false
+      alert: false,
+      distance:"",
+      restGeoLoc:false
     };
   }
 
   componentDidMount() {
+    if(!this.props.userGeoLoc){
+      navigator.geolocation.getCurrentPosition(this.props.updateUserGeoLoc);
+    }
     this.setState({ alert: false });
     this.setState({ name: this.props.match.params.id });
     this.props.getRest({ name: this.props.match.params.id });
   }
 
   componentDidUpdate(prevProps) {
+    this.setDistance();
     if (this.props != prevProps) {
       if (this.props.auth) {
-        this.setState({ alert: false });
+        this.setState({alert: false});
+      }
+      if (this.props.restaurant) {
+        if (this.props.restaurant != prevProps.restaurant) {
+          console.log("fetching");
+          fetch(geolocQueryURL + this.props.restaurant.rest.location)
+              .then((res) => {
+                return res.json();
+              })
+              .then((loc) => {
+                this.setState({restGeoLoc: loc.Response.View[0].Result[0].Location.NavigationPosition[0]});
+                console.log("setting state");
+                console.log(loc.Response.View[0].Result[0].Location.NavigationPosition[0]);
+                console.log(this.state.restGeoLoc);
+          });
+        }
       }
     }
   }
@@ -57,6 +109,19 @@ export class RestReviews extends Component {
     this.setState({ sortTime: "" });
     this.setState({ isSorted: !this.state.isSorted });
     this.setState({ sortField: e.target.name });
+  };
+
+  setDistance = () => {
+    console.log(this.state.restGeoLoc);
+    if (this.state.restGeoLoc && this.props.userGeoLoc) {
+      let newDistance = calcDistance(this.props.userGeoLoc, this.state.restGeoLoc);
+      console.log(newDistance);
+      if (newDistance!==this.state.distance) {
+        console.log("different");
+        console.log(this.state.distance);
+        this.setState({distance:newDistance});
+      }
+    }
   };
 
   onClick = e => {
@@ -231,6 +296,8 @@ export class RestReviews extends Component {
 
   render() {
     const rest = this.props.restaurant.rest;
+    const distance = this.state.distance;
+
     return (
       <div className="App">
         <AppNavBar />
@@ -243,7 +310,7 @@ export class RestReviews extends Component {
             <Jumbotron>
               <h3 className="restPage">{rest.name}</h3>
               <h4>{rest.location}</h4>
-              {rest.pictures}
+              <h6>{distance} meters away from you</h6>
             </Jumbotron>
             <Container>
               <div>
@@ -402,6 +469,8 @@ export class RestReviews extends Component {
 const mapStateToProps = state => {
   return {
     restaurant: state.restaurant,
+    //restGeoLoc: state.restaurant.restGeoLocation,
+    userGeoLoc: state.user.userGeoLocation,
     review: state.review,
     auth: state.auth.isAuthenticated
   };
@@ -413,11 +482,13 @@ const mapDispatchToProps = () => dispatch => {
       dispatch(sortByDate(newSort));
     },
     sortByField: newSort => {
-      console.log(newSort);
       dispatch(sortByField(newSort));
     },
     getRest: name => {
       dispatch(getRest(name));
+    },
+    updateUserGeoLoc: pos=>{
+      dispatch(updateUserGeoLocation(pos));
     }
   };
 };

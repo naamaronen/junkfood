@@ -19,6 +19,7 @@ import { register } from "../../actions/authActions";
 import { clearErrors } from "../../actions/errorActions";
 import Autosuggest from "react-autosuggest";
 import { connect } from "react-redux";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 const getSuggestionValue = suggestion => suggestion.name;
 
@@ -115,6 +116,10 @@ class RegisterModal extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  onlocChange = address => {
+    this.setState({ location: address});
+  };
+
   loadImage = e => {
     this.setState({
       loadedPicture: URL.createObjectURL(e[0]),
@@ -183,15 +188,31 @@ class RegisterModal extends Component {
                   className="mb-3"
                   onChange={this.onChange}
                 />
-                <Label for="location">Location</Label>
-                <Input
-                  type="text"
-                  name="location"
-                  id="location"
-                  placeholder="location"
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
+                <Label for="location">Address</Label>
+                <PlacesAutocomplete onChange={this.onlocChange} value={this.state.location}>
+                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+                      <div>
+                        <input
+                            {...getInputProps({
+                              placeholder: 'Address',
+                              className: 'location-search-input',
+                            })}
+                        />
+                        <div className="autocomplete-dropdown-container">
+                          {loading && <div>Loading...</div>}
+                          {suggestions.map(suggestion => {
+                            const className = suggestion.active
+                                ? 'suggestion-item--active'
+                                : 'suggestion-item';
+                            return (
+                                <div
+                                    {...getSuggestionItemProps(suggestion, {className})}
+                                >
+                                  <span>{suggestion.description}</span>
+                                </div>
+                            );})}</div></div>
+                  )}
+                </PlacesAutocomplete>
                 <FormGroup row>
                   <Label for="picture" sm={2}>
                     Add Picture

@@ -5,13 +5,21 @@ import {
   OTHER_PROFILE,
   OTHER_PROFILE_SUCCSSES,
   LOADED_USERS,
-  FETCH_USERS
+  FETCH_USERS,
+  USER_GEO_LOCATION
 } from "./types";
 
 export function userProfileSuccsses(user) {
   return {
     type: USER_PROFILE_SUCCSSES,
     payload: user
+  };
+}
+
+export function updateUserGeoLocation(position) {
+  return {
+    type: USER_GEO_LOCATION,
+    payload: position.coords
   };
 }
 
