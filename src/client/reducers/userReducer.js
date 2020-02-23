@@ -10,16 +10,13 @@ const initialState = {
   userProfile: null,
   otherUser: null,
   users: [],
-  userGeoLocation: null
+  geoLocation: null
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case USER_GEO_LOCATION:
-      return {...state, userGeoLocation: action.payload}
-
     case USER_PROFILE_SUCCSSES:
-      return { ...state, userProfile: action.payload };
+      return { ...state, userProfile: action.payload, geoLocation: JSON.parse(action.payload.geolocation) };
 
     case OTHER_PROFILE_SUCCSSES:
       return { ...state, otherUser: action.payload };
