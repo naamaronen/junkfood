@@ -20,6 +20,7 @@ import { clearErrors } from "../../actions/errorActions";
 import Autosuggest from "react-autosuggest";
 import { connect } from "react-redux";
 import PlacesAutocomplete from "react-places-autocomplete";
+import LocationAutocomplete from "../LocationAutocomplete";
 
 const getSuggestionValue = suggestion => suggestion.name;
 
@@ -189,30 +190,8 @@ class RegisterModal extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="location">Address</Label>
-                <PlacesAutocomplete onChange={this.onlocChange} value={this.state.location}>
-                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                      <div>
-                        <input
-                            {...getInputProps({
-                              placeholder: 'Address',
-                              className: 'location-search-input',
-                            })}
-                        />
-                        <div className="autocomplete-dropdown-container">
-                          {loading && <div>Loading...</div>}
-                          {suggestions.map(suggestion => {
-                            const className = suggestion.active
-                                ? 'suggestion-item--active'
-                                : 'suggestion-item';
-                            return (
-                                <div
-                                    {...getSuggestionItemProps(suggestion, {className})}
-                                >
-                                  <span>{suggestion.description}</span>
-                                </div>
-                            );})}</div></div>
-                  )}
-                </PlacesAutocomplete>
+                <LocationAutocomplete class={"register-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
+
                 <FormGroup row>
                   <Label for="picture" sm={2}>
                     Add Picture

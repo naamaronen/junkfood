@@ -9,12 +9,16 @@ import {
 import { getUserSuccess } from "../actions/reviewAction";
 import { returnErrors } from "../actions/errorActions";
 import {userProfileSuccsses} from "../actions/userActions";
+import {getGeoLocation} from "../helpFunctions";
 
 function* register(action) {
+  let user = action.payload;
+  const geolocation = yield call(getGeoLocation, user.get("location"));
+  user.append("geoLocation",JSON.stringify(geolocation));
   try {
     const options = {
       method: "POST",
-      body: action.payload
+      body: user
     };
 
     const res = yield call(fetch, action.uri, options);

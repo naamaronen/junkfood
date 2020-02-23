@@ -29,7 +29,6 @@ class LoginModal extends Component {
 
   componentDidUpdate(prevProps) {
     const { error } = this.props;
-    console.log(error);
     if (error !== prevProps.error) {
       this.setState({
         msg: error.msg

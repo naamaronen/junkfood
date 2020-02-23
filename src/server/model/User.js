@@ -14,13 +14,17 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: false
+    required: true
   },
   picture: {
     ref: "Image",
     type: Schema.Types.ObjectId
   },
   location: {
+    type: String,
+    required: true
+  },
+  geolocation: {
     type: String,
     required: false
   },

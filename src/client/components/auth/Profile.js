@@ -11,6 +11,7 @@ import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import ReviewModal from "../ReviewModal";
 import {clearErrors} from "../../actions/errorActions";
+import LocationAutocomplete from "../LocationAutocomplete";
 
 export class Profile extends Component {
   state = {
@@ -23,6 +24,10 @@ export class Profile extends Component {
     loadedPicture: null,
     error:null,
     updateSuccess:null
+  };
+
+  onlocChange = address => {
+    this.setState({ location: address});
   };
 
   componentDidMount() {
@@ -45,8 +50,6 @@ export class Profile extends Component {
     const userProfile = this.props.user;
     // Error with updating the profile
     if (error !== prevProps.error) {
-      console.log("error updated");
-      console.log(error);
       this.setState({
         error: error.msg
       });
@@ -124,15 +127,9 @@ export class Profile extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="location">Location</Label>
-                <Input
-                  type="text"
-                  name="location"
-                  id="location"
-                  placeholder={`${this.state.location}`}
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-            </Col>
+                <LocationAutocomplete class={"profile-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
+
+              </Col>
               <Col>
                 <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
                 <p></p>

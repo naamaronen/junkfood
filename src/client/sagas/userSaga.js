@@ -13,6 +13,8 @@ import {
   loadedUsers
 } from "../actions/userActions.js";
 import { returnErrors } from "../actions/errorActions";
+import {getGeoLocation} from "../helpFunctions";
+
 
 function* getUser(action) {
   try {
@@ -25,22 +27,29 @@ function* getUser(action) {
     };
     const res = yield call(fetch, "api/signin/userSessions", options);
     const user = yield call([res, "json"]);
+
     yield put(userProfileSuccsses(user));
   } catch (e) {
     yield put(returnErrors(e.message));
   }
 }
 
+
 function* updateProfile(action) {
+  let user = action.payload;
+  const geolocation = yield call(getGeoLocation, user.get("location"));
+  user.append("geoLocation",JSON.stringify(geolocation));
   try {
     const options = {
       method: "POST",
-      body: action.payload
+      body: user
     };
     const res = yield call(fetch, "api/register/update", options);
     const reply = yield call([res, "json"]);
 
     if (reply.success) {
+      console.log("suc");
+      console.log(reply.user);
       yield put(userProfileSuccsses(reply.user));
       yield put(refresh(reply.user));
     } else {
