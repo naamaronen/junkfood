@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import ReviewModal from "./ReviewModal";
 import { fetchUsers } from "../actions/userActions";
-
+import StarRatingComponent from "react-star-rating-component";
 import { Link } from "react-router-dom";
 
 class RestList extends Component {
@@ -63,7 +63,7 @@ class RestList extends Component {
           <Container>
             <CardDeck className="restaurnt-list">
               {restaurants.map(
-                ({ _id, name, location, picture, stringDate }) => (
+                ({ _id, name, location, picture, stringDate, averageRate }) => (
                   <Col sm="3" key={_id}>
                     <Card
                       key={_id}
@@ -77,11 +77,29 @@ class RestList extends Component {
                         <h6 className="card-subtitle mb-2 text-muted">
                           {location}
                         </h6>
-                        <CardText>Something about rest</CardText>
+                        {averageRate != "0" ? (
+                          <CardText>
+                            average rate
+                            <CardText>
+                              <StarRatingComponent
+                                name="average"
+                                starCount={5}
+                                editing={false}
+                                value={averageRate}
+                              />
+                            </CardText>
+                          </CardText>
+                        ) : (
+                          <CardText>There are no reviews </CardText>
+                        )}
+
                         <CardText>
                           <small className="text-muted">{stringDate}</small>
                         </CardText>
-                        <Button color="primary" style={{ marginBottom: "2rem" }}>
+                        <Button
+                          color="primary"
+                          style={{ marginBottom: "2rem" }}
+                        >
                           <Link style={{ color: "#fff" }} to={`/${name}`}>
                             Watch Reviews
                           </Link>
