@@ -58,7 +58,6 @@ function* updateProfile(action) {
   }
 }
 
-
 function* otherProfile(action) {
   try {
     const options = {
@@ -68,6 +67,7 @@ function* otherProfile(action) {
         "Content-Type": "application/json"
       })
     };
+    console.log(action.payload);
     const res = yield call(fetch, action.uri, options);
     const user = yield call([res, "json"]);
     yield put(otherProfileSuccsses(user));

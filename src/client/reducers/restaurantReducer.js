@@ -48,8 +48,13 @@ export default function(state = initialState, action) {
       };
 
     case RESTS_FAILURE:
-      return { ...state, loading: false, saving: false, error: action.error,
-        addSuccess: false};
+      return {
+        ...state,
+        loading: false,
+        saving: false,
+        error: action.error,
+        addSuccess: false
+      };
 
     case DELETE_REST:
       return {
@@ -73,7 +78,13 @@ export default function(state = initialState, action) {
       };
 
     case REVIEWS_FAILURE:
-      return { ...state, loading: false, saving: false, addSuccess: false, error: action.error };
+      return {
+        ...state,
+        loading: false,
+        saving: false,
+        addSuccess: false,
+        error: action.error
+      };
 
     case GET_REST_SUCCSSES: {
       let rest = action.payload;
@@ -87,7 +98,7 @@ export default function(state = initialState, action) {
     }
 
     case CLEAR_SUCCESS_STATUS:
-      return {...state, error:"", addSuccess: false};
+      return { ...state, error: "", addSuccess: false };
 
     default:
       return state;

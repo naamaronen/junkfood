@@ -51,7 +51,8 @@ class SearchNavBar extends Component {
       rest_locations: [],
       user_locations: [],
       restNames: [],
-      userNames: []
+      userNames: [],
+      range: "50"
     };
   }
 
@@ -256,96 +257,123 @@ class SearchNavBar extends Component {
       user_suggestions
     } = this.state;
     const restSearch = (
-      <Row>
-        <Col xs="auto">
-          <NavItem>
-            <FormGroup row>
-              <Autosuggest
-                id="restId"
-                suggestions={rest_suggestions}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={this.autoComplete(
-                  "Search...",
-                  this.state.SearchValue,
-                  this.onValueChange
-                )}
-              />
-              <Button onClick={this.onClick} tag={Link} to={"/search_rest"}>
-                Search
-              </Button>
-              <FormGroup check inline>
-                <Col xs="auto">
-                  <Label for="checkbox">Search Restaurant By:</Label>
-                </Col>
-                <Col xs="auto">
-                  <CustomInput
-                    type="checkbox"
-                    id="name"
-                    label="name"
-                    name="name"
-                    onChange={this.onBoxChange}
-                  />
-                </Col>
-                <Col xs="auto">
-                  <CustomInput
-                    type="checkbox"
-                    id="location"
-                    label="location"
-                    name="location"
-                    onChange={this.onBoxChange}
-                  />
-                </Col>
-                <Col>
-                  {this.state.location ? (
-                    <Autosuggest
-                      id="locationId"
-                      suggestions={locRest_suggestions}
-                      onSuggestionsFetchRequested={
-                        this.onSuggestionsFetchRequested
-                      }
-                      onSuggestionsClearRequested={
-                        this.onSuggestionsClearRequested
-                      }
-                      getSuggestionValue={getSuggestionValue}
-                      renderSuggestion={renderSuggestion}
-                      inputProps={this.autoComplete(
-                        "choose a location",
-                        this.state.SearchLocationValue,
-                        this.onLocationChange
-                      )}
-                    />
-                  ) : (
-                    ""
+      <div>
+        <Row>
+          <Col xs="auto">
+            <NavItem>
+              <FormGroup row>
+                <Autosuggest
+                  id="restId"
+                  suggestions={rest_suggestions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={this.autoComplete(
+                    "Search...",
+                    this.state.SearchValue,
+                    this.onValueChange
                   )}
-                </Col>
-                <Col xs="auto">
-                  <Form inline>
-                    <Col xs="auto">
-                      <Label for="rate">rate ></Label>
-                    </Col>
-                    <Input
-                      type="select"
-                      name="rate"
-                      id="rate"
-                      onChange={this.onChange}
-                    >
-                      <option>None</option>
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </Input>
-                  </Form>
-                </Col>
+                />
+                <Button
+                  onClick={this.onClick}
+                  tag={Link}
+                  to={{
+                    pathname: "/search_rest",
+                    state: { range: this.state.range }
+                  }}
+                >
+                  Search
+                </Button>
+                <FormGroup check inline>
+                  <Col xs="auto">
+                    <Label for="checkbox">Search Restaurant By:</Label>
+                  </Col>
+                  <Col xs="auto">
+                    <CustomInput
+                      type="checkbox"
+                      id="name"
+                      label="name"
+                      name="name"
+                      onChange={this.onBoxChange}
+                    />
+                  </Col>
+                  <Col xs="auto">
+                    <CustomInput
+                      type="checkbox"
+                      id="location"
+                      label="location"
+                      name="location"
+                      onChange={this.onBoxChange}
+                    />
+                  </Col>
+                  <Col>
+                    {this.state.location ? (
+                      <Autosuggest
+                        id="locationId"
+                        suggestions={locRest_suggestions}
+                        onSuggestionsFetchRequested={
+                          this.onSuggestionsFetchRequested
+                        }
+                        onSuggestionsClearRequested={
+                          this.onSuggestionsClearRequested
+                        }
+                        getSuggestionValue={getSuggestionValue}
+                        renderSuggestion={renderSuggestion}
+                        inputProps={this.autoComplete(
+                          "choose a location",
+                          this.state.SearchLocationValue,
+                          this.onLocationChange
+                        )}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </Col>
+                  <Col xs="auto">
+                    <Form inline>
+                      <Col xs="auto">
+                        <Label for="rate">rate ></Label>
+                      </Col>
+                      <Input
+                        type="select"
+                        name="rate"
+                        id="rate"
+                        onChange={this.onChange}
+                      >
+                        <option>None</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </Input>
+                    </Form>
+                  </Col>
+                </FormGroup>
               </FormGroup>
+            </NavItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="1">
+            <Label>Better</Label>
+          </Col>
+          <Col>
+            <FormGroup>
+              <CustomInput
+                type="range"
+                id="exampleCustomRange"
+                name="range"
+                onChange={this.onChange}
+              />
             </FormGroup>
-          </NavItem>
-        </Col>
-      </Row>
+          </Col>
+          <Col>
+            <Label>Closer</Label>
+          </Col>
+        </Row>
+      </div>
     );
 
     const userSearch = (

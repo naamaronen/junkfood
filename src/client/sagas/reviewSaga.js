@@ -47,13 +47,13 @@ function* sort(action) {
   }
 }
 
-
 function* deleteReview(action) {
   console.log("deleteReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "DELETE"
     });
+    yield put(refresh({ username: action.payload.get("user") }));
   } catch (e) {
     yield put(reviewsFailure(e.message));
   }

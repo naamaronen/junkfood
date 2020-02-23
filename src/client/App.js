@@ -17,20 +17,19 @@ export default function App() {
           renders the first one that matches the current URL. */}
         <Switch>
           <Route
-            path="/userProfile/:id"
+            path="/user_profile/:id"
             render={props => <UserProfile {...props} isAuthed={true} />}
           />
-          <Route exact path="/profile">
-            <Profile />
-          </Route>
           <Route exact path="/search_user">
             <UserSearchResult />
           </Route>
-          <Route exact path="/search_rest">
-            <RestSearchResult />
-          </Route>
-          <Route path="/users">
-            <Users />
+          <Route
+            exact
+            path="/search_rest"
+            render={props => <RestSearchResult {...props} isAuthed={true} />}
+          />
+          <Route exact path="/profile">
+            <Profile />
           </Route>
           <Route
             path="/:id"
@@ -43,8 +42,4 @@ export default function App() {
       </div>
     </Router>
   );
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
