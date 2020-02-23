@@ -93,7 +93,7 @@ module.exports = app => {
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
       })
-        //.sort({ name: 1 })
+        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -105,7 +105,6 @@ module.exports = app => {
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -159,7 +158,6 @@ module.exports = app => {
       Restaurant.find({
         name: new RegExp(`^${name}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);

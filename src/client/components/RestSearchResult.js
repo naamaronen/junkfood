@@ -11,7 +11,7 @@ import {
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
-import { Link, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReviewModal from "./ReviewModal";
 
 class RestSearchResult extends Component {
