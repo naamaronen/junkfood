@@ -10,13 +10,11 @@ import {
   loadedRests,
   restsFailure,
   addRestSuccess,
-  reviewsSuccsses,
-  reviewsFailure,
   getRestSuccsses
 } from "../actions/restaurantAction";
+import {getGeoLocation} from "../helpFunctions";
 
 function* getAllRestaurants() {
-  console.log("get all restaurants");
   try {
     const res = yield call(fetch, "/api/restaurants", {
       method: "GET",
@@ -33,13 +31,16 @@ function* getAllRestaurants() {
 
 function* saveRest(action) {
   console.log("addRestSaga=", action);
+  let rest = action.payload;
+  const geolocation = yield call(getGeoLocation, rest.location);
+  rest.geolocation = JSON.stringify(geolocation);
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(action.payload)
+      body: JSON.stringify(rest)
     });
     const reply = yield call([res, "json"]);
     if (reply.success) {
@@ -52,33 +53,7 @@ function* saveRest(action) {
   }
 }
 
-function* deleteRest(action) {
-  try {
-    yield call(fetch, `/api/restaurants/${action.payload}`, {
-      method: "DELETE"
-    });
-  } catch (e) {
-    yield put(restsFailure(e.message));
-  }
-}
-
-function* watchReviews(action) {
-  try {
-    const res = yield call(fetch, action.uri, action.payload, {
-      method: "GET"
-    });
-    console.log(res);
-    const restaurant = yield call([res, "json"]);
-    console.log(restaurant);
-    yield put(reviewsSuccsses(restaurant));
-  } catch (e) {
-    yield put(reviewsFailure(e.message));
-  }
-}
-
 function* getRest(action) {
-  console.log(action.payload);
-
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
@@ -88,7 +63,6 @@ function* getRest(action) {
       body: JSON.stringify(action.payload)
     });
     const restaurant = yield call([res, "json"]);
-    console.log(restaurant);
     yield put(getRestSuccsses(restaurant));
   } catch (e) {
     yield put(restsFailure(e.message));
@@ -98,8 +72,6 @@ function* getRest(action) {
 //using takeEvery, you take the action away from reducer to saga
 export default function* RestaurantSaga() {
   yield takeEvery(FETCH_RESTS, getAllRestaurants);
-  //yield takeEvery(DELETE_REST, deleteRest);
   yield takeEvery(ADD_REST, saveRest);
-  yield takeEvery(WATCH_REVIEWS, watchReviews);
   yield takeEvery(GET_REST, getRest);
 }

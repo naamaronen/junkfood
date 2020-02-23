@@ -1,5 +1,3 @@
-//const auth = require("../../middleware/auth");
-
 //Restaurant model
 const Restaurant = require("../model/Restaurant");
 
@@ -40,7 +38,8 @@ module.exports = app => {
       reply.msg = "Please enter all fields";
       return res.status(400).send(reply);
     }
-    let restDetails = { name: req.body.name, location: req.body.location };
+    console.log(req.body);
+    let restDetails = req.body;
     Restaurant.findOne(restDetails).then(rest => {
       if (rest) {
         reply.msg = "Restaurant already in database";
@@ -93,7 +92,6 @@ module.exports = app => {
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -105,6 +103,7 @@ module.exports = app => {
       Restaurant.find({
         location: new RegExp(`^${location}$`, "i")
       })
+        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -166,3 +165,4 @@ module.exports = app => {
     }
   });
 };
+

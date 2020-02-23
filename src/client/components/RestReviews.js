@@ -23,9 +23,6 @@ import ReviewModal from "./ReviewModal";
 import {updateUserGeoLocation} from "../actions/userActions";
 import {calcDistance} from "../helpFunctions";
 
-const geolocQueryURL = "https://geocoder.ls.hereapi.com/6.2/geocode.json?apiKey=9wo4oIHk2RzJkQNEHEiGyvip9eBaZfyncovmOlXglE8&searchtext=";
-
-
 
 export class RestReviews extends Component {
   constructor() {
@@ -43,30 +40,25 @@ export class RestReviews extends Component {
   }
 
   componentDidMount() {
-    if(!this.props.userGeoLoc){
-      navigator.geolocation.getCurrentPosition(this.props.updateUserGeoLoc);
-    }
     this.setState({ alert: false });
     this.setState({ name: this.props.match.params.id });
     this.props.getRest({ name: this.props.match.params.id });
   }
 
   componentDidUpdate(prevProps) {
-    this.setDistance();
+    // set distance
+    if (this.props.rest){
+      let restGeoLoc = this.props.rest.geolocation;
+      if (restGeoLoc && this.props.userGeoLoc) {
+        let newDistance = calcDistance(restGeoLoc, this.props.userGeoLoc);
+        if (newDistance !== this.state.distance) {
+          this.setState({distance: newDistance});
+        }
+      }
+    }
     if (this.props != prevProps) {
       if (this.props.auth) {
         this.setState({alert: false});
-      }
-      if (this.props.restaurant) {
-        if (this.props.restaurant != prevProps.restaurant) {
-          fetch(geolocQueryURL + this.props.restaurant.rest.location)
-              .then((res) => {
-                return res.json();
-              })
-              .then((loc) => {
-                this.setState({restGeoLoc: loc.Response.View[0].Result[0].Location.NavigationPosition[0]});
-              });
-        }
       }
     }
   }
@@ -82,14 +74,6 @@ export class RestReviews extends Component {
     this.setState({ sortField: e.target.name });
   };
 
-  setDistance = () => {
-    if (this.state.restGeoLoc && this.props.userGeoLoc) {
-      let newDistance = calcDistance(this.props.userGeoLoc, this.state.restGeoLoc);
-      if (newDistance!==this.state.distance) {
-        this.setState({distance:newDistance});
-      }
-    }
-  };
 
   onClick = e => {
     e.preventDefault();
@@ -262,7 +246,7 @@ export class RestReviews extends Component {
   };
 
   render() {
-    const rest = this.props.restaurant.rest;
+    const rest = this.props.rest;
     const distance = this.state.distance;
 
     return (
@@ -435,8 +419,7 @@ export class RestReviews extends Component {
 
 const mapStateToProps = state => {
   return {
-    restaurant: state.restaurant,
-    //restGeoLoc: state.restaurant.restGeoLocation,
+    rest: state.restaurant.rest,
     userGeoLoc: state.user.geoLocation,
     review: state.review,
     auth: state.auth.isAuthenticated

@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
   Container,
@@ -11,7 +12,7 @@ import {
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
-import { Link } from "react-router-dom";
+import { Link, Route, Redirect } from "react-router-dom";
 import ReviewModal from "./ReviewModal";
 
 class RestSearchResult extends Component {
@@ -19,9 +20,27 @@ class RestSearchResult extends Component {
 
   componentDidMount() {
     this.setState({ range: this.props.location.state.range });
+    
+    if (this.props.closerBetterScale){
+
+    }
+  }
+  calcCloserBetterGrade = ({distance, rate}) =>{
+    let perc = this.props.closerBetterScale;
+    if (perc) {
+      let normalized_distance = distance;
+      let normalized_rate = rate * 20;
+      return (normalized_distance * perc) + (normalized_rate * (1 - perc));
+    }
+  }
+
+  sort = (restaurants) =>{
+    restaurants.map((rest)=>{
+      rest.closerBetter = calcCloserBetterGrade(this.props.userLocation)
+    })
   }
   render() {
-    const { searchResult } = this.props.search;
+    const { searchResult } = this.sort(this.props.search);
     return (
       <div className="App">
         <AppNavBar />
@@ -71,8 +90,10 @@ class RestSearchResult extends Component {
 
 const mapStateToProps = state => {
   return {
-    search: state.search
+    search: state.search,
+    userLocation: state.user.geoLocation
   };
 };
 
 export default connect(mapStateToProps, null)(RestSearchResult);
+
