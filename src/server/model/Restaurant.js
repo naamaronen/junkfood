@@ -11,6 +11,10 @@ const RestaurantSchema = new Schema({
     type: String,
     required: true
   },
+  geolocation: {
+    type: String,
+    required: false
+  },
   averageRate: 0,
 
   date: {

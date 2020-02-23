@@ -59,30 +59,11 @@ function* deleteReview(action) {
   }
 }
 
-/*
-function* updateReview(action) {
-  console.log("updateReviewSaga=", action);
-  try {
-    const res = yield call(fetch, action.uri, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(action.payload)
-    });
-    const review = yield call([res, "json"]);
-    console.log(review);
-    yield put(refresh({ username: action.payload.user }));
-    //yield put(addReviewSuccess(review));
-  } catch (e) {
-    yield put(reviewsFailure(e.message));
-  }
-}*/
+
 
 //using takeEvery, you take the action away from reducer to saga
 export default function* ReviewSaga() {
   yield takeEvery([ADD_REVIEW, UPDATE_REVIEW], saveReview);
   yield takeEvery([TIME_SORT, FIELD_SORT], sort);
   yield takeEvery(DELETE_REVIEW, deleteReview);
-  //yield takeEvery(UPDATE_REVIEW, updateReview);
 }

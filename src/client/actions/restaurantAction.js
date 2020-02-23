@@ -50,10 +50,6 @@ export function fetchRests() {
   return { type: FETCH_RESTS, uri: "api/restaurants" };
 }
 
-export function watchReviews(rest) {
-  return { type: WATCH_REVIEWS, uri: "api/restaurant/reviews", payload: rest };
-}
-
 export function reviewsSuccsses(restaurant) {
   return { type: REVIEWS_SUCCESS, payload: restaurant };
 }
