@@ -4,7 +4,6 @@ import {
   Button,
   Col,
   Card,
-  CardImg,
   CardText,
   CardBody,
   CardDeck
@@ -16,6 +15,11 @@ import { Link, Route, Redirect } from "react-router-dom";
 import ReviewModal from "./ReviewModal";
 
 class RestSearchResult extends Component {
+  state = { range: "" };
+
+  componentDidMount() {
+    this.setState({ range: this.props.location.state.range });
+  }
   render() {
     const { searchResult } = this.props.search;
     return (
@@ -30,35 +34,32 @@ class RestSearchResult extends Component {
                   <h3>Restaurants Not Found </h3>
                 </div>
               ) : (
-                searchResult.map(
-                  ({ _id, name, location, pictures, stringDate }) => (
-                    <Col sm="3" key={_id}>
-                      <Card
-                        key={_id}
-                        outline
-                        color="danger"
-                        className="text-center"
-                      >
-                        <CardBody>
-                          <h5 className="card-title">{name}</h5>
-                          <h6 className="card-subtitle mb-2 text-muted">
-                            {location}
-                          </h6>
-                          <CardText>Something about rest</CardText>
-                          <CardText>
-                            <small className="text-muted">{stringDate}</small>
-                          </CardText>
-                          <Button style={{ marginBottom: "2rem" }}>
-                            <Link style={{ color: "#fff" }} to={`/${name}`}>
-                              Watch Reviews
-                            </Link>
-                          </Button>
-                          <ReviewModal rest_name={name} type="Add"/>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  )
-                )
+                searchResult.map(({ _id, name, location, stringDate }) => (
+                  <Col sm="3" key={_id}>
+                    <Card
+                      key={_id}
+                      outline
+                      color="danger"
+                      className="text-center"
+                    >
+                      <CardBody>
+                        <h5 className="card-title">{name}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">
+                          {location}
+                        </h6>
+                        <CardText>
+                          <small className="text-muted">{stringDate}</small>
+                        </CardText>
+                        <Button style={{ marginBottom: "2rem" }}>
+                          <Link style={{ color: "#fff" }} to={`/${name}`}>
+                            Watch Reviews
+                          </Link>
+                        </Button>
+                        <ReviewModal rest_name={name} type="Add" />
+                      </CardBody>
+                    </Card>
+                  </Col>
+                ))
               )}
             </CardDeck>
           </Container>

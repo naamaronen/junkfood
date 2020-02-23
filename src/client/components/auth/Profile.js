@@ -10,14 +10,12 @@ import {
   Card,
   Label,
   Input,
-  CardImg,
   CardBody,
   CardText,
   Container,
   Row,
   UncontrolledCarousel,
-  Alert,
-  ModalBody
+  Alert
 } from "reactstrap";
 import { connect } from "react-redux";
 import { updateProfile } from "../../actions/userActions";

@@ -59,7 +59,7 @@ class RestList extends Component {
           <Container>
             <CardDeck className="restaurnt-list">
               {restaurants.map(
-                ({ _id, name, location, picture, stringDate, averageRate }) => (
+                ({ _id, name, location, stringDate, averageRate }) => (
                   <Col sm="3" key={_id}>
                     <Card
                       key={_id}
@@ -67,7 +67,6 @@ class RestList extends Component {
                       color="danger"
                       className="text-center"
                     >
-                      <CardImg top width="100%" src={picture} />
                       <CardBody>
                         <h5 className="card-title">{name}</h5>
                         <h6 className="card-subtitle mb-2 text-muted">
