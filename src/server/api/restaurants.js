@@ -20,7 +20,7 @@ module.exports = app => {
             currRate = currRate + review.averageRate;
           });
           var avgRate = 0;
-          if (numOfRev != 0) avgRate = Math.floor(currRate / numOfRev);
+          if (numOfRev != 0) avgRate = currRate / numOfRev;
           rest.averageRate = avgRate;
           rest.save();
         });
@@ -124,7 +124,7 @@ module.exports = app => {
             rest.reviews.map(review => {
               currRate = currRate + review.averageRate;
             });
-            const avgRate = Math.floor(currRate / numOfRev);
+            const avgRate = currRate / numOfRev;
             if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
@@ -146,7 +146,7 @@ module.exports = app => {
             rest.reviews.map(review => {
               currRate = currRate + review.averageRate;
             });
-            const avgRate = Math.floor(currRate / numOfRev);
+            const avgRate = currRate / numOfRev;
             if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
