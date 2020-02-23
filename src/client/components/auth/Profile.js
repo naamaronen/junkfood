@@ -23,7 +23,9 @@ import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import ReviewModal from "../ReviewModal";
-import { clearErrors } from "../../actions/errorActions";
+import {clearErrors} from "../../actions/errorActions";
+import LocationAutocomplete from "../LocationAutocomplete";
+
 
 export class Profile extends Component {
   state = {
@@ -36,6 +38,10 @@ export class Profile extends Component {
     loadedPicture: null,
     error: null,
     updateSuccess: null
+  };
+
+  onlocChange = address => {
+    this.setState({ location: address});
   };
 
   componentDidMount() {
@@ -58,8 +64,6 @@ export class Profile extends Component {
     const userProfile = this.props.user;
     // Error with updating the profile
     if (error !== prevProps.error) {
-      console.log("error updated");
-      console.log(error);
       this.setState({
         error: error.msg
       });
@@ -123,72 +127,44 @@ export class Profile extends Component {
           <Jumbotron>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Container>
-                  <Row>
-                    <Col>
-                      <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
-                      <p>you can watch and edit your profile here!</p>
-                      <Label for="fullName">Full Name</Label>
-                      <Input
-                        type="text"
-                        name="fullName"
-                        id="fullName"
-                        placeholder={`${this.state.fullName}`}
-                        className="mb-3"
-                        onChange={this.onChange}
-                      />
-                      <Label for="location">Location</Label>
-                      <Input
-                        type="text"
-                        name="location"
-                        id="location"
-                        placeholder={`${this.state.location}`}
-                        className="mb-3"
-                        onChange={this.onChange}
-                      />
-                    </Col>
-                    <Col>
-                      <img
-                        src={
-                          this.state.loadedPicture
-                            ? this.state.loadedPicture
-                            : this.state.picture
-                        }
-                        style={{ width: 300 }}
-                      />
-                      <p></p>
-                      <p>Edit profile picture:</p>
-                      <Dropzone
-                        name="newPicture"
-                        accept="image/*"
-                        onDrop={this.loadImage}
-                      >
-                        {({ getRootProps, getInputProps }) => (
-                          <section>
-                            <div
-                              {...getRootProps()}
-                              style={{
-                                border: "1px solid black",
-                                width: 300,
-                                color: "black",
-                                padding: 20
-                              }}
-                            >
-                              <input {...getInputProps()} />
-                              <p>
-                                Drag image here, {"\n"}or click to select file
-                              </p>
-                            </div>
-                          </section>
-                        )}
-                      </Dropzone>
-                      <p></p>
-                    </Col>
-                  </Row>
-                </Container>
-                <Button color="dark" style={{ marginBottom: "2rem" }} block>
-                  Save Changes
-                </Button>
+
+            <Container>
+              <Row>
+              <Col>
+            <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
+            <p>you can watch and edit your profile here!</p>
+                <Label for="fullName">Full Name</Label>
+                <Input
+                  type="text"
+                  name="fullName"
+                  id="fullName"
+                  placeholder={`${this.state.fullName}`}
+                  className="mb-3"
+                  onChange={this.onChange}
+                />
+                <Label for="location">Location</Label>
+                <LocationAutocomplete class={"profile-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
+
+              </Col>
+              <Col>
+                <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
+                <p></p>
+                <p>Edit profile picture:</p>
+              <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
+                {({getRootProps, getInputProps}) => (
+                    <section>
+                      <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
+                        <input {...getInputProps()} />
+                        <p>Drag image here, {"\n"}or click to select file</p>
+                      </div>
+                    </section>
+                )}</Dropzone>
+                <p></p>
+              </Col></Row></Container>
+            <Button color="dark" style={{ marginBottom: "2rem" }} block>
+              Save Changes
+            </Button>
+
                 {this.state.error ? (
                   <Alert color="danger">{this.state.error}</Alert>
                 ) : (

@@ -30,12 +30,13 @@ module.exports = app => {
         });
         newImage.save();
       }
-
+      console.log(req.body.geoLocation);
       req.body.password = bcrypt.hashSync(req.body.password, 10);
       const newUser = new User({
         fullName: req.body.fullName,
         username: req.body.username,
         location: req.body.location,
+        geolocation: req.body.geoLocation,
         picture: newImage,
         password: req.body.password
       });
@@ -75,12 +76,14 @@ module.exports = app => {
       newImage.save();
     }
     let username = req.body.username;
+    console.log(req.body.geoLocation);
     User.findOne({ username })
       .populate("picture")
       .populate("reviews")
       .then(user => {
         user.fullName = req.body.fullName;
         user.location = req.body.location;
+        user.geolocation = req.body.geoLocation;
         if (newImage != null) user.picture = newImage;
         user.save();
         reply.user = user;
