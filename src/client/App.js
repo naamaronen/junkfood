@@ -23,9 +23,11 @@ export default function App() {
           <Route exact path="/search_user">
             <UserSearchResult />
           </Route>
-          <Route exact path="/search_rest">
-            <RestSearchResult />
-          </Route>
+          <Route
+            exact
+            path="/search_rest"
+            render={props => <RestSearchResult {...props} isAuthed={true} />}
+          />
           <Route exact path="/profile">
             <Profile />
           </Route>
