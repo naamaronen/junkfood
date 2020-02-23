@@ -73,18 +73,15 @@ class RestList extends Component {
                           {location}
                         </h6>
                         {averageRate != "0" ? (
-                          <CardText>
+                          <CardBody>
                             average rate
-                            <CardText>
                               <StarRatingComponent
                                 name="average"
                                 starCount={5}
                                 editing={false}
                                 value={averageRate}
                               />
-                            </CardText>
-                          </CardText>
-                        ) : (
+                          </CardBody>) : (
                           <CardText>There are no reviews </CardText>
                         )}
 
