@@ -1,20 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import {
-  LOGIN,
-  UPDATE_USER,
-  REFRESH,
-  OTHER_PROFILE,
-  FETCH_USERS
-} from "../actions/types";
+import { LOGIN, UPDATE_USER, REFRESH, FETCH_USERS } from "../actions/types";
 import {
   userProfileSuccsses,
   refresh,
-  otherProfileSuccsses,
   loadedUsers
 } from "../actions/userActions.js";
 import { returnErrors } from "../actions/errorActions";
-import {getGeoLocation} from "../helpFunctions";
-
+import { getGeoLocation } from "../helpFunctions";
 
 function* getUser(action) {
   try {
@@ -34,11 +26,10 @@ function* getUser(action) {
   }
 }
 
-
 function* updateProfile(action) {
   let user = action.payload;
   const geolocation = yield call(getGeoLocation, user.get("location"));
-  user.append("geoLocation",JSON.stringify(geolocation));
+  user.append("geoLocation", JSON.stringify(geolocation));
   try {
     const options = {
       method: "POST",
@@ -53,24 +44,6 @@ function* updateProfile(action) {
     } else {
       yield put(returnErrors(reply));
     }
-  } catch (e) {
-    yield put(returnErrors(e.message));
-  }
-}
-
-function* otherProfile(action) {
-  try {
-    const options = {
-      method: "POST",
-      body: JSON.stringify(action.payload),
-      headers: new Headers({
-        "Content-Type": "application/json"
-      })
-    };
-    console.log(action.payload);
-    const res = yield call(fetch, action.uri, options);
-    const user = yield call([res, "json"]);
-    yield put(otherProfileSuccsses(user));
   } catch (e) {
     yield put(returnErrors(e.message));
   }
@@ -97,6 +70,5 @@ export default function* UserSaga() {
   yield takeEvery(LOGIN, getUser);
   yield takeEvery(REFRESH, getUser);
   yield takeEvery(UPDATE_USER, updateProfile);
-  yield takeEvery(OTHER_PROFILE, otherProfile);
   yield takeEvery(FETCH_USERS, getAllUsers);
 }

@@ -26,13 +26,17 @@ export class UserProfile extends Component {
 
   componentDidMount() {
     this.setState({ username: this.props.match.params.id });
-    if (this.props.user.otherUser) {
-      let { fullName, location, picture, reviews } = this.props.user.otherUser;
-      this.setState({ fullName: fullName });
-      this.setState({ location: location });
-      this.setState({ picture: picture ? picture.imageData : null });
-      this.setState({ reviews: reviews });
-    }
+
+    let {
+      fullName,
+      location,
+      picture,
+      reviews
+    } = this.props.location.state.user;
+    this.setState({ fullName: fullName });
+    this.setState({ location: location });
+    this.setState({ picture: picture ? picture.imageData : null });
+    this.setState({ reviews: reviews });
   }
 
   render() {
@@ -45,11 +49,10 @@ export class UserProfile extends Component {
             <h4>{this.state.fullName}</h4>
             <h4>{this.state.location}</h4>
             <img
-              src={this.state.picture ? this.state.picture : null}
+              src={this.state.picture ? "../" + this.state.picture : null}
               style={{ width: 300 }}
             />
           </Jumbotron>
-
           <div>
             <div>
               <h3>Reviews</h3>
@@ -82,7 +85,7 @@ export class UserProfile extends Component {
                       averageRate
                     };
                     const reviewImages = pictures.map(pic => {
-                      return { key: pic._id, src: pic.imageData };
+                      return { key: pic._id, src: "../" + pic.imageData };
                     });
                     return (
                       <Col sm="4" key={_id}>

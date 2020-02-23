@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import {
   Container,
@@ -17,6 +16,7 @@ import ReviewModal from "./ReviewModal";
 import {calcDistance} from "../helpFunctions";
 
 
+
 class RestSearchResult extends Component {
   state = {
     restaurants:[],
@@ -27,10 +27,12 @@ class RestSearchResult extends Component {
     if (this.state.closerBetterScale>-1) {
       let perc = this.state.closerBetterScale/100;
       let normalized_distance = (1 - (distance-minDist)/(maxDist-minDist)) * 100;
+
       let normalized_rate = rate * 20;
-      return (normalized_distance * perc) + (normalized_rate * (1 - perc));
+      return normalized_distance * perc + normalized_rate * (1 - perc);
     }
-  }
+  };
+
 
   componentDidMount() {
     this.setState({ closerBetterScale: this.props.location.state.range });
@@ -129,4 +131,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, null)(RestSearchResult);
-
