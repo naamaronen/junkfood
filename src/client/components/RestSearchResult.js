@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React, { Component } from "react";
 import {
   Container,
@@ -78,6 +79,9 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, null)(RestSearchResult);
 =======
+=======
+
+>>>>>>> 394551a14437ef23672af94f588e91bda97dcd00
 import React, { Component } from "react";
 import {
   Container,
@@ -175,4 +179,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, null)(RestSearchResult);
+<<<<<<< HEAD
 >>>>>>> 407309c574162c511785535a1d729c7ce3d89982
+=======
+
+>>>>>>> 394551a14437ef23672af94f588e91bda97dcd00

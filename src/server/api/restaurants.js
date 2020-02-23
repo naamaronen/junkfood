@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 //const auth = require("../../middleware/auth");
 
 //Restaurant model
@@ -170,6 +171,8 @@ module.exports = app => {
 =======
 //const auth = require("../../middleware/auth");
 
+=======
+>>>>>>> 394551a14437ef23672af94f588e91bda97dcd00
 //Restaurant model
 const Restaurant = require("../model/Restaurant");
 
@@ -264,7 +267,6 @@ module.exports = app => {
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
       })
-        //.sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -330,7 +332,6 @@ module.exports = app => {
       Restaurant.find({
         name: new RegExp(`^${name}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -339,4 +340,8 @@ module.exports = app => {
     }
   });
 };
+<<<<<<< HEAD
 >>>>>>> 407309c574162c511785535a1d729c7ce3d89982
+=======
+
+>>>>>>> 394551a14437ef23672af94f588e91bda97dcd00
