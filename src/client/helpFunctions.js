@@ -9,6 +9,7 @@ function getGeoLocation(location) {
 }
 
 function calcDistance(loc1, loc2) {
+    if (!loc1.Latitude || !loc2.Latitude) return 99999999999;
     let lat1 = loc1.Latitude, lon1 = loc1.Longitude;
     let lat2 = loc2.Latitude, lon2 = loc2.Longitude;
     if ((lat1 == lat2) && (lon1 == lon2)) {

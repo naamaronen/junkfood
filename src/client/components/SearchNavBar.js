@@ -18,7 +18,7 @@ import {
   Form
 } from "reactstrap";
 import { connect } from "react-redux";
-import { Link, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { searchByRest, searchByUser } from "../actions/searchActions";
 import Autosuggest from "react-autosuggest";
 
@@ -43,7 +43,6 @@ class SearchNavBar extends Component {
       location: false,
       username: false,
       rate: null,
-      redirect: false,
       locRest_suggestions: [],
       locUser_suggestions: [],
       rest_suggestions: [],
@@ -52,7 +51,7 @@ class SearchNavBar extends Component {
       user_locations: [],
       restNames: [],
       userNames: [],
-      range: "50"
+      range: "0"
     };
   }
 
@@ -171,25 +170,7 @@ class SearchNavBar extends Component {
     });
   };
 
-  setRedirect = () => {
-    this.setState({
-      redirect: !this.state.redirect
-    });
-  };
 
-  renderRedirectRest = () => {
-    if (this.state.redirect) {
-      this.setRedirect();
-      this.setState({ SearchLocationValue: "" });
-    }
-  };
-
-  renderRedirectUser = () => {
-    if (this.state.redirect) {
-      this.setRedirect();
-      this.setState({ SearchLocationValue: "", SearchFullNameValue: null });
-    }
-  };
 
   dropDownToggle = () => {
     this.setState({
@@ -215,11 +196,9 @@ class SearchNavBar extends Component {
 
   onBoxChange = e => {
     this.setState({ [e.target.name]: !this.state[e.target.name] });
-    this.render();
   };
 
   onClick = () => {
-    this.setRedirect();
     if (this.state.searchFor === "restaurant") {
       const newSearch = {
         name: this.state.SearchValue,
@@ -236,6 +215,7 @@ class SearchNavBar extends Component {
       };
       console.log(newSearch);
       this.props.searchByUser(newSearch);
+      this.setState({ SearchLocationValue: "", SearchFullNameValue: null });
     }
   };
 
@@ -473,9 +453,6 @@ class SearchNavBar extends Component {
 
     return (
       <div>
-        {this.state.searchFor === "restaurant"
-          ? this.renderRedirectRest()
-          : this.renderRedirectUser()}
         <Navbar color="light" light expand="md">
           <Container>
             <Nav className="mr-auto" navbar>
