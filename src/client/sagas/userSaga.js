@@ -48,8 +48,6 @@ function* updateProfile(action) {
     const reply = yield call([res, "json"]);
 
     if (reply.success) {
-      console.log("suc");
-      console.log(reply.user);
       yield put(userProfileSuccsses(reply.user));
       yield put(refresh(reply.user));
     } else {

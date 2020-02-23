@@ -40,7 +40,8 @@ module.exports = app => {
       reply.msg = "Please enter all fields";
       return res.status(400).send(reply);
     }
-    let restDetails = { name: req.body.name, location: req.body.location };
+    console.log(req.body);
+    let restDetails = req.body;
     Restaurant.findOne(restDetails).then(rest => {
       if (rest) {
         reply.msg = "Restaurant already in database";
