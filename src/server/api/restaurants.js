@@ -1,5 +1,3 @@
-//const auth = require("../../middleware/auth");
-
 //Restaurant model
 const Restaurant = require("../model/Restaurant");
 
@@ -94,7 +92,6 @@ module.exports = app => {
         name: new RegExp(`^${name}$`, "i"),
         location: new RegExp(`^${location}$`, "i")
       })
-        //.sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -160,7 +157,6 @@ module.exports = app => {
       Restaurant.find({
         name: new RegExp(`^${name}$`, "i")
       })
-        .sort({ name: 1 })
         .populate("reviews")
         .then(rests => {
           res.json(rests);
@@ -169,3 +165,4 @@ module.exports = app => {
     }
   });
 };
+

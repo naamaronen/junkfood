@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
   Container,
@@ -95,3 +96,4 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, null)(RestSearchResult);
+
