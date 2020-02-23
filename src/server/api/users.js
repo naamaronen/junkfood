@@ -10,7 +10,7 @@ const upload = require("../image");
 module.exports = app => {
   app.post("/api/register", upload.single("imageData"), (req, res) => {
     console.log("User.post/api/account/register");
-    const reply = {success: false};
+    const reply = { success: false };
     //Simple validation
     if (!req.body.fullName || !req.body.username || !req.body.password) {
       reply.msg = "Please enter all fields";
@@ -41,7 +41,7 @@ module.exports = app => {
         password: req.body.password
       });
       newUser.save().then(user => {
-        reply.success=true;
+        reply.success = true;
         reply.user = user;
         res.json(reply);
         res.end();
@@ -62,7 +62,7 @@ module.exports = app => {
 
   app.post("/api/register/update", upload.single("imageData"), (req, res) => {
     console.log("User.get/users/api/register/update");
-    const reply = {success: false};
+    const reply = { success: false };
     //Simple validation
     if (!req.body.fullName || !req.body.location) {
       reply.msg = "Can't enter empty name or location.";
@@ -78,6 +78,7 @@ module.exports = app => {
     let username = req.body.username;
     console.log(req.body.geoLocation);
     User.findOne({ username })
+      .populate("picture")
       .populate("reviews")
       .then(user => {
         user.fullName = req.body.fullName;
@@ -91,26 +92,29 @@ module.exports = app => {
         res.json(reply);
         res.end();
       });
+  });
 
-    app.post("/api/users/getProfile", (req, res) => {
-      console.log("users.post/api/users/getProfile");
-      User.findOne({ username: req.body.username })
-        .select("-password")
-        .populate("reviews")
-        .populate({
-          path: "reviews",
-          populate: { path: "pictures", model: "Image" }
-        })
-        .then(user => {
-          res.json(user);
-          res.end();
-        });
-    });
+  app.post("/api/users/getProfile", (req, res) => {
+    console.log("users.post/api/users/getProfile");
+    const username = req.body.username;
+    User.findOne({ username })
+      .select("-password")
+      .populate("picture")
+      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: { path: "pictures", model: "Image" }
+      })
+      .then(user => {
+        res.json(user);
+        res.end();
+      });
   });
 
   app.get("/api/users/fetch", function(req, res) {
     console.log("/api/users/fetch");
     User.find()
+      .populate("picture")
       .populate("reviews")
       .then(users => {
         res.json(users);
@@ -128,6 +132,7 @@ module.exports = app => {
         fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate("reviews")
         .populate({
           path: "reviews",
@@ -143,6 +148,7 @@ module.exports = app => {
         fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate("reviews")
         .populate({
           path: "reviews",
@@ -158,6 +164,7 @@ module.exports = app => {
         fullName: new RegExp(`^${fullName}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate({
           path: "reviews",
           populate: { path: "pictures", model: "Image" }
@@ -172,6 +179,7 @@ module.exports = app => {
         username: new RegExp(`^${name}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate({
           path: "reviews",
           populate: { path: "pictures", model: "Image" }
@@ -185,6 +193,7 @@ module.exports = app => {
         location: new RegExp(`^${location}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate({
           path: "reviews",
           populate: { path: "pictures", model: "Image" }
@@ -199,6 +208,7 @@ module.exports = app => {
         username: new RegExp(`^${name}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate({
           path: "reviews",
           populate: { path: "pictures", model: "Image" }
@@ -212,6 +222,7 @@ module.exports = app => {
         username: new RegExp(`^${name}$`, "i")
       })
         .sort({ fullName: 1 })
+        .populate("picture")
         .populate("reviews")
         .populate({
           path: "reviews",

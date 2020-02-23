@@ -38,10 +38,6 @@ class RestList extends Component {
     }
   }
 
-  onDeleteClick = id => {
-    this.props.deleteRestaurant(id);
-  };
-
   callbackFunction = childData => {
     this.setState({ alert: true });
   };
