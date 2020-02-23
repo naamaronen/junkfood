@@ -11,35 +11,65 @@ import {
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
-import { Link, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReviewModal from "./ReviewModal";
+import {calcDistance} from "../helpFunctions";
+
 
 class RestSearchResult extends Component {
-  state = { range: "" };
+  state = {
+    restaurants:[],
+    closerBetterScale: "100"
+  };
 
-  componentDidMount() {
-    this.setState({ range: this.props.location.state.range });
-    
-    if (this.props.closerBetterScale){
-
-    }
-  }
-  calcCloserBetterGrade = ({distance, rate}) =>{
-    let perc = this.props.closerBetterScale;
-    if (perc) {
-      let normalized_distance = distance;
+  calcCloserBetterGrade = (distance, rate, minDist, maxDist) =>{
+    if (this.state.closerBetterScale>-1) {
+      let perc = this.state.closerBetterScale/100;
+      let normalized_distance = (1 - (distance-minDist)/(maxDist-minDist)) * 100;
       let normalized_rate = rate * 20;
       return (normalized_distance * perc) + (normalized_rate * (1 - perc));
     }
   }
 
-  sort = (restaurants) =>{
-    restaurants.map((rest)=>{
-      rest.closerBetter = calcCloserBetterGrade(this.props.userLocation)
-    })
+  componentDidMount() {
+    this.setState({ closerBetterScale: this.props.location.state.range });
   }
+
+  sortByCloserBetter(rests) {
+    // calculate all distances, then all closer-better grades
+    let minDist = 99999999, maxDist = 0;
+    rests.map((rest) => {
+      rest.distance = calcDistance(rest.geolocation, this.props.userLocation);
+      if (rest.distance < minDist) minDist = rest.distance;
+      if (rest.distance > maxDist) maxDist = rest.distance;
+    })
+    rests.map((rest) => {
+      rest.cbGrade = this.calcCloserBetterGrade(rest.distance, rest.averageRate, minDist, maxDist)
+    })
+
+    return rests.sort((restA, restB) => { return restB.cbGrade - restA.cbGrade })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.state.range !== this.props.location.state.range)
+      this.setState({closerBetterScale: this.props.location.state.range});
+
+    if (prevProps.searchResults !== this.props.searchResults) {
+      let rests = this.props.searchResults;
+      if (rests) {
+        if (this.props.userLocation) {
+          rests = this.sortByCloserBetter(rests);
+
+          this.setState({restaurants: rests});
+        }
+      }
+    }
+  }
+
+
   render() {
-    const { searchResult } = this.sort(this.props.search);
+    // sort by closer-better grades (cbGrade)
+    const searchResult = this.state.restaurants;
     return (
       <div className="App">
         <AppNavBar />
@@ -52,7 +82,7 @@ class RestSearchResult extends Component {
                   <h3>Restaurants Not Found </h3>
                 </div>
               ) : (
-                searchResult.map(({ _id, name, location, stringDate }) => (
+                searchResult.map(({ _id, name, location, stringDate, averageRate }) => (
                   <Col sm="3" key={_id}>
                     <Card
                       key={_id}
@@ -66,9 +96,12 @@ class RestSearchResult extends Component {
                           {location}
                         </h6>
                         <CardText>
+                          {"Average Rate: "+averageRate}
+                        </CardText>
+                        <CardText>
                           <small className="text-muted">{stringDate}</small>
                         </CardText>
-                        <Button style={{ marginBottom: "2rem" }}>
+                        <Button color="primary" style={{ marginBottom: "2rem" }}>
                           <Link style={{ color: "#fff" }} to={`/${name}`}>
                             Watch Reviews
                           </Link>
@@ -89,9 +122,12 @@ class RestSearchResult extends Component {
 
 const mapStateToProps = state => {
   return {
-    search: state.search,
+    searchResults: state.search.searchResult,
     userLocation: state.user.geoLocation
   };
 };
 
 export default connect(mapStateToProps, null)(RestSearchResult);
+
+
+

@@ -14,6 +14,10 @@ function* searchRest(action) {
     };
     const res = yield call(fetch, "api/search_rest", options);
     const ress = yield call([res, "json"]);
+    ress.map((rest)=>{
+      rest.geolocation? (rest.geolocation=JSON.parse(rest.geolocation)) : null;
+    })
+    //
     yield put(loadSearch(ress));
   } catch (e) {
     yield put(returnErrors(e.message));
