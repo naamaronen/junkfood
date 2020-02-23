@@ -12,36 +12,49 @@ module.exports = app => {
     Restaurant.find()
       .sort({ date: -1 })
       .populate("reviews")
-      .then(restaurants => {
-        res.json(restaurants);
+      .then(rests => {
+        rests.map(rest => {
+          const numOfRev = rest.reviews.length;
+          var currRate = 0;
+          rest.reviews.map(review => {
+            currRate = currRate + review.averageRate;
+          });
+          var avgRate = 0;
+          if (numOfRev != 0) avgRate = Math.floor(currRate / numOfRev);
+          console.log(avgRate);
+          rest.averageRate = avgRate;
+          rest.save();
+        });
+        res.json(rests);
         res.end();
-      });
+      })
+      .catch(e => console.log(e));
   });
 
   //@route POST api/restaurants
   //@desc Create a Post
   //access public
   app.post("/api/restaurants", (req, res) => {
-      console.log("/api/restaurants");
-      let reply = {success: false};
-      if (!req.body.name || !req.body.location) {
-          reply.msg = "Please enter all fields";
-          return res.status(400).send(reply);
+    console.log("/api/restaurants");
+    let reply = { success: false };
+    if (!req.body.name || !req.body.location) {
+      reply.msg = "Please enter all fields";
+      return res.status(400).send(reply);
+    }
+    let restDetails = { name: req.body.name, location: req.body.location };
+    Restaurant.findOne(restDetails).then(rest => {
+      if (rest) {
+        reply.msg = "Restaurant already in database";
+        return res.status(400).send(reply);
       }
-      let restDetails = { name: req.body.name, location: req.body.location };
-      Restaurant.findOne(restDetails).then(rest => {
-          if (rest) {
-              reply.msg = "Restaurant already in database";
-              return res.status(400).send(reply);
-          }
-          const newRestaurant = new Restaurant(restDetails);
-          newRestaurant.stringDate = newRestaurant.date.toLocaleString();
-          newRestaurant.save().then(restaurant => {
-              reply.success = true;
-              reply.restaurant = restaurant
-              res.json(reply);
-          });
+      const newRestaurant = new Restaurant(restDetails);
+      newRestaurant.stringDate = newRestaurant.date.toLocaleString();
+      newRestaurant.save().then(restaurant => {
+        reply.success = true;
+        reply.restaurant = restaurant;
+        res.json(reply);
       });
+    });
   });
 
   //@route DELETE api/restaurants/id
