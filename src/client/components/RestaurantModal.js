@@ -13,6 +13,7 @@ import {addRest, clearRestSuccessStatus} from "../actions/restaurantAction";
 import PlacesAutocomplete from 'react-places-autocomplete';
 
 import { connect } from "react-redux";
+import LocationAutocomplete from "./LocationAutocomplete";
 
 class RestaurantModal extends Component {
   state = {
@@ -75,30 +76,8 @@ class RestaurantModal extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="Location">Location</Label>
-                <PlacesAutocomplete onChange={this.onlocChange} value={this.state.location}>
-                  {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-                      <div>
-                        <input
-                            {...getInputProps({
-                              placeholder: 'Add Restaurant location',
-                              className: 'location-search-input',
-                            })}
-                        />
-                        <div className="autocomplete-dropdown-container">
-                          {loading && <div>Loading...</div>}
-                          {suggestions.map(suggestion => {
-                            const className = suggestion.active
-                                ? 'suggestion-item--active'
-                                : 'suggestion-item';
-                            return (
-                                <div
-                                    {...getSuggestionItemProps(suggestion, {className})}
-                                >
-                                  <span>{suggestion.description}</span>
-                                </div>
-                            );})}</div></div>
-                  )}
-                </PlacesAutocomplete>
+                <LocationAutocomplete class={"rest-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
+
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Add Restaurant
                 </Button>
