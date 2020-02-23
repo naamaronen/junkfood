@@ -89,7 +89,6 @@ export default function(state = initialState, action) {
     case GET_REST_SUCCSSES: {
       let rest = action.payload;
       rest.geolocation = rest.geolocation? JSON.parse(rest.geolocation) : null;
-      console.log("hi3");
       return {
         ...state,
         error: "",

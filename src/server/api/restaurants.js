@@ -89,8 +89,8 @@ module.exports = app => {
     console.log(req.body);
     if (location != "" && name != "") {
       Restaurant.find({
-        name: new RegExp(`^${name}$`, "i"),
-        location: new RegExp(`^${location}$`, "i")
+        name: new RegExp(`^${name}`, "i"),
+        location: new RegExp(`${location}`, "i")
       })
         .populate("reviews")
         .then(rests => {
@@ -101,7 +101,7 @@ module.exports = app => {
       console.log(`search for location: ${location}`);
       //console.log(`search for averageRate: ${rate}`);
       Restaurant.find({
-        location: new RegExp(`^${location}$`, "i")
+        location: new RegExp(`${location}`, "i")
       })
         .sort({ name: 1 })
         .populate("reviews")
@@ -111,7 +111,7 @@ module.exports = app => {
         });
     } else if (location != "" && rate != null) {
       Restaurant.find({
-        location: new RegExp(`^${location}$`, "i")
+        location: new RegExp(`${location}`, "i")
       })
         .populate("reviews")
         .then(rests => {
@@ -133,7 +133,7 @@ module.exports = app => {
         .catch(e => console.log(e));
     } else if (rate != null) {
       Restaurant.find({
-        name: new RegExp(`^${name}$`, "i")
+        name: new RegExp(`^${name}`, "i")
       })
         .populate("reviews")
         .then(rests => {
@@ -155,7 +155,7 @@ module.exports = app => {
         .catch(e => console.log(e));
     } else {
       Restaurant.find({
-        name: new RegExp(`^${name}$`, "i")
+        name: new RegExp(`^${name}`, "i")
       })
         .populate("reviews")
         .then(rests => {
