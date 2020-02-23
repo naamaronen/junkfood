@@ -30,7 +30,6 @@ module.exports = app => {
         });
         newImage.save();
       }
-      console.log(req.body.geoLocation);
       req.body.password = bcrypt.hashSync(req.body.password, 10);
       const newUser = new User({
         fullName: req.body.fullName,

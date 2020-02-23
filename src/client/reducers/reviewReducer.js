@@ -12,7 +12,6 @@ const initialState = {
   loading: false,
   saving: false,
   error: "",
-  token: localStorage.getItem("token"),
   sortedReviews: []
 };
 
@@ -33,7 +32,6 @@ export default function(state = initialState, action) {
       return { ...state, loading: false, saving: false, error: action.error };
 
     case GET_USER_SUCCESS://why we do that?
-      localStorage.setItem("token", action.payload.token);
       return {
         ...state,
         ...action.payload,

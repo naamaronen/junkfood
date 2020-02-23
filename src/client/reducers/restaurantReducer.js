@@ -14,7 +14,6 @@ import {
 
 const initialState = {
   restaurants: [],
-  reviews: [],
   loading: false,
   saving: false,
   error: "",
@@ -64,10 +63,6 @@ export default function(state = initialState, action) {
           []
         )
       };
-    //delete
-    //state = state.update("restaurants", e => e.delete(action.payload));
-    case WATCH_REVIEWS:
-      return { ...state, loading: true };
 
     case REVIEWS_SUCCESS:
       return {
@@ -80,12 +75,16 @@ export default function(state = initialState, action) {
     case REVIEWS_FAILURE:
       return { ...state, loading: false, saving: false, addSuccess: false, error: action.error };
 
-    case GET_REST_SUCCSSES:
+    case GET_REST_SUCCSSES: {
+      let rest = action.payload;
+      rest.geolocation = rest.geolocation? JSON.parse(rest.geolocation) : null;
+      console.log("hi3");
       return {
         ...state,
         error: "",
-        rest: action.payload
+        rest: rest
       }
+    }
 
     case CLEAR_SUCCESS_STATUS:
       return {...state, error:"", addSuccess: false};

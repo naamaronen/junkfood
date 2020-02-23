@@ -20,8 +20,7 @@ module.exports = app => {
             currRate = currRate + review.averageRate;
           });
           var avgRate = 0;
-          if (numOfRev != 0) avgRate = Math.floor(currRate / numOfRev);
-          console.log(avgRate);
+          if (numOfRev != 0) avgRate = (currRate / numOfRev);
           rest.averageRate = avgRate;
           rest.save();
         });
@@ -41,7 +40,8 @@ module.exports = app => {
       reply.msg = "Please enter all fields";
       return res.status(400).send(reply);
     }
-    let restDetails = { name: req.body.name, location: req.body.location };
+    console.log(req.body);
+    let restDetails = req.body;
     Restaurant.findOne(restDetails).then(rest => {
       if (rest) {
         reply.msg = "Restaurant already in database";
@@ -125,7 +125,7 @@ module.exports = app => {
             rest.reviews.map(review => {
               currRate = currRate + review.averageRate;
             });
-            const avgRate = Math.floor(currRate / numOfRev);
+            const avgRate = (currRate / numOfRev);
             if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
@@ -147,7 +147,7 @@ module.exports = app => {
             rest.reviews.map(review => {
               currRate = currRate + review.averageRate;
             });
-            const avgRate = Math.floor(currRate / numOfRev);
+            const avgRate = (currRate / numOfRev);
             if (avgRate >= Number(rate)) {
               Rests.push(rest);
             }
