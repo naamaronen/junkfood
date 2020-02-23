@@ -21,7 +21,6 @@ module.exports = app => {
           });
           var avgRate = 0;
           if (numOfRev != 0) avgRate = Math.floor(currRate / numOfRev);
-          console.log(avgRate);
           rest.averageRate = avgRate;
           rest.save();
         });

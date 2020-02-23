@@ -155,8 +155,9 @@ module.exports = app => {
     console.log("Review.sort/api/reviews/time_sort");
     const { sortTime, name } = req.body;
     console.log(req.body);
-    let sortType = null, dateQuery = null;
-    switch (sortTime){
+    let sortType = null,
+      dateQuery = null;
+    switch (sortTime) {
       case "newest":
         sortType = { date: -1 };
         break;
@@ -170,7 +171,9 @@ module.exports = app => {
         dateQuery = new Date(new Date().setMonth(new Date().getMonth() - 1));
         break;
       case "lastYear":
-        dateQuery=new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+        dateQuery = new Date(
+          new Date().setFullYear(new Date().getFullYear() - 1)
+        );
         break;
     }
 
@@ -196,6 +199,5 @@ module.exports = app => {
           res.end();
         });
     }
-
   });
 };

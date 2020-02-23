@@ -1,8 +1,23 @@
 import React, { Component, Fragment } from "react";
-import Dropzone from 'react-dropzone';
+import Dropzone from "react-dropzone";
 import {
-  Jumbotron, Button, FormGroup, Form, Col, CardDeck, Card, Label,
-  Input, CardImg, CardBody, CardText, Container, Row, UncontrolledCarousel, Alert, ModalBody
+  Jumbotron,
+  Button,
+  FormGroup,
+  Form,
+  Col,
+  CardDeck,
+  Card,
+  Label,
+  Input,
+  CardImg,
+  CardBody,
+  CardText,
+  Container,
+  Row,
+  UncontrolledCarousel,
+  Alert,
+  ModalBody
 } from "reactstrap";
 import { connect } from "react-redux";
 import { updateProfile } from "../../actions/userActions";
@@ -10,7 +25,7 @@ import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import ReviewModal from "../ReviewModal";
-import {clearErrors} from "../../actions/errorActions";
+import { clearErrors } from "../../actions/errorActions";
 
 export class Profile extends Component {
   state = {
@@ -21,13 +36,13 @@ export class Profile extends Component {
     picture: null,
     reviews: [],
     loadedPicture: null,
-    error:null,
-    updateSuccess:null
+    error: null,
+    updateSuccess: null
   };
 
   componentDidMount() {
-    console.log("profile mounted")
-    console.log(this.props.user)
+    console.log("profile mounted");
+    console.log(this.props.user);
     const { userProfile } = this.props.user;
     const { fullName, reviews, location, username, picture } = userProfile;
     this.setState({
@@ -35,8 +50,8 @@ export class Profile extends Component {
       fullName: fullName,
       location: location,
       username: username,
-      picture: picture ? picture.imageData:null,
-      reviews: reviews,
+      picture: picture ? picture.imageData : null,
+      reviews: reviews
     });
   }
 
@@ -57,15 +72,17 @@ export class Profile extends Component {
         updateSuccess: true
       });
     }
-    /*  const { fullName, reviews, location, username, picture } = userProfile;
-      this.setState({ userProfile: userProfile,
+    if (this.props != prevProps) {
+      const { fullName, reviews, location, username, picture } = userProfile;
+      this.setState({
+        //userProfile: userProfile,
         fullName: fullName,
         location: location,
         username: username,
-        picture: picture ? picture.imageData:null,
-        reviews: reviews,
-        loadedPicture: null });
-    }*/
+        picture: picture ? picture.imageData : null,
+        reviews: reviews
+      });
+    }
   }
 
   onChange = e => {
@@ -96,9 +113,8 @@ export class Profile extends Component {
     this.props.updateProfile(userData);
   };
 
-
-  onDeleteReview = id => {
-    //this.props.deleteReview(id);
+  onDeleteReview = e => {
+    this.props.deleteReview(e.target.value);
   };
 
   render() {
@@ -109,56 +125,86 @@ export class Profile extends Component {
           <Jumbotron>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-            <Container>
-              <Row>
-              <Col>
-            <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
-            <p>you can watch and edit your profile here!</p>
-                <Label for="fullName">Full Name</Label>
-                <Input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  placeholder={`${this.state.fullName}`}
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Label for="location">Location</Label>
-                <Input
-                  type="text"
-                  name="location"
-                  id="location"
-                  placeholder={`${this.state.location}`}
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-            </Col>
-              <Col>
-                <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
-                <p></p>
-                <p>Edit profile picture:</p>
-              <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                      <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
-                        <input {...getInputProps()} />
-                        <p>Drag image here, {"\n"}or click to select file</p>
-                      </div>
-                    </section>
-                )}</Dropzone>
-                <p></p>
-              </Col></Row></Container>
-            <Button color="dark" style={{ marginBottom: "2rem" }} block>
-              Save Changes
-            </Button>
+                <Container>
+                  <Row>
+                    <Col>
+                      <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
+                      <p>you can watch and edit your profile here!</p>
+                      <Label for="fullName">Full Name</Label>
+                      <Input
+                        type="text"
+                        name="fullName"
+                        id="fullName"
+                        placeholder={`${this.state.fullName}`}
+                        className="mb-3"
+                        onChange={this.onChange}
+                      />
+                      <Label for="location">Location</Label>
+                      <Input
+                        type="text"
+                        name="location"
+                        id="location"
+                        placeholder={`${this.state.location}`}
+                        className="mb-3"
+                        onChange={this.onChange}
+                      />
+                    </Col>
+                    <Col>
+                      <img
+                        src={
+                          this.state.loadedPicture
+                            ? this.state.loadedPicture
+                            : this.state.picture
+                        }
+                        style={{ width: 300 }}
+                      />
+                      <p></p>
+                      <p>Edit profile picture:</p>
+                      <Dropzone
+                        name="newPicture"
+                        accept="image/*"
+                        onDrop={this.loadImage}
+                      >
+                        {({ getRootProps, getInputProps }) => (
+                          <section>
+                            <div
+                              {...getRootProps()}
+                              style={{
+                                border: "1px solid black",
+                                width: 300,
+                                color: "black",
+                                padding: 20
+                              }}
+                            >
+                              <input {...getInputProps()} />
+                              <p>
+                                Drag image here, {"\n"}or click to select file
+                              </p>
+                            </div>
+                          </section>
+                        )}
+                      </Dropzone>
+                      <p></p>
+                    </Col>
+                  </Row>
+                </Container>
+                <Button color="dark" style={{ marginBottom: "2rem" }} block>
+                  Save Changes
+                </Button>
                 {this.state.error ? (
-                    <Alert color="danger">{this.state.error}</Alert>
-                ) : ""}
+                  <Alert color="danger">{this.state.error}</Alert>
+                ) : (
+                  ""
+                )}
                 {this.state.updateSuccess ? (
-                    <Alert color="success">{"Profile updated successfully"}</Alert>
-                ) : ""}
-          </FormGroup>
-        </Form>
+                  <Alert color="success">
+                    {"Profile updated successfully"}
+                  </Alert>
+                ) : (
+                  ""
+                )}
+              </FormGroup>
+            </Form>
           </Jumbotron>
 
           <div>
@@ -192,7 +238,9 @@ export class Profile extends Component {
                       pictures,
                       averageRate
                     };
-                    const reviewImages = pictures.map(pic => {return {'key':pic._id, 'src':pic.imageData}});
+                    const reviewImages = pictures.map(pic => {
+                      return { key: pic._id, src: pic.imageData };
+                    });
                     return (
                       <Col sm="4" key={_id}>
                         <Card
@@ -297,15 +345,19 @@ export class Profile extends Component {
                                   value={FoodQuality}
                                 />
                               </Col>
-                              <UncontrolledCarousel items={reviewImages} indicators={false} />
+                              <UncontrolledCarousel
+                                items={reviewImages}
+                                indicators={false}
+                              />
                             </Row>
                             <Col>
-                              <ReviewModal review={review} type="Update"/>
+                              <ReviewModal review={review} type="Update" />
                             </Col>
                             <Col>
                               <Button
                                 color="danger"
-                                onClick={this.onDeleteReview(_id)}
+                                value={_id}
+                                onClick={this.onDeleteReview}
                               >
                                 Delete Review
                               </Button>

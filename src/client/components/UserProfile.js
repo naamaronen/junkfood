@@ -8,13 +8,14 @@ import {
   CardBody,
   CardText,
   Container,
-  Row
+  Row,
+  UncontrolledCarousel
 } from "reactstrap";
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 
-export class Profile extends Component {
+export class UserProfile extends Component {
   state = {
     username: "",
     fullName: "",
@@ -29,7 +30,7 @@ export class Profile extends Component {
       let { fullName, location, picture, reviews } = this.props.user.otherUser;
       this.setState({ fullName: fullName });
       this.setState({ location: location });
-      this.setState({ picture: picture });
+      this.setState({ picture: picture ? picture.imageData : null });
       this.setState({ reviews: reviews });
     }
   }
@@ -43,7 +44,10 @@ export class Profile extends Component {
             <h3 className="profile">{this.state.username}</h3>
             <h4>{this.state.fullName}</h4>
             <h4>{this.state.location}</h4>
-            {this.state.picture}
+            <img
+              src={this.state.picture ? this.state.picture : null}
+              style={{ width: 300 }}
+            />
           </Jumbotron>
 
           <div>
@@ -58,7 +62,7 @@ export class Profile extends Component {
                     restaurantName,
                     stringDate,
                     _id,
-                    picture,
+                    pictures,
                     averageRate
                   }) => {
                     const {
@@ -74,9 +78,12 @@ export class Profile extends Component {
                       restaurantName,
                       stringDate,
                       _id,
-                      picture,
+                      pictures,
                       averageRate
                     };
+                    const reviewImages = pictures.map(pic => {
+                      return { key: pic._id, src: pic.imageData };
+                    });
                     return (
                       <Col sm="4" key={_id}>
                         <Card
@@ -85,7 +92,6 @@ export class Profile extends Component {
                           color="danger"
                           className="text-center"
                         >
-                          <CardImg top width="100%" src={picture} />
                           <CardBody>
                             <h5 className="card-title">{restaurantName}</h5>
                             <CardText></CardText>
@@ -182,6 +188,10 @@ export class Profile extends Component {
                                   value={FoodQuality}
                                 />
                               </Col>
+                              <UncontrolledCarousel
+                                items={reviewImages}
+                                indicators={false}
+                              />
                             </Row>
                           </CardBody>
                         </Card>
@@ -202,4 +212,4 @@ const mapStateToProps = state => ({
   user: state.user
 });
 
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, null)(UserProfile);

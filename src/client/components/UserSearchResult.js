@@ -1,21 +1,8 @@
 import React, { Component } from "react";
 import {
-  Navbar,
-  Nav,
-  NavItem,
   Container,
-  Dropdown,
   Button,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Row,
   Col,
-  FormGroup,
-  Label,
-  Input,
-  CustomInput,
-  Form,
   CardDeck,
   Card,
   CardImg,
@@ -24,13 +11,16 @@ import {
 import { connect } from "react-redux";
 import AppNavBar from "./AppNavBar";
 import SearchNavBar from "./SearchNavBar";
-import { Link, Route, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getUserProfile } from "../actions/userActions";
 
 class UserSearchResult extends Component {
   onClick = username => {
+    //const username = e.target.value;
+    console.log(username);
     this.props.getUserProfile({ username });
   };
+
   render() {
     const { searchResult } = this.props.search;
     return (
@@ -54,7 +44,11 @@ class UserSearchResult extends Component {
                         color="danger"
                         className="text-center"
                       >
-                        <CardImg top width="100%" src={picture} />
+                        <CardImg
+                          top
+                          width="100%"
+                          src={picture ? picture.imageData : null}
+                        />
                         <CardBody>
                           <h5 className="card-title">{username}</h5>
                           <h6 className="card-title">{fullName}</h6>
@@ -63,9 +57,10 @@ class UserSearchResult extends Component {
                           </h6>
                           <Button
                             color="warning"
+                            //value={username}
                             onClick={this.onClick(username)}
                             tag={Link}
-                            to={`/userProfile/${username}`}
+                            to={`/user_profile/${username}`}
                           >
                             Watch Profile
                           </Button>
