@@ -60,9 +60,8 @@ class RestSearchResult extends Component {
       if (rests) {
         if (this.props.userLocation) {
           rests = this.sortByCloserBetter(rests);
-
-          this.setState({restaurants: rests});
         }
+      this.setState({restaurants: rests});
       }
     }
   }
