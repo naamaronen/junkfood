@@ -14,14 +14,13 @@ import {
 import { refresh } from "../actions/userActions";
 
 function* saveReview(action) {
-  console.log("saveReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
       body: action.payload
     });
     const reviewRes = yield call([res, "json"]);
-    let username = {username: action.payload.get("user")}
+    let username = { username: action.payload.get("user") };
     reviewRes.review.user = username;
     yield put(refresh(username));
     yield put(addReviewSuccess(reviewRes));
@@ -31,7 +30,6 @@ function* saveReview(action) {
 }
 
 function* sort(action) {
-  console.log("sortTimeReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "POST",
@@ -48,7 +46,6 @@ function* sort(action) {
 }
 
 function* deleteReview(action) {
-  console.log("deleteReviewSaga=", action);
   try {
     const res = yield call(fetch, action.uri, {
       method: "DELETE"
@@ -58,8 +55,6 @@ function* deleteReview(action) {
     yield put(reviewsFailure(e.message));
   }
 }
-
-
 
 //using takeEvery, you take the action away from reducer to saga
 export default function* ReviewSaga() {

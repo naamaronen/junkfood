@@ -31,7 +31,7 @@ export default function(state = initialState, action) {
     case REVIEWS_FAILURE:
       return { ...state, loading: false, saving: false, error: action.error };
 
-    case GET_USER_SUCCESS://why we do that?
+    case GET_USER_SUCCESS:
       return {
         ...state,
         ...action.payload,

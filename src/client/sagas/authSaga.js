@@ -4,17 +4,17 @@ import {
   registerSuccsses,
   registerFail,
   loginSuccsses,
-  loginFail,
+  loginFail
 } from "../actions/authActions";
 import { getUserSuccess } from "../actions/reviewAction";
 import { returnErrors } from "../actions/errorActions";
-import {userProfileSuccsses} from "../actions/userActions";
-import {getGeoLocation} from "../helpFunctions";
+import { userProfileSuccsses } from "../actions/userActions";
+import { getGeoLocation } from "../helpFunctions";
 
 function* register(action) {
   let user = action.payload;
   const geolocation = yield call(getGeoLocation, user.get("location"));
-  user.append("geoLocation",JSON.stringify(geolocation));
+  user.append("geoLocation", JSON.stringify(geolocation));
   try {
     const options = {
       method: "POST",
@@ -23,7 +23,7 @@ function* register(action) {
 
     const res = yield call(fetch, action.uri, options);
     const reply = yield res.json();
-    if (reply.success){
+    if (reply.success) {
       yield put(registerSuccsses(reply.user));
       yield put(userProfileSuccsses(reply.user));
     } else {
@@ -46,12 +46,9 @@ function* login(action) {
     };
     const res = yield call(fetch, action.uri, options);
     const reply = yield call([res, "json"]);
-    console.log(reply);
     if (reply.success) {
       yield put(loginSuccsses(reply));
-      //yield put(getUserSuccess(reply));
-    }
-    else{
+    } else {
       yield put(loginFail(reply));
       yield put(returnErrors(reply));
     }
