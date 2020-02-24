@@ -31,10 +31,6 @@ class ReviewModal extends Component {
     };
   }
 
-  /*componentDidUpdate() {
-    StarRatingComponent;
-  }*/
-
   onStarClick1(nextValue, prevValue, name) {
     this.setState({ BathroomQuality: nextValue });
   }
@@ -89,8 +85,8 @@ class ReviewModal extends Component {
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  loadImages = (files) => {
-    this.setState({pictures: files})
+  loadImages = files => {
+    this.setState({ pictures: files });
   };
   onSubmit = e => {
     e.preventDefault();
@@ -116,7 +112,7 @@ class ReviewModal extends Component {
     for (const img of this.state.pictures) {
       newReview.append("pictures", img);
     }
-    //Add restaurant via ADD_REVIEW sction
+    //Add review via ADD_REVIEW sction
     switch (this.props.type) {
       case "Add":
         this.props.addReview(newReview);

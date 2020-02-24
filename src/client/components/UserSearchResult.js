@@ -18,7 +18,7 @@ class UserSearchResult extends Component {
   render() {
     const { searchResult } = this.props.search;
     return (
-      <div className="App">
+      <div className="App" style={{ "background-color": "#FFFFCC" }}>
         <AppNavBar />
         <SearchNavBar />
         <div>
@@ -37,6 +37,7 @@ class UserSearchResult extends Component {
                         outline
                         color="danger"
                         className="text-center"
+                        style={{ "background-color": "#FFFF99" }}
                       >
                         <CardImg
                           top

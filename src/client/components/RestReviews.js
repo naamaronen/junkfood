@@ -20,9 +20,8 @@ import StarRatingComponent from "react-star-rating-component";
 import { getRest } from "../actions/restaurantAction";
 import { sortByDate, sortByField } from "../actions/reviewAction";
 import ReviewModal from "./ReviewModal";
-import {updateUserGeoLocation} from "../actions/userActions";
-import {calcDistance} from "../helpFunctions";
-
+import { updateUserGeoLocation } from "../actions/userActions";
+import { calcDistance } from "../helpFunctions";
 
 export class RestReviews extends Component {
   constructor() {
@@ -34,8 +33,8 @@ export class RestReviews extends Component {
       showSorted: false,
       name: "",
       alert: false,
-      distance:"",
-      restGeoLoc:false
+      distance: "",
+      restGeoLoc: false
     };
   }
 
@@ -47,18 +46,18 @@ export class RestReviews extends Component {
 
   componentDidUpdate(prevProps) {
     // set distance
-    if (this.props.rest){
+    if (this.props.rest) {
       let restGeoLoc = this.props.rest.geolocation;
       if (restGeoLoc && this.props.userGeoLoc) {
         let newDistance = calcDistance(restGeoLoc, this.props.userGeoLoc);
         if (newDistance !== this.state.distance) {
-          this.setState({distance: newDistance});
+          this.setState({ distance: newDistance });
         }
       }
     }
     if (this.props != prevProps) {
       if (this.props.auth) {
-        this.setState({alert: false});
+        this.setState({ alert: false });
       }
     }
   }
@@ -73,7 +72,6 @@ export class RestReviews extends Component {
     this.setState({ isSorted: !this.state.isSorted });
     this.setState({ sortField: e.target.name });
   };
-
 
   onClick = e => {
     e.preventDefault();
@@ -133,6 +131,7 @@ export class RestReviews extends Component {
                       outline
                       color="danger"
                       className="text-center"
+                      style={{ "background-color": "#FFFF99" }}
                     >
                       <CardBody>
                         <h5 className="card-title">{restaurantName}</h5>
@@ -231,7 +230,10 @@ export class RestReviews extends Component {
                               value={FoodQuality}
                             />
                           </Col>
-                          <UncontrolledCarousel items={reviewImages} indicators={false}/>
+                          <UncontrolledCarousel
+                            items={reviewImages}
+                            indicators={false}
+                          />
                         </Row>
                       </CardBody>
                     </Card>
@@ -250,7 +252,7 @@ export class RestReviews extends Component {
     const distance = this.state.distance;
 
     return (
-      <div className="App">
+      <div className="App" style={{ "background-color": "#FFFFCC" }}>
         <AppNavBar />
         {!rest ? (
           <div>
@@ -258,10 +260,10 @@ export class RestReviews extends Component {
           </div>
         ) : (
           <div>
-            <Jumbotron>
+            <Jumbotron style={{ "background-color": "#FFFF99" }}>
               <h3 className="restPage">{rest.name}</h3>
               <h4>{rest.location}</h4>
-              {distance? (<h6>{distance} meters away from you</h6>):""}
+              {distance ? <h6>{distance} meters away from you</h6> : ""}
             </Jumbotron>
             <Container>
               <div>
@@ -437,7 +439,7 @@ const mapDispatchToProps = () => dispatch => {
     getRest: name => {
       dispatch(getRest(name));
     },
-    updateUserGeoLoc: pos=>{
+    updateUserGeoLoc: pos => {
       dispatch(updateUserGeoLocation(pos));
     }
   };

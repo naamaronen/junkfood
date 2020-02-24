@@ -7,10 +7,11 @@ import {
   ModalHeader,
   ModalBody,
   FormGroup,
-  Label, Alert
+  Label,
+  Alert
 } from "reactstrap";
-import {addRest, clearRestSuccessStatus} from "../actions/restaurantAction";
-import PlacesAutocomplete from 'react-places-autocomplete';
+import { addRest, clearRestSuccessStatus } from "../actions/restaurantAction";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 import { connect } from "react-redux";
 import LocationAutocomplete from "./LocationAutocomplete";
@@ -20,7 +21,7 @@ class RestaurantModal extends Component {
     modal: false,
     name: "",
     location: "",
-    error:""
+    error: ""
   };
   //autocomplete = new google.maps.places.Autocomplete();
   toggle = () => {
@@ -35,7 +36,7 @@ class RestaurantModal extends Component {
   };
 
   onlocChange = address => {
-    this.setState({ location: address});
+    this.setState({ location: address });
   };
 
   onSubmit = e => {
@@ -47,9 +48,6 @@ class RestaurantModal extends Component {
     };
     //Add restaurant via ADD_REST sction
     this.props.addRest(newRest);
-
-    //close modal
-    //this.toggle();
   };
 
   render() {
@@ -76,7 +74,11 @@ class RestaurantModal extends Component {
                   onChange={this.onChange}
                 />
                 <Label for="Location">Location</Label>
-                <LocationAutocomplete class={"rest-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
+                <LocationAutocomplete
+                  class={"rest-autocomplete"}
+                  value={this.state.location}
+                  onChange={this.onlocChange}
+                />
 
                 <Button color="dark" style={{ marginBottom: "2rem" }} block>
                   Add Restaurant
@@ -84,11 +86,15 @@ class RestaurantModal extends Component {
               </FormGroup>
             </Form>
             {this.props.error ? (
-                <Alert color="danger">{this.props.error}</Alert>
-            ) : ""}
+              <Alert color="danger">{this.props.error}</Alert>
+            ) : (
+              ""
+            )}
             {this.props.success ? (
-                <Alert color="success">{"Restaurant added successfully"}</Alert>
-            ) : ""}
+              <Alert color="success">{"Restaurant added successfully"}</Alert>
+            ) : (
+              ""
+            )}
           </ModalBody>
         </Modal>
       </div>
@@ -100,11 +106,10 @@ const mapStateToProps = state => {
   return {
     error: state.restaurant.error,
     success: state.restaurant.addSuccess
-  }
-}
+  };
+};
 
 const mapDispatchToProps = () => dispatch => {
-  //addRest;
   return {
     addRest: restaurant => {
       dispatch(addRest(restaurant));

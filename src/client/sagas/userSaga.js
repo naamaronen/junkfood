@@ -19,7 +19,6 @@ function* getUser(action) {
     };
     const res = yield call(fetch, "api/signin/userSessions", options);
     const user = yield call([res, "json"]);
-
     yield put(userProfileSuccsses(user));
   } catch (e) {
     yield put(returnErrors(e.message));
@@ -37,10 +36,8 @@ function* updateProfile(action) {
     };
     const res = yield call(fetch, "api/register/update", options);
     const reply = yield call([res, "json"]);
-
     if (reply.success) {
       yield put(userProfileSuccsses(reply.user));
-      yield put(refresh(reply.user));
     } else {
       yield put(returnErrors(reply));
     }
@@ -50,7 +47,6 @@ function* updateProfile(action) {
 }
 
 function* getAllUsers(action) {
-  console.log("get all users");
   try {
     const res = yield call(fetch, action.uri, {
       method: "GET",
