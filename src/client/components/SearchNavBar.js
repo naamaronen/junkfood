@@ -452,8 +452,8 @@ class SearchNavBar extends Component {
     );
 
     return (
-      <div>
-        <Navbar color="light" light expand="md">
+      <div style={{"background-color":"yellow"}}>
+        <Navbar light expand="md">
           <Container>
             <Nav className="mr-auto" navbar>
               <Row>

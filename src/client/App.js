@@ -12,7 +12,7 @@ import UserProfile from "./components/UserProfile";
 export default function App() {
   return (
     <Router>
-      <div>
+      <div style={{"background-color":"yellow"}}>
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
         <Switch>

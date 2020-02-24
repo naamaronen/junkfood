@@ -6,7 +6,7 @@ import RestaurantModal from "./components/RestaurantModal";
 import { Container } from "reactstrap";
 
 const Home = () => (
-  <div className="App">
+  <div className="App" style={{"background-color":"yellow"}}>
     <AppNavBar />
     <SearchNavBar />
     <Container>
