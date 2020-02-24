@@ -93,23 +93,6 @@ module.exports = app => {
       });
   });
 
-  app.post("/api/users/getProfile", (req, res) => {
-    console.log("users.post/api/users/getProfile");
-    const username = req.body.username;
-    User.findOne({ username })
-      .select("-password")
-      .populate("picture")
-      .populate("reviews")
-      .populate({
-        path: "reviews",
-        populate: { path: "pictures", model: "Image" }
-      })
-      .then(user => {
-        res.json(user);
-        res.end();
-      });
-  });
-
   app.get("/api/users/fetch", function(req, res) {
     console.log("/api/users/fetch");
     User.find()

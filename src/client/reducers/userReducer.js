@@ -1,3 +1,4 @@
+
 import {
   USER_PROFILE_SUCCSSES,
   OTHER_PROFILE_SUCCSSES,
@@ -26,6 +27,7 @@ export default function(state = initialState, action) {
       return {
         ...state
       };
+
     case LOADED_USERS:
       return {
         ...state,

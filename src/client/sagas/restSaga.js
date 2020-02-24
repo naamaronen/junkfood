@@ -1,18 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import {
-  ADD_REST,
-  DELETE_REST,
-  FETCH_RESTS,
-  WATCH_REVIEWS,
-  GET_REST
-} from "../actions/types";
+import { ADD_REST, FETCH_RESTS, GET_REST } from "../actions/types";
 import {
   loadedRests,
   restsFailure,
   addRestSuccess,
   getRestSuccsses
 } from "../actions/restaurantAction";
-import {getGeoLocation} from "../helpFunctions";
+import { getGeoLocation } from "../helpFunctions";
 
 function* getAllRestaurants() {
   try {

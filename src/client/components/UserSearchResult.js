@@ -15,12 +15,6 @@ import { Link } from "react-router-dom";
 import { getUserProfile } from "../actions/userActions";
 
 class UserSearchResult extends Component {
-  onClick = username => {
-    //const username = e.target.value;
-    console.log(username);
-    this.props.getUserProfile({ username });
-  };
-
   render() {
     const { searchResult } = this.props.search;
     return (
@@ -36,7 +30,7 @@ class UserSearchResult extends Component {
                 </div>
               ) : (
                 searchResult.map(
-                  ({ _id, fullName, location, picture, username }) => (
+                  ({ _id, fullName, location, picture, username, reviews }) => (
                     <Col sm="3" key={_id}>
                       <Card
                         key={_id}
@@ -57,10 +51,20 @@ class UserSearchResult extends Component {
                           </h6>
                           <Button
                             color="warning"
-                            //value={username}
-                            onClick={this.onClick(username)}
                             tag={Link}
-                            to={`/user_profile/${username}`}
+                            to={{
+                              pathname: `/user_profile/${username}`,
+                              state: {
+                                user: {
+                                  _id,
+                                  fullName,
+                                  location,
+                                  picture,
+                                  username,
+                                  reviews
+                                }
+                              }
+                            }}
                           >
                             Watch Profile
                           </Button>
@@ -84,12 +88,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = () => dispatch => {
-  return {
-    getUserProfile: username => {
-      dispatch(getUserProfile(username));
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserSearchResult);
+export default connect(mapStateToProps, null)(UserSearchResult);
