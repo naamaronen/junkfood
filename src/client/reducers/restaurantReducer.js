@@ -9,7 +9,7 @@ import {
   REVIEWS_SUCCESS,
   REVIEWS_FAILURE,
   GET_REST_SUCCSSES,
-  CLEAR_SUCCESS_STATUS
+  CLEAR_SUCCESS_STATUS, ADD_REVIEW_SUCCESS
 } from "../actions/types";
 
 const initialState = {
@@ -67,6 +67,12 @@ export default function(state = initialState, action) {
               : restaurants,
           []
         )
+      };
+
+    case ADD_REVIEW_SUCCESS:
+      state.rest.reviews.push(action.payload.review);
+      return {
+        ...state
       };
 
     case REVIEWS_SUCCESS:

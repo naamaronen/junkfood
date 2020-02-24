@@ -2,7 +2,7 @@ import {
   USER_PROFILE_SUCCSSES,
   OTHER_PROFILE_SUCCSSES,
   LOADED_USERS,
-  LOGOUT
+  LOGOUT, ADD_REVIEW_SUCCESS
 } from "../actions/types";
 
 
@@ -21,6 +21,11 @@ export default function(state = initialState, action) {
       return {...state, userProfile: null, geoLocation: null }
     case OTHER_PROFILE_SUCCSSES:
       return { ...state, otherUser: action.payload };
+    case ADD_REVIEW_SUCCESS:
+      state.userProfile.reviews.push(action.payload.review);
+      return {
+        ...state
+      };
     case LOADED_USERS:
       return {
         ...state,
