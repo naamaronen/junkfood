@@ -45,6 +45,7 @@ module.exports = app => {
         reply.msg = "Restaurant already in database";
         return res.status(400).send(reply);
       }
+      restDetails.date = Date.now();
       const newRestaurant = new Restaurant(restDetails);
       newRestaurant.stringDate = newRestaurant.date.toLocaleString();
       newRestaurant.save().then(restaurant => {

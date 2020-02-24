@@ -27,6 +27,7 @@ module.exports = app => {
     });
     const newReview = new Review({
       pictures: newImages,
+      date: Date.now(),
       rates: {
         BathroomQuality: parseInt(req.body.BathroomQuality),
         StaffKindness: parseInt(req.body.StaffKindness),
