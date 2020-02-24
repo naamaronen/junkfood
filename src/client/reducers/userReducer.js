@@ -21,13 +21,7 @@ export default function(state = initialState, action) {
         geoLocation: JSON.parse(action.payload.geolocation)
       };
     case LOGOUT:
-<<<<<<< HEAD
       return {...state, userProfile: null, geoLocation: null }
-=======
-      return { ...state, userProfile: null, geoLocation: null };
-    case OTHER_PROFILE_SUCCSSES:
-      return { ...state, otherUser: action.payload };
->>>>>>> 4ef1bc30f99db1218531d1780f1bb624c89d8564
     case ADD_REVIEW_SUCCESS:
       state.userProfile.reviews.push(action.payload.review);
       return {
