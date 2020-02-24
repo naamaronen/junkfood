@@ -55,23 +55,18 @@ export class Profile extends Component {
       location: location,
       username: username,
       picture: picture ? picture.imageData : null,
-      reviews: reviews
+      reviews: reviews ? reviews : []
     });
   }
 
   componentDidUpdate(prevProps) {
     const error = this.props.error;
-    const userProfile = this.props.user;
+    const { userProfile } = this.props.user;
+    console.log(userProfile);
     // Error with updating the profile
     if (error !== prevProps.error) {
       this.setState({
         error: error.msg
-      });
-    }
-    if (userProfile != prevProps.user) {
-      console.log("profile changed");
-      this.setState({
-        updateSuccess: true
       });
     }
     if (this.props != prevProps) {
@@ -82,7 +77,8 @@ export class Profile extends Component {
         location: location,
         username: username,
         picture: picture ? picture.imageData : null,
-        reviews: reviews
+        reviews: reviews ? reviews : [],
+        updateSuccess: true
       });
     }
   }
@@ -121,10 +117,10 @@ export class Profile extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{"background-color":"#FFFFCC"}}>
         <AppNavBar />
         <div>
-          <Jumbotron>
+          <Jumbotron style={{"background-color":"#FFFF99"}}>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
 
@@ -222,6 +218,7 @@ export class Profile extends Component {
                           outline
                           color="danger"
                           className="text-center"
+                          style={{"background-color":"#FFFF99"}}
                         >
                           <CardBody>
                             <h5 className="card-title">{restaurantName}</h5>

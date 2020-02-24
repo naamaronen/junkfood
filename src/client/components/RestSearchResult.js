@@ -73,7 +73,7 @@ class RestSearchResult extends Component {
     // sort by closer-better grades (cbGrade)
     const searchResult = this.state.restaurants;
     return (
-      <div className="App">
+      <div className="App" style={{"background-color":"#FFFFCC"}}>
         <AppNavBar />
         <SearchNavBar />
         <div>
@@ -98,7 +98,7 @@ class RestSearchResult extends Component {
                           {location}
                         </h6>
                         <CardText>
-                          {"Average Rate: "+averageRate}
+                          {"Average Rate: "+Math.round(averageRate*100)/100}
                         </CardText>
                         <CardText>
                           <small className="text-muted">{stringDate}</small>
