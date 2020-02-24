@@ -94,8 +94,10 @@ class LoginModal extends Component {
                   Login
                 </Button>
                 {this.state.msg ? (
-                    <Alert color="danger">{this.state.msg}</Alert>
-                ) : ""}
+                  <Alert color="danger">{this.state.msg}</Alert>
+                ) : (
+                  ""
+                )}
               </FormGroup>
             </Form>
           </ModalBody>
@@ -113,7 +115,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = () => dispatch => {
-  //addRest;
   return {
     login: user => {
       dispatch(login(user));

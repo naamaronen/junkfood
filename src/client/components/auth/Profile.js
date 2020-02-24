@@ -23,13 +23,11 @@ import AppNavBar from "../AppNavBar";
 import StarRatingComponent from "react-star-rating-component";
 import { deleteReview } from "../../actions/reviewAction";
 import ReviewModal from "../ReviewModal";
-import {clearErrors} from "../../actions/errorActions";
+import { clearErrors } from "../../actions/errorActions";
 import LocationAutocomplete from "../LocationAutocomplete";
-
 
 export class Profile extends Component {
   state = {
-    //userProfile: null,
     username: "",
     fullName: "",
     location: "",
@@ -41,7 +39,7 @@ export class Profile extends Component {
   };
 
   onlocChange = address => {
-    this.setState({ location: address});
+    this.setState({ location: address });
   };
 
   componentDidMount() {
@@ -50,19 +48,17 @@ export class Profile extends Component {
     const { userProfile } = this.props.user;
     const { fullName, reviews, location, username, picture } = userProfile;
     this.setState({
-      //userProfile: userProfile,
       fullName: fullName,
       location: location,
       username: username,
       picture: picture ? picture.imageData : null,
-      reviews: reviews ? reviews : []
+      reviews: reviews
     });
   }
 
   componentDidUpdate(prevProps) {
     const error = this.props.error;
     const { userProfile } = this.props.user;
-    console.log(userProfile);
     // Error with updating the profile
     if (error !== prevProps.error) {
       this.setState({
@@ -70,15 +66,16 @@ export class Profile extends Component {
       });
     }
     if (this.props != prevProps) {
+      this.setState({
+        updateSuccess: true
+      });
       const { fullName, reviews, location, username, picture } = userProfile;
       this.setState({
-        //userProfile: userProfile,
         fullName: fullName,
         location: location,
         username: username,
         picture: picture ? picture.imageData : null,
-        reviews: reviews ? reviews : [],
-        updateSuccess: true
+        reviews: reviews
       });
     }
   }
@@ -105,8 +102,6 @@ export class Profile extends Component {
     userData.append("imageData", this.state.picture);
     userData.append("fullName", this.state.fullName);
     userData.append("location", this.state.location);
-    console.log("submitting");
-    console.log(this.state);
     //Update user
     this.props.updateProfile(userData);
   };
@@ -121,49 +116,75 @@ export class Profile extends Component {
 
   render() {
     return (
-      <div className="App" style={{"background-color":"#FFFFCC"}}>
+      <div className="App" style={{ "background-color": "#FFFFCC" }}>
         <AppNavBar />
         <div>
-          <Jumbotron style={{"background-color":"#FFFF99"}}>
+          <Jumbotron style={{ "background-color": "#FFFF99" }}>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-
-            <Container>
-              <Row>
-              <Col>
-            <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
-            <p>you can watch and edit your profile here!</p>
-                <Label for="fullName">Full Name</Label>
-                <Input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  placeholder={`${this.state.fullName}`}
-                  className="mb-3"
-                  onChange={this.onChange}
-                />
-                <Label for="location">Location</Label>
-                <LocationAutocomplete class={"profile-autocomplete"} value={this.state.location} onChange={this.onlocChange}/>
-
-              </Col>
-              <Col>
-                <img src={this.state.loadedPicture?this.state.loadedPicture:this.state.picture} style={{width: 300}}/>
-                <p></p>
-                <p>Edit profile picture:</p>
-              <Dropzone name="newPicture" accept="image/*" onDrop={this.loadImage}>
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                      <div {...getRootProps()} style={{ border: '1px solid black', width: 300, color: 'black', padding: 20 }}>
-                        <input {...getInputProps()} />
-                        <p>Drag image here, {"\n"}or click to select file</p>
-                      </div>
-                    </section>
-                )}</Dropzone>
-                <p></p>
-              </Col></Row></Container>
-            <Button color="dark" style={{ marginBottom: "2rem" }} block>
-              Save Changes
-            </Button>
+                <Container>
+                  <Row>
+                    <Col>
+                      <h3 className="profile">{`Hello, ${this.state.username}`}</h3>
+                      <p>you can watch and edit your profile here!</p>
+                      <Label for="fullName">Full Name</Label>
+                      <Input
+                        type="text"
+                        name="fullName"
+                        id="fullName"
+                        placeholder={`${this.state.fullName}`}
+                        className="mb-3"
+                        onChange={this.onChange}
+                      />
+                      <Label for="location">Location</Label>
+                      <LocationAutocomplete
+                        class={"profile-autocomplete"}
+                        value={this.state.location}
+                        onChange={this.onlocChange}
+                      />
+                    </Col>
+                    <Col>
+                      <img
+                        src={
+                          this.state.loadedPicture
+                            ? this.state.loadedPicture
+                            : this.state.picture
+                        }
+                        style={{ width: 300 }}
+                      />
+                      <p></p>
+                      <p>Edit profile picture:</p>
+                      <Dropzone
+                        name="newPicture"
+                        accept="image/*"
+                        onDrop={this.loadImage}
+                      >
+                        {({ getRootProps, getInputProps }) => (
+                          <section>
+                            <div
+                              {...getRootProps()}
+                              style={{
+                                border: "1px solid black",
+                                width: 300,
+                                color: "black",
+                                padding: 20
+                              }}
+                            >
+                              <input {...getInputProps()} />
+                              <p>
+                                Drag image here, {"\n"}or click to select file
+                              </p>
+                            </div>
+                          </section>
+                        )}
+                      </Dropzone>
+                      <p></p>
+                    </Col>
+                  </Row>
+                </Container>
+                <Button color="dark" style={{ marginBottom: "2rem" }} block>
+                  Save Changes
+                </Button>
 
                 {this.state.error ? (
                   <Alert color="danger">{this.state.error}</Alert>
@@ -222,7 +243,7 @@ export class Profile extends Component {
                           outline
                           color="danger"
                           className="text-center"
-                          style={{"background-color":"#FFFF99"}}
+                          style={{ "background-color": "#FFFF99" }}
                         >
                           <CardBody>
                             <h5 className="card-title">{restaurantName}</h5>

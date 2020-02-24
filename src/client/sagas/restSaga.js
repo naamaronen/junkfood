@@ -24,7 +24,6 @@ function* getAllRestaurants() {
 }
 
 function* saveRest(action) {
-  console.log("addRestSaga=", action);
   let rest = action.payload;
   const geolocation = yield call(getGeoLocation, rest.location);
   rest.geolocation = JSON.stringify(geolocation);

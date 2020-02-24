@@ -66,6 +66,7 @@ class RestList extends Component {
                       outline
                       color="danger"
                       className="text-center"
+                      style={{ "background-color": "#FFFF99" }}
                     >
                       <CardBody>
                         <h5 className="card-title">{name}</h5>
@@ -75,13 +76,14 @@ class RestList extends Component {
                         {averageRate != "0" ? (
                           <CardBody>
                             average rate
-                              <StarRatingComponent
-                                name="average"
-                                starCount={5}
-                                editing={false}
-                                value={averageRate}
-                              />
-                          </CardBody>) : (
+                            <StarRatingComponent
+                              name="average"
+                              starCount={5}
+                              editing={false}
+                              value={averageRate}
+                            />
+                          </CardBody>
+                        ) : (
                           <CardText>There are no reviews </CardText>
                         )}
 
