@@ -1,6 +1,5 @@
 import {
   USER_PROFILE_SUCCSSES,
-  OTHER_PROFILE_SUCCSSES,
   LOADED_USERS,
   LOGOUT,
   ADD_REVIEW_SUCCESS
@@ -22,9 +21,7 @@ export default function(state = initialState, action) {
         geoLocation: JSON.parse(action.payload.geolocation)
       };
     case LOGOUT:
-      return { ...state, userProfile: null, geoLocation: null };
-    case OTHER_PROFILE_SUCCSSES:
-      return { ...state, otherUser: action.payload };
+      return {...state, userProfile: null, geoLocation: null }
     case ADD_REVIEW_SUCCESS:
       state.userProfile.reviews.push(action.payload.review);
       return {

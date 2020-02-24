@@ -107,7 +107,11 @@ export class Profile extends Component {
   };
 
   onDeleteReview = e => {
-    this.props.deleteReview(e.target.value);
+    let revIdToDelete = e.target.value;
+    this.props.deleteReview(revIdToDelete);
+    let reviews = this.state.reviews;
+    reviews = reviews.filter(rev=>rev._id!=revIdToDelete);
+    this.setState({reviews:reviews});
   };
 
   render() {
