@@ -70,7 +70,7 @@ class AppNavBar extends Component {
 
     return (
       <div>
-        <Navbar color="dark" dark exapnd="sm" className="mb-5">
+        <Navbar color="danger" dark exapnd="sm" className="mb-5">
           <Container>
             <NavbarBrand tag={Link} to="/">
               Junk Food Web
