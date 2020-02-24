@@ -20,10 +20,11 @@ function* saveReview(action) {
       method: "POST",
       body: action.payload
     });
-    const review = yield call([res, "json"]);
-    console.log(review);
-    yield put(refresh({ username: action.payload.get("user") }));
-    yield put(addReviewSuccess(review));
+    const reviewRes = yield call([res, "json"]);
+    let username = {username: action.payload.get("user")}
+    reviewRes.review.user = username;
+    yield put(refresh(username));
+    yield put(addReviewSuccess(reviewRes));
   } catch (e) {
     yield put(reviewsFailure(e.message));
   }
@@ -40,7 +41,6 @@ function* sort(action) {
       body: JSON.stringify(action.payload)
     });
     const reviews = yield call([res, "json"]);
-    console.log(reviews);
     yield put(sortSuccsses(reviews));
   } catch (e) {
     yield put(reviewsFailure(e.message));
