@@ -41,10 +41,10 @@ export class UserProfile extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{ "background-color": "#FFFFCC" }}>
         <AppNavBar />
         <div>
-          <Jumbotron>
+          <Jumbotron style={{ "background-color": "#FFFF99" }}>
             <h3 className="profile">{this.state.username}</h3>
             <h4>{this.state.fullName}</h4>
             <h4>{this.state.location}</h4>
@@ -94,6 +94,7 @@ export class UserProfile extends Component {
                           outline
                           color="danger"
                           className="text-center"
+                          style={{ "background-color": "#FFFF99" }}
                         >
                           <CardBody>
                             <h5 className="card-title">{restaurantName}</h5>
