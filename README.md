@@ -1,6 +1,6 @@
 # junkfood web
 
-Simple(r) full stack boilerplate code implementing a Junk Food web using up to date dependencies (May2019).
+Simple(r) full stack boilerplate code implementing a Junk Food web using up to date dependencies (Feb 2020).
 
 To start the server:
 
