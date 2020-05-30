@@ -1,11 +1,17 @@
 {
   "private": true,
   "version": "0.0.1",
-  "description": "Flickr Gallery Template",
+  "description": "JunkFood Reviews",
   "main": "",
+  "engine": {
+    "node": "12.14.0",
+    "npm": "6.13.4"
+  },
   "scripts": {
-    "dev": "webpack-dev-server",
-    "start": "webpack"
+    "dev": "webpack-dev-server --config webpack.dev.js",
+    "start": "node src/server/server.js",
+    "build": "webpack --config webpack.prod.js",
+    "postinstall": "webpack -p"
   },
   "repository": "",
   "keywords": [],
@@ -64,7 +70,8 @@
     "url-loader": "^1.1.2",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.2"
+    "webpack-dev-server": "^3.10.2",
+    "webpack-merge": "^4.2.2"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
